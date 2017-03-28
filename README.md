@@ -168,7 +168,7 @@ Responds with the updated group (including it's id which is a UUID).
 
 ### Delete Group
 
-curl -XDELETE localhost:8092/api/userService/v1/group/$GROUP_ID
+    curl -XDELETE localhost:8092/api/userService/v1/group/$GROUP_ID
 
 Responds with the deleted group (including it's id which is a UUID).
 
