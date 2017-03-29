@@ -100,7 +100,9 @@ If not healthy the server response is:
 
     400 {"version":"1.0","status":"NOK","message":"$ERROR_MESSAGE"}
 
-### Create Context
+### Context Related
+
+#### Create
 
     curl -XPUT localhost:8092/api/userService/v1/context -H "Content-Type: application/json" -d '{
       "displayName": "$DISPLAY_NAME" // string
@@ -108,7 +110,7 @@ If not healthy the server response is:
 
 Responds with the created context (including it's id which is a UUID).
 
-### Update Context
+#### Update
 
     curl -XPOST localhost:8092/api/userService/v1/context -H "Content-Type: application/json" -d '{
       "contextId": "$CONTEXT_ID", // UUID
@@ -117,11 +119,13 @@ Responds with the created context (including it's id which is a UUID).
 
 Responds with the updated context (including it's id which is a UUID).
 
-### Delete Context
+#### Delete
 
     curl -XDELETE localhost:8092/api/userService/v1/context/$CONTEXT_ID
 
-### Create User
+### User Related
+
+#### Create User
 
     curl -XPUT localhost:8092/api/userService/v1/user -H "Content-Type: application/json" -d '{
       "externalId": "$EXTERNAL_USER_ID", // string
@@ -131,13 +135,13 @@ Responds with the updated context (including it's id which is a UUID).
 
 Responds with the created user (including it's id which is a UUID).
 
-### Find UserId
+#### Find UserId
 
     curl localhost:8092/api/userService/v1/user/$PROVIDER/$EXTERNAL_USER_ID
 
 Responds with the user if it exists (including it's id which is a UUID).
 
-### Update User
+#### Update
 
     curl -XPOST localhost:8092/api/userService/v1/user -H "Content-Type: application/json" -d '{
       "userId": "$USER_ID", // UUID
@@ -148,13 +152,15 @@ Responds with the user if it exists (including it's id which is a UUID).
 
 Responds with the updated user (including it's id which is a UUID).
 
-### Delete User
+#### Delete
 
     curl -XPUT localhost:8092/api/userService/v1/user/$USER_ID
 
 Responds with the deleted user (including it's id which is a UUID).
 
-### Create Group
+### Group Related
+
+#### Create Group
 
     curl -XPUT localhost:8092/api/userService/v1/group -H "Content-Type: application/json" -d '{
       "ownerId": "$OWNER", // userId allowed to modify it
@@ -165,7 +171,7 @@ Responds with the deleted user (including it's id which is a UUID).
 
 Responds with the created group (including it's id which is a UUID).
 
-### Update Group
+#### Update
 
     curl -XPOST localhost:8092/api/userService/v1/group -H "Content-Type: application/json" -d '{
       "groupId": "$GROUP_ID", // UUID
@@ -177,23 +183,27 @@ Responds with the created group (including it's id which is a UUID).
 
 Responds with the updated group (including it's id which is a UUID).
 
-### Delete Group
+#### Delete
 
     curl -XDELETE localhost:8092/api/userService/v1/group/$GROUP_ID
 
 Responds with the deleted group (including it's id which is a UUID).
 
-### Add User(s) to Group
+#### Add Users to Group
 
 This is a convenience method and the same result would be achieved by updating a group.
 
-    curl -XPOST localhost:8092/api/userService/v1/group/allowedUsers/$USER_ID
+    curl -XPOST localhost:8092/api/userService/v1/group/allowedUsers -H "Content-Type: application/json" -d '{
+      "allowedUsers": ["$USER_ID_1", "$USER_ID_2"]
+    }'
 
-### Remove User(s) from Group
+#### Remove Users from Group
 
 This is a convenience method and the same result would be achieved by updating a group.
 
-    curl -XDELETE localhost:8092/api/userService/v1/group/allowedUsers/$USER_ID
+    curl -XDELETE localhost:8092/api/userService/v1/group/allowedUsers -H "Content-Type: application/json" -d '{
+      "allowedUsers": ["$USER_ID_1", "$USER_ID_2"]
+    }'
 
 ### Get Groups
 
