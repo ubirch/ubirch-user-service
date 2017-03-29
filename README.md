@@ -3,7 +3,7 @@
 
 ## General Information
 
-ubirch user managent service
+ubirch user management service
 
 TODO
 

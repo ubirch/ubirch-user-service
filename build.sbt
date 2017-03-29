@@ -5,7 +5,7 @@ concurrentRestrictions in Global := Seq(
   Tags.limit(Tags.Test, 1)
 )
 
-val projectVersion = "0.0.1-SNAPSHOT"
+val projectVersion = "0.1.0-SNAPSHOT"
 lazy val commonSettings = Seq(
 
   scalaVersion := "2.11.8",
