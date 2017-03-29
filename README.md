@@ -124,7 +124,7 @@ Responds with the created context (including it's id which is a UUID).
 #### Update
 
     curl -XPOST localhost:8092/api/userService/v1/context -H "Content-Type: application/json" -d '{
-      "contextId": "$CONTEXT_ID", // UUID
+      "id": "$CONTEXT_ID", // UUID
       "displayName": "$DISPLAY_NAME" // string
     }'
 
@@ -155,7 +155,7 @@ Responds with the user if it exists (including it's id which is a UUID).
 #### Update
 
     curl -XPOST localhost:8092/api/userService/v1/user -H "Content-Type: application/json" -d '{
-      "userId": "$USER_ID", // UUID
+      "id": "$USER_ID", // UUID
       "externalId": "$EXTERNAL_USER_ID", // string
       "providerId": "$PROVIDER_ID", // string
       "displayName": "$DISPLAY_NAME" // string
@@ -176,7 +176,7 @@ Responds with the deleted user (including it's id which is a UUID).
     curl -XPUT localhost:8092/api/userService/v1/group -H "Content-Type: application/json" -d '{
       "ownerId": "$OWNER", // userId allowed to modify it
       "displayName": "$DISPLAY_NAME", // string
-      "context": "$CONTEXT", // string
+      "contextId": "$CONTEXT_ID", // UUID
       "allowedUsers": ["$USER_ID_1", "$USER_ID_2"] // ownerId always has access no matter if it's listed here
     }'
 
@@ -185,10 +185,10 @@ Responds with the created group (including it's id which is a UUID).
 #### Update
 
     curl -XPOST localhost:8092/api/userService/v1/group -H "Content-Type: application/json" -d '{
-      "groupId": "$GROUP_ID", // UUID
+      "id": "$GROUP_ID", // UUID
       "ownerId": "$OWNER", // userId allowed to modify it
       "displayName": "$DISPLAY_NAME", // string
-      "context": "$CONTEXT", // string
+      "contextId": "$CONTEXT_ID", // UUID
       "allowedUsers": ["$USER_ID_1", "$USER_ID_2"] // ownerId always has access no matter if it's listed here
     }'
 

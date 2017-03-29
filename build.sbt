@@ -68,8 +68,7 @@ lazy val modelRest = (project in file("model-rest"))
   .settings(commonSettings: _*)
   .settings(
     name := "model-rest",
-    description := "REST JSON models",
-    libraryDependencies ++= depModelRest
+    description := "REST JSON models"
   )
 
 lazy val server = project
@@ -130,10 +129,6 @@ lazy val depCore = Seq(
 ) ++ scalaLogging
 
 lazy val depModelDb = Seq(
-  ubirchUuid
-)
-
-lazy val depModelRest = Seq(
   ubirchUuid
 )
 
