@@ -38,7 +38,7 @@ lazy val config = project
   .settings(commonSettings: _*)
   .settings(
     description := "user-service specific config and config tools",
-    libraryDependencies += ubirchUtilConfig
+    libraryDependencies += ubirchConfig
   )
 
 lazy val cmdtools = project
@@ -60,14 +60,16 @@ lazy val modelDb = (project in file("model-db"))
   .settings(commonSettings: _*)
   .settings(
     name := "model-db",
-    description := "database JSON models"
+    description := "database JSON models",
+    libraryDependencies ++= depModelDb
   )
 
 lazy val modelRest = (project in file("model-rest"))
   .settings(commonSettings: _*)
   .settings(
     name := "model-rest",
-    description := "REST JSON models"
+    description := "REST JSON models",
+    libraryDependencies ++= depModelRest
   )
 
 lazy val server = project
@@ -111,30 +113,38 @@ lazy val depServer = Seq(
 
   akkaSlf4j,
   akkaHttp,
-  ubirchUtilRestAkkaHttp,
-  ubirchUtilRestAkkaHttpTest % "test",
+  ubirchRestAkkaHttp,
+  ubirchRestAkkaHttpTest % "test",
 
-  ubirchUtilJsonAutoConvert,
-  ubirchUtilResponse
+  ubirchJsonAutoConvert,
+  ubirchResponse
 
 )
 
 lazy val depCore = Seq(
   akkaActor,
-  ubirchUtilResponse,
+  ubirchResponse,
   json4sNative,
-  ubirchUtilJson,
+  ubirchJson,
   scalatest % "test"
 ) ++ scalaLogging
 
+lazy val depModelDb = Seq(
+  ubirchUuid
+)
+
+lazy val depModelRest = Seq(
+  ubirchUuid
+)
+
 lazy val depModel = Seq(
-  ubirchUtilJsonAutoConvert,
+  ubirchJsonAutoConvert,
   json4sNative
 )
 
 lazy val depTestTools = Seq(
   json4sNative,
-  ubirchUtilJsonAutoConvert,
+  ubirchJsonAutoConvert,
   scalatest
 ) ++ scalaLogging
 
@@ -173,36 +183,19 @@ lazy val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaV
 lazy val akkaHttp = "com.typesafe.akka" %% "akka-http" % akkaHttpV
 lazy val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % akkaV
 
-lazy val ubirchUtilConfig = ubirchUtilG %% "config" % "0.1" excludeAll(
+lazy val excludedLoggers = Seq(
   ExclusionRule(organization = "com.typesafe.scala-logging"),
   ExclusionRule(organization = "org.slf4j"),
   ExclusionRule(organization = "ch.qos.logback")
 )
-lazy val ubirchUtilRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.3.3" excludeAll(
-  ExclusionRule(organization = "com.typesafe.scala-logging"),
-  ExclusionRule(organization = "org.slf4j"),
-  ExclusionRule(organization = "ch.qos.logback")
-)
-lazy val ubirchUtilRestAkkaHttpTest = ubirchUtilG %% "rest-akka-http-test" % "0.3.3" excludeAll(
-  ExclusionRule(organization = "com.typesafe.scala-logging"),
-  ExclusionRule(organization = "org.slf4j"),
-  ExclusionRule(organization = "ch.qos.logback")
-)
-lazy val ubirchUtilResponse = ubirchUtilG %% "response-util" % "0.1.2" excludeAll(
-  ExclusionRule(organization = "com.typesafe.scala-logging"),
-  ExclusionRule(organization = "org.slf4j"),
-  ExclusionRule(organization = "ch.qos.logback")
-)
-lazy val ubirchUtilJson = ubirchUtilG %% "json" % "0.3.2" excludeAll(
-  ExclusionRule(organization = "com.typesafe.scala-logging"),
-  ExclusionRule(organization = "org.slf4j"),
-  ExclusionRule(organization = "ch.qos.logback")
-)
-lazy val ubirchUtilJsonAutoConvert = ubirchUtilG %% "json-auto-convert" % "0.3.2" excludeAll(
-  ExclusionRule(organization = "com.typesafe.scala-logging"),
-  ExclusionRule(organization = "org.slf4j"),
-  ExclusionRule(organization = "ch.qos.logback")
-)
+
+lazy val ubirchConfig = ubirchUtilG %% "config" % "0.1" excludeAll(excludedLoggers: _*)
+lazy val ubirchJson = ubirchUtilG %% "json" % "0.3.2" excludeAll(excludedLoggers: _*)
+lazy val ubirchJsonAutoConvert = ubirchUtilG %% "json-auto-convert" % "0.3.2" excludeAll(excludedLoggers: _*)
+lazy val ubirchRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.3.3" excludeAll(excludedLoggers: _*)
+lazy val ubirchRestAkkaHttpTest = ubirchUtilG %% "rest-akka-http-test" % "0.3.3" excludeAll(excludedLoggers: _*)
+lazy val ubirchResponse = ubirchUtilG %% "response-util" % "0.1.2" excludeAll(excludedLoggers: _*)
+lazy val ubirchUuid = ubirchUtilG %% "uuid" % "0.1.1" excludeAll(excludedLoggers: _*)
 
 /*
  * RESOLVER
