@@ -17,7 +17,7 @@ lazy val commonSettings = Seq(
     url("https://github.com/ubirch/ubirch-user-service"),
     "scm:git:git@github.com:ubirch/ubirch-user-service.git"
   )),
-  version := "0.0.1-SNAPSHOT",
+  version := "0.1.0-SNAPSHOT",
   test in assembly := {},
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
@@ -32,7 +32,7 @@ lazy val commonSettings = Seq(
 
 lazy val userService = (project in file("."))
   .settings(commonSettings: _*)
-  .aggregate(cmdtools, config, core, model, server, testTools, util)
+  .aggregate(cmdtools, config, core, modelDb, modelRest, server, testTools, util)
 
 lazy val config = project
   .settings(commonSettings: _*)
@@ -50,22 +50,30 @@ lazy val cmdtools = project
 
 lazy val core = project
   .settings(commonSettings: _*)
-  .dependsOn(model, util, testTools % "test")
+  .dependsOn(modelDb, modelRest, util, testTools % "test")
   .settings(
     description := "business logic",
     libraryDependencies ++= depCore
   )
 
-lazy val model = project
+lazy val modelDb = (project in file("model-db"))
   .settings(commonSettings: _*)
   .settings(
-    description := "JSON models"
+    name := "model-db",
+    description := "database JSON models"
+  )
+
+lazy val modelRest = (project in file("model-rest"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "model-rest",
+    description := "REST JSON models"
   )
 
 lazy val server = project
   .settings(commonSettings: _*)
   .settings(mergeStrategy: _*)
-  .dependsOn(config, core, model, util)
+  .dependsOn(config, core, modelRest, util)
   .enablePlugins(DockerPlugin)
   .settings(
     description := "REST interface and Akka HTTP specific code",
