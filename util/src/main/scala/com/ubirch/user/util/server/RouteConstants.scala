@@ -10,6 +10,8 @@ object RouteConstants {
   final val serviceName = "userService"
   final val currentVersion = "v1"
 
+  final val context = "context"
+
   val pathPrefix = s"/$apiPrefix/$serviceName/$currentVersion"
 
 }

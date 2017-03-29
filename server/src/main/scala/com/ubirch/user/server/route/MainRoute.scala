@@ -12,6 +12,7 @@ import akka.http.scaladsl.server.Route
 class MainRoute {
 
   val welcome = new WelcomeRoute {}
+  val context = new ContextRoute {}
 
   val myRoute: Route = {
 
@@ -19,14 +20,14 @@ class MainRoute {
       pathPrefix(RouteConstants.serviceName) {
         pathPrefix(RouteConstants.currentVersion) {
 
+          context.route ~
           pathEndOrSingleSlash {
             welcome.route
           }
 
         }
       }
-    } ~
-      pathSingleSlash {
+    } ~ pathSingleSlash {
         welcome.route
       }
 

@@ -1,0 +1,11 @@
+package com.ubirch.user.core.actor
+
+/**
+  * author: cvandrei
+  * since: 2017-03-29
+  */
+object ActorNames {
+
+  final val CONTEXT = "context-actor"
+
+}
