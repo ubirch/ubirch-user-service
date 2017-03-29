@@ -205,7 +205,8 @@ Responds with the deleted group (including it's id which is a UUID).
 This is a convenience method and the same result would be achieved by updating a group.
 
     curl -XPOST localhost:8092/api/userService/v1/group/allowedUsers -H "Content-Type: application/json" -d '{
-      "allowedUsers": ["$USER_ID_1", "$USER_ID_2"]
+      "groupId": "$GROUP_ID", // UUID
+      "allowedUsers": ["$USER_ID_1", "$USER_ID_2"] // list(UUID)
     }'
 
 #### Remove Users from Group
@@ -213,7 +214,8 @@ This is a convenience method and the same result would be achieved by updating a
 This is a convenience method and the same result would be achieved by updating a group.
 
     curl -XDELETE localhost:8092/api/userService/v1/group/allowedUsers -H "Content-Type: application/json" -d '{
-      "allowedUsers": ["$USER_ID_1", "$USER_ID_2"]
+      "groupId": "$GROUP_ID", // UUID
+      "allowedUsers": ["$USER_ID_1", "$USER_ID_2"] // list(UUID)
     }'
 
 ### Get Groups
