@@ -6,6 +6,6 @@ import java.util.UUID
   * author: cvandrei
   * since: 2017-03-29
   */
-case class Context(id: Option[UUID],
+case class Context(id: Option[UUID] = None,
                    displayName: String
                   )

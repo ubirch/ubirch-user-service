@@ -6,7 +6,9 @@ import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.actor.{ActorNames, ContextActor, CreateContext, DeleteContext, GetContext, UpdateContext}
+import com.ubirch.user.model._
 import com.ubirch.user.model.rest.Context
+import com.ubirch.user.server.util.ModelConverter
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
 import com.ubirch.util.json.MyJsonProtocol
@@ -71,18 +73,18 @@ trait ContextRoute extends MyJsonProtocol
 
   }
 
-  private def create(context: Context): Route = {
+  private def create(restContext: Context): Route = {
 
-    // TODO translate rest model to db model
-    onComplete(contextActor ? CreateContext(context)) {
+    val dbContext = ModelConverter.toDb(restContext)
+    onComplete(contextActor ? CreateContext(dbContext)) {
 
       case Failure(t) =>
-        logger.error("create context call responded with an unhandled message (check ContextRoute for bugs!!!)")
+        logger.error("create context call responded with an unhandled message (check ContextRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
-          case c: Context => complete(c)
+          case c: db.Context => complete(ModelConverter.toRest(c))
           case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create context"))
         }
 
@@ -90,18 +92,18 @@ trait ContextRoute extends MyJsonProtocol
 
   }
 
-  private def update(context: Context): Route = {
+  private def update(restContext: Context): Route = {
 
-    // TODO translate rest model to db model
-    onComplete(contextActor ? UpdateContext(context)) {
+    val dbContext = ModelConverter.toDb(restContext)
+    onComplete(contextActor ? UpdateContext(dbContext)) {
 
       case Failure(t) =>
-        logger.error("update context call responded with an unhandled message (check ContextRoute for bugs!!!)")
+        logger.error("update context call responded with an unhandled message (check ContextRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
-          case c: Context => complete(c)
+          case c: db.Context => complete(ModelConverter.toRest(c))
           case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update context"))
         }
 
@@ -114,12 +116,12 @@ trait ContextRoute extends MyJsonProtocol
     onComplete(contextActor ? GetContext(id)) {
 
       case Failure(t) =>
-        logger.error("getContext call responded with an unhandled message (check ContextRoute for bugs!!!)")
+        logger.error("getContext call responded with an unhandled message (check ContextRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
-          case c: Context => complete(c) // TODO translate db model to rest model
+          case c: db.Context => complete(ModelConverter.toRest(c))
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query context"))
         }
 
@@ -132,12 +134,12 @@ trait ContextRoute extends MyJsonProtocol
     onComplete(contextActor ? DeleteContext(id)) {
 
       case Failure(t) =>
-        logger.error("deleteContext call responded with an unhandled message (check ContextRoute for bugs!!!)")
+        logger.error("deleteContext call responded with an unhandled message (check ContextRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
-          case c: Context => complete(c) // TODO translate db model to rest model
+          case c: db.Context => complete(ModelConverter.toRest(c))
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete context"))
         }
 

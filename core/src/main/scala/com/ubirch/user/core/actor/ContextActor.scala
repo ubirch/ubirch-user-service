@@ -3,7 +3,7 @@ package com.ubirch.user.core.actor
 import java.util.UUID
 
 import com.ubirch.user.core.manager.ContextManager
-import com.ubirch.user.model.rest.Context
+import com.ubirch.user.model.db.Context
 
 import akka.actor.{Actor, ActorLogging}
 
@@ -40,9 +40,9 @@ class ContextActor extends Actor
 
 }
 
-case class CreateContext(context: Context) // TODO refactor to accept object from model-db
+case class CreateContext(context: Context)
 
-case class UpdateContext(context: Context) // TODO refactor to accept object from model-db
+case class UpdateContext(context: Context)
 
 case class GetContext(id: UUID)
 
