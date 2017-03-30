@@ -165,7 +165,7 @@ Responds with the updated user (including it's id which is a UUID).
 
 #### Delete
 
-    curl -XPUT localhost:8092/api/userService/v1/user/$USER_ID
+    curl -XDELETE localhost:8092/api/userService/v1/user/$USER_ID
 
 Responds with the deleted user (including it's id which is a UUID).
 

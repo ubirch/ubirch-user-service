@@ -13,6 +13,7 @@ class MainRoute {
 
   val welcome = new WelcomeRoute {}
   val context = new ContextRoute {}
+  val user = new UserRoute {}
 
   val myRoute: Route = {
 
@@ -21,6 +22,7 @@ class MainRoute {
         pathPrefix(RouteConstants.currentVersion) {
 
           context.route ~
+          user.route ~
           pathEndOrSingleSlash {
             welcome.route
           }

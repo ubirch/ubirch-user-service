@@ -7,5 +7,6 @@ package com.ubirch.user.core.actor
 object ActorNames {
 
   final val CONTEXT = "context-actor"
+  final val USER = "user-actor"
 
 }
