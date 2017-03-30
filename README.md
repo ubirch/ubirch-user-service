@@ -232,11 +232,15 @@ This is a convenience method and the same result would be achieved by updating a
       "allowedUsers": ["$USER_ID_1", "$USER_ID_2"] // list(UUID)
     }'
 
-### Get Groups
+### Groups Related
 
-_$USER_ID_ and $CONTEXT_NAME are strings.
+#### Find Groups
 
-    curl localhost:8092/api/userService/v1/groups/$CONTEXT_NAME/$USER_ID
+_$CONTEXT_NAME_ and _$EXTERNAL_USER_ID_ are strings.
+
+    curl localhost:8092/api/userService/v1/groups/$CONTEXT_NAME/$EXTERNAL_USER_ID
+
+Responds with a list of groups associated to the given contextName and externalUserId.
 
 
 ## Configuration

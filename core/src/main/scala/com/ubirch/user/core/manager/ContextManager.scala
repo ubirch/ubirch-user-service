@@ -17,23 +17,31 @@ import scala.concurrent.Future
 object ContextManager extends StrictLogging {
 
   def create(contextRest: Context): Future[Context] = {
+
     // TODO implement
     Future(contextRest.copy(id = Some(UUIDUtil.uuid)))
+
   }
 
   def update(contextRest: Context): Future[Context] = {
+
     // TODO implement
     Future(contextRest)
+
   }
 
   def get(id: UUID): Future[Context] = {
+
     // TODO implement
     Future(Context(Some(id), "foo-display-name-get"))
+
   }
 
   def delete(id: UUID): Future[Context] = {
+
     // TODO implement
     Future(Context(Some(id), "foo-display-name-delete"))
+
   }
 
 }

@@ -17,16 +17,21 @@ import scala.concurrent.Future
 object GroupManager extends StrictLogging {
 
   def create(groupRest: Group): Future[Group] = {
+
     // TODO implement
     Future(groupRest.copy(id = Some(UUIDUtil.uuid)))
+
   }
 
   def update(groupRest: Group): Future[Group] = {
+
     // TODO implement
     Future(groupRest)
+
   }
 
   def findById(id: UUID): Future[Group] = {
+
     // TODO implement
     Future(
       Group(
@@ -37,9 +42,11 @@ object GroupManager extends StrictLogging {
         allowedUsers = Seq.empty
       )
     )
+
   }
 
   def delete(id: UUID): Future[Group] = {
+
     // TODO implement
     Future(
       Group(
@@ -50,16 +57,21 @@ object GroupManager extends StrictLogging {
         allowedUsers = Seq.empty
       )
     )
+
   }
 
   def addAllowedUsers(allowedUsers: AllowedUsers): Future[Boolean] = {
+
     // TODO implement
     Future(true)
+
   }
 
   def deleteAllowedUsers(allowedUsers: AllowedUsers): Future[Boolean] = {
+
     // TODO implement
     Future(true)
+
   }
 
 }

@@ -17,16 +17,21 @@ import scala.concurrent.Future
 object UserManager extends StrictLogging {
 
   def create(userRest: User): Future[User] = {
+
     // TODO implement
     Future(userRest.copy(id = Some(UUIDUtil.uuid)))
+
   }
 
   def update(userRest: User): Future[User] = {
+
     // TODO implement
     Future(userRest)
+
   }
 
   def findByProviderIdExternalId(providerId: String, externalUserId: String): Future[User] = {
+
     // TODO implement
     Future(
       User(
@@ -36,9 +41,11 @@ object UserManager extends StrictLogging {
         externalId = externalUserId
       )
     )
+
   }
 
   def delete(id: UUID): Future[User] = {
+
     // TODO implement
     Future(
       User(
@@ -48,6 +55,7 @@ object UserManager extends StrictLogging {
         externalId = "some-external-id"
       )
     )
+
   }
 
 }

@@ -9,5 +9,6 @@ object ActorNames {
   final val CONTEXT = "context-actor"
   final val USER = "user-actor"
   final val GROUP = "group-actor"
+  final val GROUPS = "groups-actor"
 
 }

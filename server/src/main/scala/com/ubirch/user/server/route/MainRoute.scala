@@ -15,6 +15,7 @@ class MainRoute {
   val context = new ContextRoute {}
   val user = new UserRoute {}
   val group = new GroupRoute {}
+  val groups = new GroupsRoute {}
 
   val myRoute: Route = {
 
@@ -25,6 +26,7 @@ class MainRoute {
           context.route ~
           user.route ~
           group.route ~
+          groups.route ~
           pathEndOrSingleSlash {
             welcome.route
           }
