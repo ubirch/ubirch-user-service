@@ -6,9 +6,9 @@ import java.util.UUID
   * author: cvandrei
   * since: 2017-03-29
   */
-case class Group(id: Option[UUID],
+case class Group(id: Option[UUID] = None,
                  displayName: String,
                  ownerId: UUID,
                  contextId: UUID,
-                 allowedUsers: Seq[UUID]
+                 allowedUsers: Seq[UUID] = Seq.empty
                 )
