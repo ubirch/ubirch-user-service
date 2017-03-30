@@ -75,7 +75,7 @@ trait ContextRoute extends MyJsonProtocol
 
   private def create(restContext: Context): Route = {
 
-    val dbContext = ModelConverter.toDb(restContext)
+    val dbContext = ModelConverter.contextToDb(restContext)
     onComplete(contextActor ? CreateContext(dbContext)) {
 
       case Failure(t) =>
@@ -84,7 +84,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(ModelConverter.toRest(c))
+          case c: db.Context => complete(ModelConverter.contextToRest(c))
           case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create context"))
         }
 
@@ -94,7 +94,7 @@ trait ContextRoute extends MyJsonProtocol
 
   private def update(restContext: Context): Route = {
 
-    val dbContext = ModelConverter.toDb(restContext)
+    val dbContext = ModelConverter.contextToDb(restContext)
     onComplete(contextActor ? UpdateContext(dbContext)) {
 
       case Failure(t) =>
@@ -103,7 +103,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(ModelConverter.toRest(c))
+          case c: db.Context => complete(ModelConverter.contextToRest(c))
           case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update context"))
         }
 
@@ -121,7 +121,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(ModelConverter.toRest(c))
+          case c: db.Context => complete(ModelConverter.contextToRest(c))
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query context"))
         }
 
@@ -139,7 +139,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(ModelConverter.toRest(c))
+          case c: db.Context => complete(ModelConverter.contextToRest(c))
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete context"))
         }
 

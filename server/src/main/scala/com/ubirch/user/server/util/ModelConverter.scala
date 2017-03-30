@@ -15,7 +15,7 @@ object ModelConverter {
 
   private implicit def json4sFormats: Formats = JsonFormats.default
 
-  def toRest(dbContext: db.Context): rest.Context = {
+  def contextToRest(dbContext: db.Context): rest.Context = {
 
     // TODO unit tests
     val json = write(dbContext)
@@ -23,11 +23,43 @@ object ModelConverter {
 
   }
 
-  def toDb(restContext: rest.Context): db.Context = {
+  def contextToDb(restContext: rest.Context): db.Context = {
 
     // TODO unit tests
     val json = write(restContext)
     read[db.Context](json)
+
+  }
+
+  def userToRest(dbUser: db.User): rest.User = {
+
+    // TODO unit tests
+    val json = write(dbUser)
+    read[rest.User](json)
+
+  }
+
+  def userToDb(restUser: rest.User): db.User = {
+
+    // TODO unit tests
+    val json = write(restUser)
+    read[db.User](json)
+
+  }
+
+  def groupToRest(dbGroup: db.Group): rest.Group = {
+
+    // TODO unit tests
+    val json = write(dbGroup)
+    read[rest.Group](json)
+
+  }
+
+  def groupToDb(restGroup: rest.Group): db.Group = {
+
+    // TODO unit tests
+    val json = write(restGroup)
+    read[db.Group](json)
 
   }
 
