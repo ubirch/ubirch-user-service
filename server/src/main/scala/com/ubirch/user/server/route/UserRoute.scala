@@ -134,7 +134,7 @@ trait UserRoute extends MyJsonProtocol
     onComplete(userActor ? DeleteUser(userId)) {
 
       case Failure(t) =>
-        logger.error("deleteUser call responded with an unhandled message (check ContextRoute for bugs!!!)")
+        logger.error("deleteUser call responded with an unhandled message (check UserRoute for bugs!!!)")
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>

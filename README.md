@@ -130,13 +130,21 @@ Responds with the created context (including it's id which is a UUID).
 
 Responds with the updated context (including it's id which is a UUID).
 
+#### Get
+
+    curl localhost:8092/api/userService/v1/context/$CONTEXT_ID
+
+Responds with the context if it exists (including it's id which is a UUID).
+
 #### Delete
 
     curl -XDELETE localhost:8092/api/userService/v1/context/$CONTEXT_ID
 
+Responds with the deleted context (including it's id which is a UUID).
+
 ### User Related
 
-#### Create User
+#### Create
 
     curl -XPUT localhost:8092/api/userService/v1/user -H "Content-Type: application/json" -d '{
       "externalId": "$EXTERNAL_USER_ID", // string
@@ -145,12 +153,6 @@ Responds with the updated context (including it's id which is a UUID).
     }'
 
 Responds with the created user (including it's id which is a UUID).
-
-#### Find UserId
-
-    curl localhost:8092/api/userService/v1/user/$PROVIDER/$EXTERNAL_USER_ID
-
-Responds with the user if it exists (including it's id which is a UUID).
 
 #### Update
 
@@ -163,6 +165,12 @@ Responds with the user if it exists (including it's id which is a UUID).
 
 Responds with the updated user (including it's id which is a UUID).
 
+#### Find
+
+    curl localhost:8092/api/userService/v1/user/$PROVIDER/$EXTERNAL_USER_ID
+
+Responds with the user if it exists (including it's id which is a UUID).
+
 #### Delete
 
     curl -XDELETE localhost:8092/api/userService/v1/user/$USER_ID
@@ -171,10 +179,10 @@ Responds with the deleted user (including it's id which is a UUID).
 
 ### Group Related
 
-#### Create Group
+#### Create
 
     curl -XPUT localhost:8092/api/userService/v1/group -H "Content-Type: application/json" -d '{
-      "ownerId": "$OWNER", // userId allowed to modify it
+      "ownerId": "$OWNER", // UUID: userId allowed to modify it
       "displayName": "$DISPLAY_NAME", // string
       "contextId": "$CONTEXT_ID", // UUID
       "allowedUsers": ["$USER_ID_1", "$USER_ID_2"] // ownerId always has access no matter if it's listed here
@@ -186,13 +194,19 @@ Responds with the created group (including it's id which is a UUID).
 
     curl -XPOST localhost:8092/api/userService/v1/group -H "Content-Type: application/json" -d '{
       "id": "$GROUP_ID", // UUID
-      "ownerId": "$OWNER", // userId allowed to modify it
+      "ownerId": "$OWNER", // UUID: userId allowed to modify it
       "displayName": "$DISPLAY_NAME", // string
       "contextId": "$CONTEXT_ID", // UUID
       "allowedUsers": ["$USER_ID_1", "$USER_ID_2"] // ownerId always has access no matter if it's listed here
     }'
 
 Responds with the updated group (including it's id which is a UUID).
+
+#### Get
+
+    curl -XPUT localhost:8092/api/userService/v1/group/$GROUP_ID
+
+Responds with the related group if it exists
 
 #### Delete
 

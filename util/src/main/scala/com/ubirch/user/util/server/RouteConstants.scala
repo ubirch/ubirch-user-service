@@ -14,6 +14,8 @@ object RouteConstants {
 
   final val context = "context"
   final val user = "user"
+  final val group = "group"
+  final val allowedUsers = "allowedUsers"
 
   val pathPrefix = s"/$apiPrefix/$serviceName/$currentVersion"
 
@@ -23,5 +25,9 @@ object RouteConstants {
   val pathUser = s"$pathPrefix/$user"
   def pathUserFind(providerId: String, externalUserId: String) = s"$pathUser/$providerId/$externalUserId"
   def pathUserDelete(id: UUID) = s"$pathUser/$id"
+
+  val pathGroup = s"$pathPrefix/$group"
+  def pathGroupWithId(id: UUID) = s"$pathGroup/$id"
+  val pathGroupAllowedUsers = s"$pathGroup/$allowedUsers"
 
 }
