@@ -83,9 +83,10 @@ trait GroupRoute extends MyJsonProtocol
 
   }
 
-  private def createGroup(group: Group): Route = {
+  private def createGroup(restGroup: Group): Route = {
 
-    onComplete(groupActor ? CreateGroup(group)) {
+    // TODO translate rest model to db model
+    onComplete(groupActor ? CreateGroup(restGroup)) {
 
       case Failure(t) =>
         logger.error("create user call responded with an unhandled message (check GroupRoute for bugs!!!)")
@@ -93,8 +94,8 @@ trait GroupRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case g: Group => complete(g)
-          case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create group"))
+          case g: Group => complete(g) // TODO translate db model to rest model
+          case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create restGroup"))
         }
 
     }
@@ -103,16 +104,17 @@ trait GroupRoute extends MyJsonProtocol
 
   private def updateGroup(group: Group): Route = {
 
+    // TODO translate rest model to db model
     onComplete(groupActor ? UpdateGroup(group)) {
 
       case Failure(t) =>
-        logger.error("update group call responded with an unhandled message (check GroupRoute for bugs!!!)")
+        logger.error("update restGroup call responded with an unhandled message (check GroupRoute for bugs!!!)")
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
-          case g: Group => complete(g)
-          case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update group"))
+          case g: Group => complete(g) // TODO translate db model to rest model
+          case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update restGroup"))
         }
 
     }
@@ -129,8 +131,8 @@ trait GroupRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case g: Group => complete(g)
-          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query group"))
+          case g: Group => complete(g) // TODO translate db model to rest model
+          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query restGroup"))
         }
 
     }
@@ -147,8 +149,8 @@ trait GroupRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case g: Group => complete(g)
-          case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete group"))
+          case g: Group => complete(g) // TODO translate db model to rest model
+          case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete restGroup"))
         }
 
     }
@@ -157,7 +159,7 @@ trait GroupRoute extends MyJsonProtocol
 
   private def addAllowedUsers(allowedUsers: AllowedUsers): Route = {
 
-    onComplete(groupActor ? AddAllowedUsers(allowedUsers)) {
+    onComplete(groupActor ? AddAllowedUsers(groupId = allowedUsers.groupId, allowedUsers = allowedUsers.allowedUsers)) {
 
       case Failure(t) =>
         logger.error("adding allowed users call responded with an unhandled message (check GroupRoute for bugs!!!)")
@@ -175,7 +177,7 @@ trait GroupRoute extends MyJsonProtocol
 
   private def deleteAllowedUsers(allowedUsers: AllowedUsers): Route = {
 
-    onComplete(groupActor ? DeleteAllowedUsers(allowedUsers)) {
+    onComplete(groupActor ? DeleteAllowedUsers(groupId = allowedUsers.groupId, allowedUsers = allowedUsers.allowedUsers)) {
 
       case Failure(t) =>
         logger.error("adding allowed users call responded with an unhandled message (check GroupRoute for bugs!!!)")

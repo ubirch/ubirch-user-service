@@ -60,7 +60,7 @@ trait GroupsRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case found: FoundGroups => complete(found.groups)
+          case found: FoundGroups => complete(found.groups) // TODO translate db model to rest model
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query groups"))
         }
 

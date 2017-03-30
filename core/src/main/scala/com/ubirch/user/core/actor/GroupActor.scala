@@ -3,7 +3,7 @@ package com.ubirch.user.core.actor
 import java.util.UUID
 
 import com.ubirch.user.core.manager.GroupManager
-import com.ubirch.user.model.rest.{AllowedUsers, Group}
+import com.ubirch.user.model.rest.Group
 
 import akka.actor.{Actor, ActorLogging}
 
@@ -36,11 +36,17 @@ class GroupActor extends Actor
 
     case addAllowed: AddAllowedUsers =>
       val sender = context.sender()
-      GroupManager.addAllowedUsers(addAllowed.allowedUsers) map (sender ! _)
+      GroupManager.addAllowedUsers(
+        groupId = addAllowed.groupId,
+        allowedUsers = addAllowed.allowedUsers
+      ) map (sender ! _)
 
     case deleteAllowed: DeleteAllowedUsers =>
       val sender = context.sender()
-      GroupManager.deleteAllowedUsers(deleteAllowed.allowedUsers) map (sender ! _)
+      GroupManager.deleteAllowedUsers(
+        groupId = deleteAllowed.groupId,
+        allowedUsers = deleteAllowed.allowedUsers
+      ) map (sender ! _)
 
     case _ => log.error("unknown message")
 
@@ -48,14 +54,18 @@ class GroupActor extends Actor
 
 }
 
-case class CreateGroup(group: Group)
+case class CreateGroup(group: Group) // TODO refactor to accept object from model-db
 
-case class UpdateGroup(group: Group)
+case class UpdateGroup(group: Group) // TODO refactor to accept object from model-db
 
 case class FindGroup(id: UUID)
 
 case class DeleteGroup(id: UUID)
 
-case class AddAllowedUsers(allowedUsers: AllowedUsers)
+case class AddAllowedUsers(groupId: UUID,
+                           allowedUsers: Seq[UUID]
+                          )
 
-case class DeleteAllowedUsers(allowedUsers: AllowedUsers)
+case class DeleteAllowedUsers(groupId: UUID,
+                              allowedUsers: Seq[UUID]
+                             )

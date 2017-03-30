@@ -77,6 +77,7 @@ trait UserRoute extends MyJsonProtocol
 
   private def createUser(user: User): Route = {
 
+    // TODO translate rest model to db model
     onComplete(userActor ? CreateUser(user)) {
 
       case Failure(t) =>
@@ -85,7 +86,7 @@ trait UserRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case u: User => complete(u)
+          case u: User => complete(u) // TODO translate db model to rest model
           case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create user"))
         }
 
@@ -95,6 +96,7 @@ trait UserRoute extends MyJsonProtocol
 
   private def updateUser(user: User): Route = {
 
+    // TODO translate rest model to db model
     onComplete(userActor ? UpdateUser(user)) {
 
       case Failure(t) =>
@@ -103,7 +105,7 @@ trait UserRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case u: User => complete(u)
+          case u: User => complete(u) // TODO translate db model to rest model
           case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update user"))
         }
 
@@ -121,7 +123,7 @@ trait UserRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case u: User => complete(u)
+          case u: User => complete(u) // TODO translate db model to rest model
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query user"))
         }
 
@@ -139,7 +141,7 @@ trait UserRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case u: User => complete(u)
+          case u: User => complete(u) // TODO translate db model to rest model
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete user"))
         }
 

@@ -34,4 +34,4 @@ case class FindGroups(contextName: String,
                       externalUserId: String
                      )
 
-case class FoundGroups(groups: Seq[Group])
+case class FoundGroups(groups: Seq[Group]) // TODO refactor to accept object from model-db

@@ -40,9 +40,9 @@ class ContextActor extends Actor
 
 }
 
-case class CreateContext(context: Context)
+case class CreateContext(context: Context) // TODO refactor to accept object from model-db
 
-case class UpdateContext(context: Context)
+case class UpdateContext(context: Context) // TODO refactor to accept object from model-db
 
 case class GetContext(id: UUID)
 

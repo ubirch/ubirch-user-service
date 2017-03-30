@@ -4,7 +4,7 @@ import java.util.UUID
 
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
-import com.ubirch.user.model.rest.{AllowedUsers, Group}
+import com.ubirch.user.model.rest.Group
 import com.ubirch.util.uuid.UUIDUtil
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -60,14 +60,14 @@ object GroupManager extends StrictLogging {
 
   }
 
-  def addAllowedUsers(allowedUsers: AllowedUsers): Future[Boolean] = {
+  def addAllowedUsers(groupId: UUID, allowedUsers: Seq[UUID]): Future[Boolean] = {
 
     // TODO implement
     Future(true)
 
   }
 
-  def deleteAllowedUsers(allowedUsers: AllowedUsers): Future[Boolean] = {
+  def deleteAllowedUsers(groupId: UUID, allowedUsers: Seq[UUID]): Future[Boolean] = {
 
     // TODO implement
     Future(true)

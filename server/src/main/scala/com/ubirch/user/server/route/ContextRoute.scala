@@ -73,6 +73,7 @@ trait ContextRoute extends MyJsonProtocol
 
   private def create(context: Context): Route = {
 
+    // TODO translate rest model to db model
     onComplete(contextActor ? CreateContext(context)) {
 
       case Failure(t) =>
@@ -91,6 +92,7 @@ trait ContextRoute extends MyJsonProtocol
 
   private def update(context: Context): Route = {
 
+    // TODO translate rest model to db model
     onComplete(contextActor ? UpdateContext(context)) {
 
       case Failure(t) =>
@@ -117,7 +119,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: Context => complete(c)
+          case c: Context => complete(c) // TODO translate db model to rest model
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query context"))
         }
 
@@ -135,7 +137,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: Context => complete(c)
+          case c: Context => complete(c) // TODO translate db model to rest model
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete context"))
         }
 

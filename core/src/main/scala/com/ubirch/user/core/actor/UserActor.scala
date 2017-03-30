@@ -40,9 +40,9 @@ class UserActor extends Actor
 
 }
 
-case class CreateUser(user: User)
+case class CreateUser(user: User) // TODO refactor to accept object from model-db
 
-case class UpdateUser(user: User)
+case class UpdateUser(user: User) // TODO refactor to accept object from model-db
 
 case class FindUser(providerId: String, externalUserId: String)
 
