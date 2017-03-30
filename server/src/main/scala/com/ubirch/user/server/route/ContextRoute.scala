@@ -1,5 +1,7 @@
 package com.ubirch.user.server.route
 
+import java.util.UUID
+
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.Config
@@ -46,80 +48,97 @@ trait ContextRoute extends MyJsonProtocol
 
           put {
             entity(as[Context]) { context =>
-
-              onComplete(contextActor ? CreateContext(context)) {
-
-                case Failure(t) =>
-                  logger.error("create context call responded with an unhandled message (check ContextRoute for bugs!!!)")
-                  complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
-
-                case Success(resp) =>
-                  resp match {
-                    case c: Context => complete(c)
-                    case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create context"))
-                  }
-
-              }
-
+              create(context)
             }
           } ~ post {
             entity(as[Context]) { context =>
-
-              onComplete(contextActor ? UpdateContext(context)) {
-
-                case Failure(t) =>
-                  logger.error("update context call responded with an unhandled message (check ContextRoute for bugs!!!)")
-                  complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
-
-                case Success(resp) =>
-                  resp match {
-                    case c: Context => complete(c)
-                    case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update context"))
-                  }
-
-              }
-
+              update(context)
             }
           }
 
         } ~ path(JavaUUID) { contextId =>
 
           get {
-
-            onComplete(contextActor ? GetContext(contextId)) {
-
-              case Failure(t) =>
-                logger.error("getContext call responded with an unhandled message (check ContextRoute for bugs!!!)")
-                complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
-
-              case Success(resp) =>
-                resp match {
-                  case c: Context => complete(c)
-                  case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query context"))
-                }
-
-            }
-
+            getById(contextId)
           } ~ delete {
-
-            onComplete(contextActor ? DeleteContext(contextId)) {
-
-              case Failure(t) =>
-                logger.error("deleteContext call responded with an unhandled message (check ContextRoute for bugs!!!)")
-                complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
-
-              case Success(resp) =>
-                resp match {
-                  case c: Context => complete(c)
-                  case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete context"))
-                }
-
-            }
-
+            deleteById(contextId)
           }
+
         }
 
       }
+    }
+
+  }
+
+  private def create(context: Context): Route = {
+
+    onComplete(contextActor ? CreateContext(context)) {
+
+      case Failure(t) =>
+        logger.error("create context call responded with an unhandled message (check ContextRoute for bugs!!!)")
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
+
+      case Success(resp) =>
+        resp match {
+          case c: Context => complete(c)
+          case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create context"))
+        }
+
+    }
+
+  }
+
+  private def update(context: Context): Route = {
+
+    onComplete(contextActor ? UpdateContext(context)) {
+
+      case Failure(t) =>
+        logger.error("update context call responded with an unhandled message (check ContextRoute for bugs!!!)")
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
+
+      case Success(resp) =>
+        resp match {
+          case c: Context => complete(c)
+          case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update context"))
+        }
+
+    }
+
+  }
+
+  private def getById(id: UUID): Route = {
+
+    onComplete(contextActor ? GetContext(id)) {
+
+      case Failure(t) =>
+        logger.error("getContext call responded with an unhandled message (check ContextRoute for bugs!!!)")
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
+
+      case Success(resp) =>
+        resp match {
+          case c: Context => complete(c)
+          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query context"))
+        }
+
+    }
+
+  }
+
+  private def deleteById(id: UUID): Route = {
+
+    onComplete(contextActor ? DeleteContext(id)) {
+
+      case Failure(t) =>
+        logger.error("deleteContext call responded with an unhandled message (check ContextRoute for bugs!!!)")
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
+
+      case Success(resp) =>
+        resp match {
+          case c: Context => complete(c)
+          case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete context"))
+        }
+
     }
 
   }
