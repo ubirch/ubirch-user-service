@@ -8,10 +8,9 @@ import com.ubirch.user.config.Config
 import com.ubirch.user.core.actor.{ActorNames, ContextActor, CreateContext, DeleteContext, GetContext, UpdateContext}
 import com.ubirch.user.model._
 import com.ubirch.user.model.rest.Context
-import com.ubirch.user.server.util.ModelConverter
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
-import com.ubirch.util.json.MyJsonProtocol
+import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
 import com.ubirch.util.rest.akka.directives.CORSDirective
 
 import akka.actor.{ActorSystem, Props}
@@ -75,7 +74,7 @@ trait ContextRoute extends MyJsonProtocol
 
   private def create(restContext: Context): Route = {
 
-    val dbContext = ModelConverter.contextToDb(restContext)
+    val dbContext = Json4sUtil.any2any[db.Context](restContext)
     onComplete(contextActor ? CreateContext(dbContext)) {
 
       case Failure(t) =>
@@ -84,7 +83,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(ModelConverter.contextToRest(c))
+          case c: db.Context => complete(Json4sUtil.any2any[db.Context](c))
           case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create context"))
         }
 
@@ -94,7 +93,7 @@ trait ContextRoute extends MyJsonProtocol
 
   private def update(restContext: Context): Route = {
 
-    val dbContext = ModelConverter.contextToDb(restContext)
+    val dbContext = Json4sUtil.any2any[db.Context](restContext)
     onComplete(contextActor ? UpdateContext(dbContext)) {
 
       case Failure(t) =>
@@ -103,7 +102,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(ModelConverter.contextToRest(c))
+          case c: db.Context => complete(Json4sUtil.any2any[db.Context](c))
           case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update context"))
         }
 
@@ -121,7 +120,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(ModelConverter.contextToRest(c))
+          case c: db.Context => complete(Json4sUtil.any2any[db.Context](c))
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query context"))
         }
 
@@ -139,7 +138,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(ModelConverter.contextToRest(c))
+          case c: db.Context => complete(Json4sUtil.any2any[db.Context](c))
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete context"))
         }
 
