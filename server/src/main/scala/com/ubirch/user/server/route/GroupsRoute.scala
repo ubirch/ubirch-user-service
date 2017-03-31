@@ -4,7 +4,7 @@ import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.actor.{ActorNames, FindGroups, FoundGroups, GroupsActor}
-import com.ubirch.user.model.rest.Group
+import com.ubirch.user.model._
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
 import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
@@ -63,7 +63,7 @@ trait GroupsRoute extends MyJsonProtocol
         resp match {
 
           case found: FoundGroups =>
-            val restGroups = found.groups map Json4sUtil.any2any[Group]
+            val restGroups = found.groups map Json4sUtil.any2any[rest.Group]
             complete(restGroups)
 
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query groups"))
