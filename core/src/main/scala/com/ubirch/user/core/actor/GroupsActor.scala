@@ -1,7 +1,7 @@
 package com.ubirch.user.core.actor
 
 import com.ubirch.user.core.manager.GroupsManager
-import com.ubirch.user.model.rest.Group
+import com.ubirch.user.model.db.Group
 
 import akka.actor.{Actor, ActorLogging}
 
@@ -34,4 +34,4 @@ case class FindGroups(contextName: String,
                       externalUserId: String
                      )
 
-case class FoundGroups(groups: Seq[Group]) // TODO refactor to accept object from model-db
+case class FoundGroups(groups: Seq[Group])

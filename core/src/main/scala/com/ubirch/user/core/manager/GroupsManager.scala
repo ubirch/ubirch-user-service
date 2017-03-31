@@ -2,7 +2,7 @@ package com.ubirch.user.core.manager
 
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
-import com.ubirch.user.model.rest.Group
+import com.ubirch.user.model.db.Group
 import com.ubirch.util.uuid.UUIDUtil
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -25,14 +25,12 @@ object GroupsManager extends StrictLogging {
     Future(
       Seq(
         Group(
-          id = Some(UUIDUtil.uuid),
           displayName = "display-name-group-1",
           ownerId = ownerId,
           contextId = contextId,
           allowedUsers = Seq(allowedUser1, allowedUser2)
         ),
         Group(
-          id = Some(UUIDUtil.uuid),
           displayName = "display-name-group-2",
           ownerId = ownerId,
           contextId = contextId,

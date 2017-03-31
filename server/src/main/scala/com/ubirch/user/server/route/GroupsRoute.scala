@@ -4,9 +4,10 @@ import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.actor.{ActorNames, FindGroups, FoundGroups, GroupsActor}
+import com.ubirch.user.model.rest.Group
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
-import com.ubirch.util.json.MyJsonProtocol
+import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
 import com.ubirch.util.rest.akka.directives.CORSDirective
 
 import akka.actor.{ActorSystem, Props}
@@ -60,8 +61,13 @@ trait GroupsRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case found: FoundGroups => complete(found.groups) // TODO translate db model to rest model
+
+          case found: FoundGroups =>
+            val restGroups = found.groups map Json4sUtil.any2any[Group]
+            complete(restGroups)
+
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query groups"))
+
         }
 
     }
