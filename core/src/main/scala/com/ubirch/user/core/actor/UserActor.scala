@@ -3,7 +3,7 @@ package com.ubirch.user.core.actor
 import java.util.UUID
 
 import com.ubirch.user.core.manager.UserManager
-import com.ubirch.user.model.rest.User
+import com.ubirch.user.model.db.User
 
 import akka.actor.{Actor, ActorLogging}
 
@@ -40,9 +40,9 @@ class UserActor extends Actor
 
 }
 
-case class CreateUser(user: User) // TODO refactor to accept object from model-db
+case class CreateUser(user: User)
 
-case class UpdateUser(user: User) // TODO refactor to accept object from model-db
+case class UpdateUser(user: User)
 
 case class FindUser(providerId: String, externalUserId: String)
 

@@ -7,9 +7,10 @@ import com.typesafe.scalalogging.slf4j.StrictLogging
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.actor.{ActorNames, CreateUser, DeleteUser, FindUser, UpdateUser, UserActor}
 import com.ubirch.user.model.rest.User
+import com.ubirch.user.model._
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
-import com.ubirch.util.json.MyJsonProtocol
+import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
 import com.ubirch.util.rest.akka.directives.CORSDirective
 
 import akka.actor.{ActorSystem, Props}
@@ -75,10 +76,10 @@ trait UserRoute extends MyJsonProtocol
 
   }
 
-  private def createUser(user: User): Route = {
+  private def createUser(restUser: User): Route = {
 
-    // TODO translate rest model to db model
-    onComplete(userActor ? CreateUser(user)) {
+    val dbUser = Json4sUtil.any2any[db.User](restUser)
+    onComplete(userActor ? CreateUser(dbUser)) {
 
       case Failure(t) =>
         logger.error("create user call responded with an unhandled message (check UserRoute for bugs!!!)")
@@ -86,7 +87,7 @@ trait UserRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case u: User => complete(u) // TODO translate db model to rest model
+          case u: db.User => complete(Json4sUtil.any2any[rest.User](u))
           case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create user"))
         }
 
@@ -94,10 +95,10 @@ trait UserRoute extends MyJsonProtocol
 
   }
 
-  private def updateUser(user: User): Route = {
+  private def updateUser(restUser: User): Route = {
 
-    // TODO translate rest model to db model
-    onComplete(userActor ? UpdateUser(user)) {
+    val dbUser = Json4sUtil.any2any[db.User](restUser)
+    onComplete(userActor ? UpdateUser(dbUser)) {
 
       case Failure(t) =>
         logger.error("update user call responded with an unhandled message (check UserRoute for bugs!!!)")
@@ -105,7 +106,7 @@ trait UserRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case u: User => complete(u) // TODO translate db model to rest model
+          case u: db.User => complete(Json4sUtil.any2any[rest.User](u))
           case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update user"))
         }
 
@@ -123,7 +124,7 @@ trait UserRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case u: User => complete(u) // TODO translate db model to rest model
+          case u: db.User => complete(Json4sUtil.any2any[rest.User](u))
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query user"))
         }
 
@@ -141,7 +142,7 @@ trait UserRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case u: User => complete(u) // TODO translate db model to rest model
+          case u: db.User => complete(Json4sUtil.any2any[rest.User](u))
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete user"))
         }
 
