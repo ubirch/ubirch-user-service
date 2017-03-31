@@ -4,7 +4,7 @@ import java.util.UUID
 
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
-import com.ubirch.user.model.rest.Group
+import com.ubirch.user.model.db.Group
 import com.ubirch.util.uuid.UUIDUtil
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -19,7 +19,7 @@ object GroupManager extends StrictLogging {
   def create(groupRest: Group): Future[Group] = {
 
     // TODO implement
-    Future(groupRest.copy(id = Some(UUIDUtil.uuid)))
+    Future(groupRest)
 
   }
 
@@ -35,7 +35,6 @@ object GroupManager extends StrictLogging {
     // TODO implement
     Future(
       Group(
-        id = Some(id),
         displayName = "displayName-find",
         ownerId = UUIDUtil.uuid,
         contextId = UUIDUtil.uuid,
@@ -50,7 +49,6 @@ object GroupManager extends StrictLogging {
     // TODO implement
     Future(
       Group(
-        id = Some(id),
         displayName = "displayName-delete",
         ownerId = UUIDUtil.uuid,
         contextId = UUIDUtil.uuid,

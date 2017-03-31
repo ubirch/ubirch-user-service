@@ -7,9 +7,10 @@ import com.typesafe.scalalogging.slf4j.StrictLogging
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.actor.{ActorNames, AddAllowedUsers, CreateGroup, DeleteAllowedUsers, DeleteGroup, FindGroup, GroupActor, UpdateGroup}
 import com.ubirch.user.model.rest.{AllowedUsers, Group}
+import com.ubirch.user.model._
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
-import com.ubirch.util.json.MyJsonProtocol
+import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
 import com.ubirch.util.rest.akka.directives.CORSDirective
 
 import akka.actor.{ActorSystem, Props}
@@ -85,8 +86,8 @@ trait GroupRoute extends MyJsonProtocol
 
   private def createGroup(restGroup: Group): Route = {
 
-    // TODO translate rest model to db model
-    onComplete(groupActor ? CreateGroup(restGroup)) {
+    val dbGroup = Json4sUtil.any2any[db.Group](restGroup)
+    onComplete(groupActor ? CreateGroup(dbGroup)) {
 
       case Failure(t) =>
         logger.error("create user call responded with an unhandled message (check GroupRoute for bugs!!!)")
@@ -94,7 +95,7 @@ trait GroupRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case g: Group => complete(g) // TODO translate db model to rest model
+          case g: db.Group => complete(Json4sUtil.any2any[rest.Group](g))
           case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create restGroup"))
         }
 
@@ -102,10 +103,10 @@ trait GroupRoute extends MyJsonProtocol
 
   }
 
-  private def updateGroup(group: Group): Route = {
+  private def updateGroup(restGroup: Group): Route = {
 
-    // TODO translate rest model to db model
-    onComplete(groupActor ? UpdateGroup(group)) {
+    val dbGroup = Json4sUtil.any2any[db.Group](restGroup)
+    onComplete(groupActor ? UpdateGroup(dbGroup)) {
 
       case Failure(t) =>
         logger.error("update restGroup call responded with an unhandled message (check GroupRoute for bugs!!!)")
@@ -113,7 +114,7 @@ trait GroupRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case g: Group => complete(g) // TODO translate db model to rest model
+          case g: db.Group => complete(Json4sUtil.any2any[rest.Group](g))
           case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update restGroup"))
         }
 
@@ -131,7 +132,7 @@ trait GroupRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case g: Group => complete(g) // TODO translate db model to rest model
+          case g: db.Group => complete(Json4sUtil.any2any[rest.Group](g))
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query restGroup"))
         }
 
@@ -149,7 +150,7 @@ trait GroupRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case g: Group => complete(g) // TODO translate db model to rest model
+          case g: db.Group => complete(Json4sUtil.any2any[rest.Group](g))
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete restGroup"))
         }
 

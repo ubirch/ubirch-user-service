@@ -3,7 +3,7 @@ package com.ubirch.user.core.actor
 import java.util.UUID
 
 import com.ubirch.user.core.manager.GroupManager
-import com.ubirch.user.model.rest.Group
+import com.ubirch.user.model.db.Group
 
 import akka.actor.{Actor, ActorLogging}
 
@@ -54,9 +54,9 @@ class GroupActor extends Actor
 
 }
 
-case class CreateGroup(group: Group) // TODO refactor to accept object from model-db
+case class CreateGroup(group: Group)
 
-case class UpdateGroup(group: Group) // TODO refactor to accept object from model-db
+case class UpdateGroup(group: Group)
 
 case class FindGroup(id: UUID)
 
