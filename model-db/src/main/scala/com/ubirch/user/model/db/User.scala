@@ -2,7 +2,10 @@ package com.ubirch.user.model.db
 
 import java.util.UUID
 
+import com.ubirch.util.date.DateUtil
 import com.ubirch.util.uuid.UUIDUtil
+
+import org.joda.time.DateTime
 
 /**
   * author: cvandrei
@@ -11,5 +14,7 @@ import com.ubirch.util.uuid.UUIDUtil
 case class User(id: UUID = UUIDUtil.uuid,
                 displayName: String,
                 providerId: String,
-                externalId: String
+                externalId: String,
+                created: DateTime = DateUtil.nowUTC,
+                updated: DateTime = DateUtil.nowUTC,
                )

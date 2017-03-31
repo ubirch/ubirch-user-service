@@ -129,12 +129,8 @@ lazy val depCore = Seq(
 ) ++ scalaLogging
 
 lazy val depModelDb = Seq(
-  ubirchUuid
-)
-
-lazy val depModel = Seq(
-  ubirchJsonAutoConvert,
-  json4sNative
+  ubirchUuid,
+  ubirchDate
 )
 
 lazy val depTestTools = Seq(
@@ -185,6 +181,7 @@ lazy val excludedLoggers = Seq(
 )
 
 lazy val ubirchConfig = ubirchUtilG %% "config" % "0.1" excludeAll(excludedLoggers: _*)
+lazy val ubirchDate = ubirchUtilG %% "date" % "0.1" excludeAll(excludedLoggers: _*)
 lazy val ubirchJson = ubirchUtilG %% "json" % "0.3.3-SNAPSHOT" excludeAll(excludedLoggers: _*)
 lazy val ubirchJsonAutoConvert = ubirchUtilG %% "json-auto-convert" % "0.3.3-SNAPSHOT" excludeAll(excludedLoggers: _*)
 lazy val ubirchRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.3.3" excludeAll(excludedLoggers: _*)

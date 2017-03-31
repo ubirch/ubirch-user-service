@@ -2,7 +2,10 @@ package com.ubirch.user.model.db
 
 import java.util.UUID
 
+import com.ubirch.util.date.DateUtil
 import com.ubirch.util.uuid.UUIDUtil
+
+import org.joda.time.DateTime
 
 /**
   * author: cvandrei
@@ -12,5 +15,7 @@ case class Group(id: UUID = UUIDUtil.uuid,
                  displayName: String,
                  ownerId: UUID,
                  contextId: UUID,
-                 allowedUsers: Seq[UUID]
+                 allowedUsers: Seq[UUID],
+                 created: DateTime = DateUtil.nowUTC,
+                 updated: DateTime = DateUtil.nowUTC
                 )
