@@ -16,17 +16,17 @@ import scala.concurrent.Future
   */
 object ContextManager extends StrictLogging {
 
-  def create(contextRest: Context): Future[Context] = {
+  def create(context: Context): Future[Context] = {
 
     // TODO implement
-    Future(contextRest)
+    Future(context)
 
   }
 
-  def update(contextRest: Context): Future[Context] = {
+  def update(context: Context): Future[Context] = {
 
     // TODO implement
-    Future(contextRest)
+    Future(context)
 
   }
 

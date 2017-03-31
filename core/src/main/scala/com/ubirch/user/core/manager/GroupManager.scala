@@ -16,17 +16,17 @@ import scala.concurrent.Future
   */
 object GroupManager extends StrictLogging {
 
-  def create(groupRest: Group): Future[Group] = {
+  def create(group: Group): Future[Group] = {
 
     // TODO implement
-    Future(groupRest)
+    Future(group)
 
   }
 
-  def update(groupRest: Group): Future[Group] = {
+  def update(group: Group): Future[Group] = {
 
     // TODO implement
-    Future(groupRest)
+    Future(group)
 
   }
 
