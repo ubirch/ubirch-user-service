@@ -83,7 +83,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(Json4sUtil.any2any[db.Context](c))
+          case c: db.Context => complete(Json4sUtil.any2any[rest.Context](c))
           case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create context"))
         }
 
@@ -102,7 +102,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(Json4sUtil.any2any[db.Context](c))
+          case c: db.Context => complete(Json4sUtil.any2any[rest.Context](c))
           case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update context"))
         }
 
@@ -120,7 +120,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(Json4sUtil.any2any[db.Context](c))
+          case c: db.Context => complete(Json4sUtil.any2any[rest.Context](c))
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query context"))
         }
 
@@ -138,7 +138,7 @@ trait ContextRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(Json4sUtil.any2any[db.Context](c))
+          case c: db.Context => complete(Json4sUtil.any2any[rest.Context](c))
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete context"))
         }
 
