@@ -30,6 +30,10 @@ class ContextActor extends Actor
       val sender = context.sender()
       ContextManager.get(get.id) map (sender ! _)
 
+    case find: FindContextByName =>
+      val sender = context.sender()
+      ContextManager.findByName(find.name) map (sender ! _)
+
     case delete: DeleteContext =>
       val sender = context.sender()
       ContextManager.delete(delete.id) map (sender ! _)
@@ -47,3 +51,5 @@ case class UpdateContext(context: Context)
 case class GetContext(id: UUID)
 
 case class DeleteContext(id: UUID)
+
+case class FindContextByName(name: String)

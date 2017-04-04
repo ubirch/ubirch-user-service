@@ -47,26 +47,22 @@ trait UserRoute extends MyJsonProtocol
 
         pathEnd {
 
-          put {
+          post {
             entity(as[User]) { user =>
               createUser(user)
             }
-          } ~ post {
-            entity(as[User]) { user =>
-              updateUser(user)
-            }
           }
 
-        } ~ path(Segment / Segment) { (provider, userId) =>
+        } ~ path(Segment / Segment) { (provider, externalUserId) =>
 
           get {
-            findByProviderUserId(provider, userId)
-          }
-
-        } ~ path(JavaUUID) { userId =>
-
-          delete {
-            deleteById(userId)
+            findByProviderUserId(provider, externalUserId)
+          } ~ put {
+            entity(as[User]) { user =>
+              updateUser(provider, externalUserId, user)
+            }
+          } ~ delete {
+            deleteById(provider, externalUserId)
           }
 
         }
@@ -95,10 +91,18 @@ trait UserRoute extends MyJsonProtocol
 
   }
 
-  private def updateUser(restUser: User): Route = {
+  private def updateUser(providerId: String,
+                         externalUserId: String,
+                         restUser: User
+                        ): Route = {
 
     val dbUser = Json4sUtil.any2any[db.User](restUser)
-    onComplete(userActor ? UpdateUser(dbUser)) {
+    onComplete(userActor ? UpdateUser(
+      providerId = providerId,
+      externalUserId = externalUserId,
+      dbUser
+    )
+    ) {
 
       case Failure(t) =>
         logger.error("update user call responded with an unhandled message (check UserRoute for bugs!!!)")
@@ -132,9 +136,9 @@ trait UserRoute extends MyJsonProtocol
 
   }
 
-  private def deleteById(userId: UUID): Route = {
+  private def deleteById(providerId: String, externalUserId: String): Route = {
 
-    onComplete(userActor ? DeleteUser(userId)) {
+    onComplete(userActor ? DeleteUser(providerId = providerId, externalUserId = externalUserId)) {
 
       case Failure(t) =>
         logger.error("deleteUser call responded with an unhandled message (check UserRoute for bugs!!!)")

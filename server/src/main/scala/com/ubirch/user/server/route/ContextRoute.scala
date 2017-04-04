@@ -5,7 +5,7 @@ import java.util.UUID
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.Config
-import com.ubirch.user.core.actor.{ActorNames, ContextActor, CreateContext, DeleteContext, GetContext, UpdateContext}
+import com.ubirch.user.core.actor.{ActorNames, ContextActor, CreateContext, DeleteContext, FindContextByName, GetContext, UpdateContext}
 import com.ubirch.user.model._
 import com.ubirch.user.model.rest.Context
 import com.ubirch.user.util.server.RouteConstants
@@ -47,11 +47,11 @@ trait ContextRoute extends MyJsonProtocol
 
         pathEnd {
 
-          put {
+          post {
             entity(as[Context]) { context =>
               create(context)
             }
-          } ~ post {
+          } ~ put {
             entity(as[Context]) { context =>
               update(context)
             }
@@ -63,6 +63,12 @@ trait ContextRoute extends MyJsonProtocol
             getById(contextId)
           } ~ delete {
             deleteById(contextId)
+          }
+
+        } ~ path(RouteConstants.byName / Segment) { contextName =>
+
+          get {
+            findByName(contextName)
           }
 
         }
@@ -140,6 +146,24 @@ trait ContextRoute extends MyJsonProtocol
         resp match {
           case c: db.Context => complete(Json4sUtil.any2any[rest.Context](c))
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete context"))
+        }
+
+    }
+
+  }
+
+  private def findByName(name: String): Route = {
+
+    onComplete(contextActor ? FindContextByName(name)) {
+
+      case Failure(t) =>
+        logger.error("findContextByName call responded with an unhandled message (check ContextRoute for bugs!!!)", t)
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
+
+      case Success(resp) =>
+        resp match {
+          case c: db.Context => complete(Json4sUtil.any2any[rest.Context](c))
+          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to find context by name"))
         }
 
     }

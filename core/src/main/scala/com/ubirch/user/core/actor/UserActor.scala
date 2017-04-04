@@ -1,7 +1,5 @@
 package com.ubirch.user.core.actor
 
-import java.util.UUID
-
 import com.ubirch.user.core.manager.UserManager
 import com.ubirch.user.model.db.User
 
@@ -24,15 +22,25 @@ class UserActor extends Actor
 
     case update: UpdateUser =>
       val sender = context.sender()
-      UserManager.update(update.user) map (sender ! _)
+      UserManager.update(
+        providerId = update.providerId,
+        externalUserId = update.externalUserId,
+        user = update.user
+      ) map (sender ! _)
 
     case find: FindUser =>
       val sender = context.sender()
-      UserManager.findByProviderIdExternalId(providerId = find.providerId, externalUserId = find.externalUserId) map (sender ! _)
+      UserManager.findByProviderIdExternalId(
+        providerId = find.providerId,
+        externalUserId = find.externalUserId
+      ) map (sender ! _)
 
     case delete: DeleteUser =>
       val sender = context.sender()
-      UserManager.delete(delete.userId) map (sender ! _)
+      UserManager.delete(
+        providerId = delete.providerId,
+        externalUserId = delete.externalUserId
+      ) map (sender ! _)
 
     case _ => log.error("unknown message")
 
@@ -42,8 +50,15 @@ class UserActor extends Actor
 
 case class CreateUser(user: User)
 
-case class UpdateUser(user: User)
+case class UpdateUser(providerId: String,
+                      externalUserId: String,
+                      user: User
+                     )
 
-case class FindUser(providerId: String, externalUserId: String)
+case class FindUser(providerId: String,
+                    externalUserId: String
+                   )
 
-case class DeleteUser(userId: UUID)
+case class DeleteUser(providerId: String,
+                      externalUserId: String
+                     )

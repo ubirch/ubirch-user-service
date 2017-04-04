@@ -1,7 +1,5 @@
 package com.ubirch.user.core.manager
 
-import java.util.UUID
-
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.model.db.User
@@ -22,7 +20,10 @@ object UserManager extends StrictLogging {
 
   }
 
-  def update(user: User): Future[User] = {
+  def update(providerId: String,
+             externalUserId: String,
+             user: User
+            ): Future[User] = {
 
     // TODO implement
     Future(user)
@@ -42,14 +43,14 @@ object UserManager extends StrictLogging {
 
   }
 
-  def delete(id: UUID): Future[User] = {
+  def delete(providerId: String, externalUserId: String): Future[User] = {
 
     // TODO implement
     Future(
       User(
-        displayName = "displayName-find",
-        providerId = "some-provider-id",
-        externalId = "some-external-id"
+        displayName = "displayName-delete",
+        providerId = providerId,
+        externalId = externalUserId
       )
     )
 

@@ -21,6 +21,7 @@ class GroupsActor extends Actor
       val sender = context.sender()
       GroupsManager.findByContextNameAndExternalUserId(
         contextName = find.contextName,
+        providerId = find.providerId,
         externalUserId = find.externalUserId
       ) map (sender ! FoundGroups(_))
 
@@ -31,6 +32,7 @@ class GroupsActor extends Actor
 }
 
 case class FindGroups(contextName: String,
+                      providerId: String,
                       externalUserId: String
                      )
 

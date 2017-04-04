@@ -13,6 +13,7 @@ object RouteConstants {
   final val currentVersion = "v1"
 
   final val context = "context"
+  final val byName = "byName"
   final val user = "user"
   final val group = "group"
   final val allowedUsers = "allowedUsers"
@@ -22,6 +23,7 @@ object RouteConstants {
 
   val pathContext = s"$pathPrefix/$context"
   def pathContextWithId(id: UUID) = s"$pathContext/$id"
+  def pathContextFindByName(name: String) = s"$pathContext/$byName/$name"
 
   val pathUser = s"$pathPrefix/$user"
   def pathUserFind(providerId: String, externalUserId: String) = s"$pathUser/$providerId/$externalUserId"

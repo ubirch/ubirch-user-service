@@ -37,6 +37,13 @@ object ContextManager extends StrictLogging {
 
   }
 
+  def findByName(name: String): Future[Context] = {
+
+    // TODO implement
+    Future(Context(displayName = name))
+
+  }
+
   def delete(id: UUID): Future[Context] = {
 
     // TODO implement

@@ -48,11 +48,11 @@ trait GroupRoute extends MyJsonProtocol
 
         pathEnd {
 
-          put {
+          post {
             entity(as[Group]) { group =>
               createGroup(group)
             }
-          } ~ post {
+          } ~ put {
             entity(as[Group]) { group =>
               updateGroup(group)
             }
@@ -68,7 +68,7 @@ trait GroupRoute extends MyJsonProtocol
 
         } ~ path(RouteConstants.allowedUsers) {
 
-          post {
+          put {
             entity(as[AllowedUsers]) { allowedUsers =>
               addAllowedUsers(allowedUsers)
             }

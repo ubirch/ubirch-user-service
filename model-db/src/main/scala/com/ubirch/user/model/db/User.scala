@@ -16,5 +16,5 @@ case class User(id: UUID = UUIDUtil.uuid,
                 providerId: String,
                 externalId: String,
                 created: DateTime = DateUtil.nowUTC,
-                updated: DateTime = DateUtil.nowUTC,
+                updated: DateTime = DateUtil.nowUTC
                )

@@ -115,7 +115,7 @@ If not healthy the server response is:
 
 #### Create
 
-    curl -XPUT localhost:8092/api/userService/v1/context -H "Content-Type: application/json" -d '{
+    curl -XPOST localhost:8092/api/userService/v1/context -H "Content-Type: application/json" -d '{
       "displayName": "$DISPLAY_NAME" // string
     }'
 
@@ -123,7 +123,7 @@ Responds with the created context (including it's id which is a UUID).
 
 #### Update
 
-    curl -XPOST localhost:8092/api/userService/v1/context -H "Content-Type: application/json" -d '{
+    curl -XPUT localhost:8092/api/userService/v1/context -H "Content-Type: application/json" -d '{
       "id": "$CONTEXT_ID", // UUID
       "displayName": "$DISPLAY_NAME" // string
     }'
@@ -133,6 +133,10 @@ Responds with the updated context (including it's id which is a UUID).
 #### Get
 
     curl localhost:8092/api/userService/v1/context/$CONTEXT_ID
+
+#### Find by Name
+
+    curl localhost:8092/api/userService/v1/context/byName/$CONTEXT_NAME
 
 Responds with the context if it exists (including it's id which is a UUID).
 
@@ -146,7 +150,7 @@ Responds with the deleted context (including it's id which is a UUID).
 
 #### Create
 
-    curl -XPUT localhost:8092/api/userService/v1/user -H "Content-Type: application/json" -d '{
+    curl -XPOST localhost:8092/api/userService/v1/user -H "Content-Type: application/json" -d '{
       "externalId": "$EXTERNAL_USER_ID", // string
       "providerId": "$PROVIDER_ID", // string
       "displayName": "$DISPLAY_NAME" // string
@@ -156,8 +160,7 @@ Responds with the created user (including it's id which is a UUID).
 
 #### Update
 
-    curl -XPOST localhost:8092/api/userService/v1/user -H "Content-Type: application/json" -d '{
-      "id": "$USER_ID", // UUID
+    curl -XPUT localhost:8092/api/userService/v1/user/$PROVIDER/$EXTERNAL_USER_ID -H "Content-Type: application/json" -d '{
       "externalId": "$EXTERNAL_USER_ID", // string
       "providerId": "$PROVIDER_ID", // string
       "displayName": "$DISPLAY_NAME" // string
@@ -173,7 +176,7 @@ Responds with the user if it exists (including it's id which is a UUID).
 
 #### Delete
 
-    curl -XDELETE localhost:8092/api/userService/v1/user/$USER_ID
+    curl -XDELETE localhost:8092/api/userService/v1/user/$PROVIDER/$EXTERNAL_USER_ID
 
 Responds with the deleted user (including it's id which is a UUID).
 
@@ -192,7 +195,7 @@ Responds with the created group (including it's id which is a UUID).
 
 #### Update
 
-    curl -XPOST localhost:8092/api/userService/v1/group -H "Content-Type: application/json" -d '{
+    curl -XPUT localhost:8092/api/userService/v1/group -H "Content-Type: application/json" -d '{
       "id": "$GROUP_ID", // UUID
       "ownerId": "$OWNER", // UUID: userId allowed to modify it
       "displayName": "$DISPLAY_NAME", // string
@@ -204,7 +207,7 @@ Responds with the updated group (including it's id which is a UUID).
 
 #### Get
 
-    curl -XPUT localhost:8092/api/userService/v1/group/$GROUP_ID
+    curl localhost:8092/api/userService/v1/group/$GROUP_ID
 
 Responds with the related group if it exists
 
@@ -218,7 +221,7 @@ Responds with the deleted group (including it's id which is a UUID).
 
 This is a convenience method and the same result would be achieved by updating a group.
 
-    curl -XPOST localhost:8092/api/userService/v1/group/allowedUsers -H "Content-Type: application/json" -d '{
+    curl -XPUT localhost:8092/api/userService/v1/group/allowedUsers -H "Content-Type: application/json" -d '{
       "groupId": "$GROUP_ID", // UUID
       "allowedUsers": ["$USER_ID_1", "$USER_ID_2"] // list(UUID)
     }'
@@ -238,9 +241,9 @@ This is a convenience method and the same result would be achieved by updating a
 
 _$CONTEXT_NAME_ and _$EXTERNAL_USER_ID_ are strings.
 
-    curl localhost:8092/api/userService/v1/groups/$CONTEXT_NAME/$EXTERNAL_USER_ID
+    curl localhost:8092/api/userService/v1/groups/$CONTEXT_NAME/$PROVIDER_ID/$EXTERNAL_USER_ID
 
-Responds with a list of groups associated to the given contextName and externalUserId.
+Responds with a list of groups associated to the given contextName and (providerId, externalUserId).
 
 
 ## Configuration

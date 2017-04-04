@@ -40,10 +40,14 @@ trait GroupsRoute extends MyJsonProtocol
   val route: Route = {
 
     respondWithCORS {
-      path(RouteConstants.groups / Segment / Segment) { (contextName, externalUserId) =>
+      path(RouteConstants.groups / Segment / Segment / Segment) { (contextName, providerId, externalUserId) =>
 
         get {
-          findByContextNameAndExternalUserId(contextName = contextName, externalUserId = externalUserId)
+          findByContextNameAndExternalUserId(
+            contextName = contextName,
+            providerId = providerId,
+            externalUserId = externalUserId
+          )
         }
 
       }
@@ -51,9 +55,17 @@ trait GroupsRoute extends MyJsonProtocol
 
   }
 
-  private def findByContextNameAndExternalUserId(contextName: String, externalUserId: String): Route = {
+  private def findByContextNameAndExternalUserId(contextName: String,
+                                                 providerId: String,
+                                                 externalUserId: String
+                                                ): Route = {
 
-    onComplete(groupsActor ? FindGroups(contextName, externalUserId)) {
+    onComplete(groupsActor ? FindGroups(
+      contextName = contextName,
+      providerId = providerId,
+      externalUserId = externalUserId
+    )
+    ) {
 
       case Failure(t) =>
         logger.error("findGroups call responded with an unhandled message (check GroupsRoute for bugs!!!)")

@@ -14,7 +14,10 @@ import scala.concurrent.Future
   */
 object GroupsManager extends StrictLogging {
 
-  def findByContextNameAndExternalUserId(contextName: String, externalUserId: String): Future[Seq[Group]] = {
+  def findByContextNameAndExternalUserId(contextName: String,
+                                         providerId: String,
+                                         externalUserId: String
+                                        ): Future[Seq[Group]] = {
 
     // TODO implement
     val ownerId = UUIDUtil.uuid
