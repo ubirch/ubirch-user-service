@@ -11,9 +11,12 @@ import com.ubirch.user.model.rest.Context
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
 import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
+import com.ubirch.util.model.JsonErrorResponse
+import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.rest.akka.directives.CORSDirective
 
 import akka.actor.{ActorSystem, Props}
+import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
 import akka.pattern.ask
 import akka.routing.RoundRobinPool
@@ -29,7 +32,7 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-03-29
   */
-trait ContextRoute extends MyJsonProtocol
+class ContextRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
   with CORSDirective
   with ResponseUtil
   with StrictLogging {
@@ -38,7 +41,7 @@ trait ContextRoute extends MyJsonProtocol
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
   implicit val timeout = Timeout(Config.actorTimeout seconds)
 
-  private val contextActor = system.actorOf(new RoundRobinPool(Config.akkaNumberOfWorkers).props(Props[ContextActor]), ActorNames.CONTEXT)
+  private val contextActor = system.actorOf(new RoundRobinPool(Config.akkaNumberOfWorkers).props(Props(new ContextActor())), ActorNames.CONTEXT)
 
   val route: Route = {
 
@@ -121,13 +124,22 @@ trait ContextRoute extends MyJsonProtocol
     onComplete(contextActor ? GetContext(id)) {
 
       case Failure(t) =>
+
         logger.error("getContext call responded with an unhandled message (check ContextRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
+
         resp match {
-          case c: db.Context => complete(Json4sUtil.any2any[rest.Context](c))
+
+          case None =>
+            val jsonError = JsonErrorResponse(errorType = "QueryError", errorMessage = "not found")
+            complete(serverErrorResponse(response = jsonError, status = StatusCodes.NotFound))
+
+          case Some(c: db.Context) => complete(Json4sUtil.any2any[rest.Context](c))
+
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query context"))
+
         }
 
     }
@@ -157,13 +169,22 @@ trait ContextRoute extends MyJsonProtocol
     onComplete(contextActor ? FindContextByName(name)) {
 
       case Failure(t) =>
+
         logger.error("findContextByName call responded with an unhandled message (check ContextRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
+
         resp match {
-          case c: db.Context => complete(Json4sUtil.any2any[rest.Context](c))
+
+          case None =>
+            val jsonError = JsonErrorResponse(errorType = "QueryError", errorMessage = "not found")
+            complete(serverErrorResponse(response = jsonError, status = StatusCodes.NotFound))
+
+          case Some(c: db.Context) => complete(Json4sUtil.any2any[rest.Context](c))
+
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to find context by name"))
+
         }
 
     }

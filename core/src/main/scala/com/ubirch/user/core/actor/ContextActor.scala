@@ -4,6 +4,7 @@ import java.util.UUID
 
 import com.ubirch.user.core.manager.ContextManager
 import com.ubirch.user.model.db.Context
+import com.ubirch.util.mongo.connection.MongoUtil
 
 import akka.actor.{Actor, ActorLogging}
 
@@ -13,7 +14,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
   * author: cvandrei
   * since: 2017-03-29
   */
-class ContextActor extends Actor
+class ContextActor(implicit mongo: MongoUtil) extends Actor
   with ActorLogging {
 
   override def receive: Receive = {

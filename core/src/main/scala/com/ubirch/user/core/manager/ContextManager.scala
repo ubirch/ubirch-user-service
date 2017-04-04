@@ -5,6 +5,7 @@ import java.util.UUID
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.model.db.Context
+import com.ubirch.util.mongo.connection.MongoUtil
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -16,38 +17,55 @@ import scala.concurrent.Future
   */
 object ContextManager extends StrictLogging {
 
-  def create(context: Context): Future[Context] = {
+  def create(context: Context)(implicit mongo: MongoUtil): Future[Context] = {
 
     // TODO implement
+    printCollectionNames()
     Future(context)
 
   }
 
-  def update(context: Context): Future[Context] = {
+  def update(context: Context)(implicit mongo: MongoUtil): Future[Context] = {
 
     // TODO implement
+    printCollectionNames()
     Future(context)
 
   }
 
-  def get(id: UUID): Future[Context] = {
+  def get(id: UUID)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
     // TODO implement
-    Future(Context(id, "foo-display-name-get"))
+    printCollectionNames()
+    Future(Some(Context(id, "foo-display-name-get")))
 
   }
 
-  def findByName(name: String): Future[Context] = {
+  def findByName(name: String)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
     // TODO implement
-    Future(Context(displayName = name))
+    printCollectionNames()
+    Future(Some(Context(displayName = name)))
 
   }
 
-  def delete(id: UUID): Future[Context] = {
+  def delete(id: UUID)(implicit mongo: MongoUtil): Future[Context] = {
 
     // TODO implement
+    printCollectionNames()
     Future(Context(id, "foo-display-name-delete"))
+
+  }
+
+  private def printCollectionNames()(implicit mongo: MongoUtil): Unit = {
+
+    mongo.db() map { db =>
+
+      logger.info(s"connected to database: ${db.name}")
+      logger.info("listing collection names")
+      db.collectionNames map println
+
+    }
 
   }
 
