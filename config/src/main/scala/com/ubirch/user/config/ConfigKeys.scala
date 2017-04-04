@@ -26,9 +26,15 @@ object ConfigKeys {
   final val AKKA_NUMBER_OF_WORKERS = s"$akkaPrefix.numberOfWorkers"
 
   /*
-   * mongo-utils
+   * Mongo
    *********************************************************************************************/
 
   final val MONGO_PREFIX = s"$CONFIG_PREFIX.mongo"
+
+  private final val mongoCollection = s"$MONGO_PREFIX.collection"
+
+  final val COLLECTION_CONTEXT = s"$mongoCollection.context"
+  final val COLLECTION_USER = s"$mongoCollection.user"
+  final val COLLECTION_GROUP = s"$mongoCollection.group"
 
 }

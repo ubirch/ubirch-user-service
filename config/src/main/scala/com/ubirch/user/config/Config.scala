@@ -42,4 +42,14 @@ object Config extends ConfigBase {
 
   def akkaNumberOfWorkers: Int = config.getInt(ConfigKeys.AKKA_NUMBER_OF_WORKERS)
 
+  /*
+   * Mongo Related
+   ************************************************************************************************/
+
+  def mongoCollectionContext: String = config.getString(ConfigKeys.COLLECTION_CONTEXT)
+
+  def mongoCollectionUser: String = config.getString(ConfigKeys.COLLECTION_USER)
+
+  def mongoCollectionGroup: String = config.getString(ConfigKeys.COLLECTION_GROUP)
+
 }
