@@ -91,6 +91,7 @@ lazy val server = project
 
 lazy val testTools = (project in file("test-tools"))
   .settings(commonSettings: _*)
+  .dependsOn(config)
   .settings(
     name := "test-tools",
     description := "tools useful in automated tests",
@@ -137,7 +138,8 @@ lazy val depModelDb = Seq(
 lazy val depTestTools = Seq(
   json4sNative,
   ubirchJsonAutoConvert,
-  scalatest
+  scalatest,
+  ubirchMongo
 ) ++ scalaLogging
 
 lazy val depUtils = Seq(
