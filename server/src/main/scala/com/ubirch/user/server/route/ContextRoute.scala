@@ -118,8 +118,15 @@ class ContextRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(Json4sUtil.any2any[rest.Context](c))
+
+          case None =>
+            val jsonError = JsonErrorResponse(errorType = "UpdateError", errorMessage = "failed to update context")
+            complete(requestErrorResponse(jsonError))
+
+          case Some(c: db.Context) => complete(Json4sUtil.any2any[rest.Context](c))
+
           case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update context"))
+
         }
 
     }
@@ -163,7 +170,7 @@ class ContextRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(Json4sUtil.any2any[rest.Context](c))
+          case deleted: Boolean if deleted => complete(StatusCodes.OK)
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete context"))
         }
 

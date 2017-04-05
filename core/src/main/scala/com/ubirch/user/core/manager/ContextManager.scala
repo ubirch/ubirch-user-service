@@ -54,11 +54,27 @@ object ContextManager extends StrictLogging
 
   }
 
-  def update(context: Context)(implicit mongo: MongoUtil): Future[Context] = {
+  def update(context: Context)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
-    // TODO implement
-    printCollectionNames()
-    Future(context)
+    // TODO automated tests
+    val selector = document("id" -> context.id)
+    val update = contextWriter.write(context)
+
+    mongo.collection(Config.mongoCollectionContext) flatMap {
+
+      _.update(selector, update) map { writeResult =>
+
+        if (writeResult.ok) {
+          logger.info(s"updated context: id=${context.id}")
+          Some(context)
+        } else {
+          logger.error(s"failed to update context: context=$context")
+          None
+        }
+
+      }
+
+    }
 
   }
 
@@ -84,22 +100,23 @@ object ContextManager extends StrictLogging
 
   }
 
-  def delete(id: UUID)(implicit mongo: MongoUtil): Future[Context] = {
+  def delete(id: UUID)(implicit mongo: MongoUtil): Future[Boolean] = {
 
-    // TODO implement
-    printCollectionNames()
-    Future(Context(id, "foo-display-name-delete"))
+    // TODO automated tests
+    val selector = document("id" -> id)
 
-  }
+    mongo.collection(Config.mongoCollectionContext) flatMap {
+      _.remove(selector) map { writeResult =>
 
-  private def printCollectionNames()(implicit mongo: MongoUtil): Unit = {
+        if (writeResult.ok && writeResult.n == 1) {
+          logger.info(s"deleted context: id=$id")
+          true
+        } else {
+          logger.error(s"failed to delete context: id=$id (writeResult=$writeResult)")
+          false
+        }
 
-    mongo.db() map { db =>
-
-      logger.info(s"connected to database: ${db.name}")
-      logger.info("listing collection names")
-      db.collectionNames map println
-
+      }
     }
 
   }
