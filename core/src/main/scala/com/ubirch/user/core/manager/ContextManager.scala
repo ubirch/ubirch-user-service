@@ -28,12 +28,19 @@ object ContextManager extends StrictLogging
 
   def create(context: Context)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
-    // TODO automated tests
     mongo.collection(Config.mongoCollectionContext) flatMap { collection =>
 
-      findByName(context.displayName) map {
+      for {
+        findById <- get(context.id)
+        findByName <- findByName(context.displayName)
+      } yield {
 
-        case None =>
+        if (findById.isDefined || findByName.isDefined) {
+
+          logger.error(s"unable to create context as it's displayName and/or id already exist: context=$context")
+          None
+
+        } else {
 
           collection.insert[Context](context) onComplete {
 
@@ -46,7 +53,7 @@ object ContextManager extends StrictLogging
           }
           Some(context)
 
-        case Some(_) => None
+        }
 
       }
 
