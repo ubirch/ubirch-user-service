@@ -28,6 +28,7 @@ object ContextManager extends StrictLogging
 
   def create(context: Context)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
+    // TODO automated tests
     mongo.collection(Config.mongoCollectionContext) flatMap { collection =>
 
       findByName(context.displayName) map {
@@ -71,6 +72,7 @@ object ContextManager extends StrictLogging
 
   def findByName(name: String)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
+    // TODO automated tests
     val query = document("displayName" -> name)
 
     mongo.collection(Config.mongoCollectionContext) flatMap {
