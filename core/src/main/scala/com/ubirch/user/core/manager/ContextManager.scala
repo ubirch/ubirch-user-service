@@ -64,9 +64,12 @@ object ContextManager extends StrictLogging
 
   def get(id: UUID)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
-    // TODO implement
-    printCollectionNames()
-    Future(Some(Context(id, "foo-display-name-get")))
+    // TODO automated tests
+    val query = document("id" -> id)
+
+    mongo.collection(Config.mongoCollectionContext) flatMap {
+      _.find(query).one[Context]
+    }
 
   }
 
