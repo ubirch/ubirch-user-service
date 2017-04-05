@@ -25,7 +25,7 @@ class ContextActor(implicit mongo: MongoUtil) extends Actor
 
     case update: UpdateContext =>
       val sender = context.sender()
-      ContextManager.create(update.context) map (sender ! _)
+      ContextManager.update(update.context) map (sender ! _)
 
     case get: GetContext =>
       val sender = context.sender()

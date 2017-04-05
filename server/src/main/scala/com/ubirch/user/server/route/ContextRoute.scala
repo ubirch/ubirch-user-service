@@ -92,8 +92,15 @@ class ContextRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case c: db.Context => complete(Json4sUtil.any2any[rest.Context](c))
+
+          case None =>
+            val jsonError = JsonErrorResponse(errorType = "CreateError", errorMessage = "context already exists")
+            complete(requestErrorResponse(jsonError))
+
+          case Some(c: db.Context) => complete(Json4sUtil.any2any[rest.Context](c))
+
           case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create context"))
+
         }
 
     }
@@ -178,8 +185,8 @@ class ContextRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
         resp match {
 
           case None =>
-            val jsonError = JsonErrorResponse(errorType = "QueryError", errorMessage = "not found")
-            complete(serverErrorResponse(response = jsonError, status = StatusCodes.NotFound))
+            val jsonError = JsonErrorResponse(errorType = "QueryError", errorMessage = "context not found")
+            complete(requestErrorResponse(response = jsonError))
 
           case Some(c: db.Context) => complete(Json4sUtil.any2any[rest.Context](c))
 

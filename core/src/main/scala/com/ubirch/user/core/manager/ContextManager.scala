@@ -9,7 +9,7 @@ import com.ubirch.user.model.db.Context
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
 
-import reactivemongo.bson.{BSONDocumentReader, BSONDocumentWriter, Macros}
+import reactivemongo.bson.{BSONDocumentReader, BSONDocumentWriter, Macros, document}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -22,24 +22,32 @@ import scala.util.{Failure, Success}
 object ContextManager extends StrictLogging
   with MongoFormats {
 
-  implicit def contextWriter: BSONDocumentWriter[Context] = Macros.writer[Context]
-  implicit def contextReader: BSONDocumentReader[Context] = Macros.reader[Context]
+  implicit protected def contextWriter: BSONDocumentWriter[Context] = Macros.writer[Context]
 
-  def create(context: Context)(implicit mongo: MongoUtil): Future[Context] = {
+  implicit protected def contextReader: BSONDocumentReader[Context] = Macros.reader[Context]
 
-    mongo.collection(Config.mongoCollectionContext) map { collection =>
+  def create(context: Context)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
-      // TODO if context already exists
-      collection.insert[Context](context) onComplete {
+    mongo.collection(Config.mongoCollectionContext) flatMap { collection =>
 
-        case Failure(e) =>
-          logger.error("failed to create context", e)
-          throw e
+      findByName(context.displayName) map {
 
-        case Success(_) => logger.info(s"created new context: $context")
+        case None =>
+
+          collection.insert[Context](context) onComplete {
+
+            case Failure(e) =>
+              logger.error("failed to create context", e)
+              throw e
+
+            case Success(_) => logger.info(s"created new context: $context")
+
+          }
+          Some(context)
+
+        case Some(_) => None
 
       }
-      context
 
     }
 
@@ -63,9 +71,11 @@ object ContextManager extends StrictLogging
 
   def findByName(name: String)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
-    // TODO implement
-    printCollectionNames()
-    Future(Some(Context(displayName = name)))
+    val query = document("displayName" -> name)
+
+    mongo.collection(Config.mongoCollectionContext) flatMap {
+      _.find(query).one[Context]
+    }
 
   }
 
