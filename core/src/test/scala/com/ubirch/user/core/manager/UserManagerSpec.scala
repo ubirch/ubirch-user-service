@@ -137,4 +137,147 @@ class UserManagerSpec extends MongoSpec {
 
   }
 
+  feature("findByProviderIdAndExternalId()") {
+
+    scenario("user.providerId: exists; user.externalId: exists --> success") {
+
+      // prepare
+      UserManager.create(DefaultModels.user()) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(user) =>
+
+          // test
+          UserManager.findByProviderIdAndExternalId(
+            providerId = user.providerId,
+            externalUserId = user.externalId
+          ) flatMap { result =>
+
+            // verify
+            result shouldBe Some(user)
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+    scenario("user.providerId: does not exist; user.externalId: exists --> fail") {
+
+      // prepare
+      UserManager.create(DefaultModels.user()) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(user) =>
+
+          // test
+          UserManager.findByProviderIdAndExternalId(
+            providerId = s"${user.providerId}-test",
+            externalUserId = user.externalId
+          ) flatMap { result =>
+
+            // verify
+            result shouldBe None
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+    scenario("user.providerId: exists; user.externalId: does not exist --> fail") {
+
+      // prepare
+      UserManager.create(DefaultModels.user()) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(user) =>
+
+          // test
+          UserManager.findByProviderIdAndExternalId(
+            providerId = user.providerId,
+            externalUserId = s"${user.externalId}-test"
+          ) flatMap { result =>
+
+            // verify
+            result shouldBe None
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+    scenario("user.providerId: exists; user.externalId: exists --> fail") {
+
+      // prepare
+      UserManager.create(DefaultModels.user()) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(user) =>
+
+          // test
+          UserManager.findByProviderIdAndExternalId(
+            providerId = s"${user.providerId}-test",
+            externalUserId = s"${user.externalId}-test"
+          ) flatMap { result =>
+
+            // verify
+            result shouldBe None
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+  }
+
+  feature("delete()") {
+
+    scenario("user.id does not exist --> fail") {
+
+      // test
+      UserManager.delete(UUIDUtil.uuid) flatMap { result =>
+
+        // verify
+        result shouldBe false
+        mongoTestUtils.countAll(collection) map (_ shouldBe 0)
+
+      }
+
+    }
+
+    scenario("user.id exists --> success") {
+
+      // prepare
+      UserManager.create(DefaultModels.user()) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(user) =>
+
+          // test
+          UserManager.delete(user.id) flatMap { result =>
+
+            // verify
+            result shouldBe true
+            mongoTestUtils.countAll(collection) map (_ shouldBe 0)
+
+          }
+
+      }
+
+    }
+
+  }
+
 }

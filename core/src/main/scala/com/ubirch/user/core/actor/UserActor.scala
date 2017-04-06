@@ -27,7 +27,7 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
     case update: UpdateUser =>
 
       val sender = context.sender()
-      val updated = UserManager.findByProviderIdExternalId(update.providerId, externalUserId = update.externalUserId) flatMap {
+      val updated = UserManager.findByProviderIdAndExternalId(update.providerId, externalUserId = update.externalUserId) flatMap {
 
         case None =>
           log.error(s"unable to update use as it does not exist: provider=${update.providerId}, externalId=${update.externalUserId}")
@@ -42,7 +42,7 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
 
     case find: FindUser =>
       val sender = context.sender()
-      UserManager.findByProviderIdExternalId(
+      UserManager.findByProviderIdAndExternalId(
         providerId = find.providerId,
         externalUserId = find.externalUserId
       ) map (sender ! _)
@@ -51,7 +51,7 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
 
       val sender = context.sender()
 
-      val result = UserManager.findByProviderIdExternalId(
+      val result = UserManager.findByProviderIdAndExternalId(
         providerId = delete.providerId,
         externalUserId = delete.externalUserId
       ) flatMap {

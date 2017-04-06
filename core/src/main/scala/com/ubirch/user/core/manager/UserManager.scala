@@ -30,7 +30,7 @@ object UserManager extends StrictLogging
 
   def create(user: User)(implicit mongo: MongoUtil): Future[Option[User]] = {
 
-    findByProviderIdExternalId(providerId = user.providerId, externalUserId = user.externalId) flatMap {
+    findByProviderIdAndExternalId(providerId = user.providerId, externalUserId = user.externalId) flatMap {
 
       case Some(_: User) =>
 
@@ -89,10 +89,9 @@ object UserManager extends StrictLogging
 
   }
 
-  def findByProviderIdExternalId(providerId: String, externalUserId: String)
-                                (implicit mongo: MongoUtil): Future[Option[User]] = {
+  def findByProviderIdAndExternalId(providerId: String, externalUserId: String)
+                                   (implicit mongo: MongoUtil): Future[Option[User]] = {
 
-    // TODO automated tests
     val selector = document(
       "providerId" -> providerId,
       "externalId" -> externalUserId
@@ -106,7 +105,6 @@ object UserManager extends StrictLogging
 
   def delete(id: UUID)(implicit mongo: MongoUtil): Future[Boolean] = {
 
-    // TODO automated tests
     val selector = document("id" -> id)
 
     mongo.collection(collectionName) flatMap {

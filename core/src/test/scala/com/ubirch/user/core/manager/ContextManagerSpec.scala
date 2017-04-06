@@ -204,10 +204,10 @@ class ContextManagerSpec extends MongoSpec {
     scenario("context.id does not exist --> fail") {
 
       // test
-      ContextManager.delete(UUIDUtil.uuid) flatMap { created =>
+      ContextManager.delete(UUIDUtil.uuid) flatMap { result =>
 
         // verify
-        created shouldBe false
+        result shouldBe false
         mongoTestUtils.countAll(collection) map (_ shouldBe 0)
 
       }
