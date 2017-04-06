@@ -187,9 +187,9 @@ lazy val excludedLoggers = Seq(
 
 lazy val ubirchConfig = ubirchUtilG %% "config" % "0.1" excludeAll(excludedLoggers: _*)
 lazy val ubirchDate = ubirchUtilG %% "date" % "0.1" excludeAll(excludedLoggers: _*)
-lazy val ubirchJson = ubirchUtilG %% "json" % "0.3.3-SNAPSHOT" excludeAll(excludedLoggers: _*)
-lazy val ubirchJsonAutoConvert = ubirchUtilG %% "json-auto-convert" % "0.3.3-SNAPSHOT" excludeAll(excludedLoggers: _*)
-lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.1.0-SNAPSHOT" excludeAll(
+lazy val ubirchJson = ubirchUtilG %% "json" % "0.3.3" excludeAll(excludedLoggers: _*)
+lazy val ubirchJsonAutoConvert = ubirchUtilG %% "json-auto-convert" % "0.3.3" excludeAll(excludedLoggers: _*)
+lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.1.0" excludeAll(
   excludedLoggers++ Seq(ExclusionRule(organization = akkaG, name = "akka-actor")): _*
   )
 lazy val ubirchMongo = ubirchUtilG %% "mongo-utils" % "0.1.0" excludeAll(
