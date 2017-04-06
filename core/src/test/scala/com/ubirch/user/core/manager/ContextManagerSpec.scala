@@ -1,8 +1,7 @@
 package com.ubirch.user.core.manager
 
 import com.ubirch.user.config.Config
-import com.ubirch.user.model.db.Context
-import com.ubirch.user.testTools.db.mongo.MongoSpec
+import com.ubirch.user.testTools.db.mongo.{DefaultModels, MongoSpec}
 import com.ubirch.util.uuid.UUIDUtil
 
 /**
@@ -11,19 +10,21 @@ import com.ubirch.util.uuid.UUIDUtil
   */
 class ContextManagerSpec extends MongoSpec {
 
+  private val collection: String = Config.mongoCollectionContext
+  
   feature("create()") {
 
     scenario("context does NOT exist --> success") {
 
       // prepare
-      val context = Context(displayName = "automated-test")
+      val context = DefaultModels.context()
 
       // test
       ContextManager.create(context) flatMap { created =>
 
         // verify
         created shouldBe Some(context)
-        mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 1)
+        mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
       }
 
@@ -32,7 +33,7 @@ class ContextManagerSpec extends MongoSpec {
     scenario("context with same id exists --> fail") {
 
       // prepare
-      ContextManager.create(Context(displayName = "automated-test")) flatMap {
+      ContextManager.create(DefaultModels.context()) flatMap {
 
         case None => fail("failed during preparation")
 
@@ -45,7 +46,7 @@ class ContextManagerSpec extends MongoSpec {
 
             // verify
             created shouldBe None
-            mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 1)
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -56,7 +57,7 @@ class ContextManagerSpec extends MongoSpec {
     scenario("context with same name exists --> fail") {
 
       // prepare
-      ContextManager.create(Context(displayName = "automated-test")) flatMap {
+      ContextManager.create(DefaultModels.context()) flatMap {
 
         case None => fail("failed during preparation")
 
@@ -69,7 +70,7 @@ class ContextManagerSpec extends MongoSpec {
 
             // verify
             created shouldBe None
-            mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 1)
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -83,15 +84,12 @@ class ContextManagerSpec extends MongoSpec {
 
     scenario("context.id does not exist --> fail") {
 
-      // prepare
-      val context = Context(displayName = "automated-test")
-
       // test
-      ContextManager.update(context) flatMap { updated =>
+      ContextManager.update(DefaultModels.context()) flatMap { updated =>
 
         // verify
         updated shouldBe None
-        mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 0)
+        mongoTestUtils.countAll(collection) map (_ shouldBe 0)
 
       }
 
@@ -100,7 +98,7 @@ class ContextManagerSpec extends MongoSpec {
     scenario("context.id exists --> success") {
 
       // prepare
-      ContextManager.create(Context(displayName = "automated-test")) flatMap {
+      ContextManager.create(DefaultModels.context()) flatMap {
 
         case None => fail("failed during preparation")
 
@@ -113,7 +111,7 @@ class ContextManagerSpec extends MongoSpec {
 
             // verify
             result shouldBe Some(update)
-            mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 1)
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -132,7 +130,7 @@ class ContextManagerSpec extends MongoSpec {
 
         // verify
         created shouldBe None
-        mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 0)
+        mongoTestUtils.countAll(collection) map (_ shouldBe 0)
 
       }
 
@@ -141,7 +139,7 @@ class ContextManagerSpec extends MongoSpec {
     scenario("context.id exists --> success") {
 
       // prepare
-      ContextManager.create(Context(displayName = "automated-test")) flatMap {
+      ContextManager.create(DefaultModels.context()) flatMap {
 
         case None => fail("failed during preparation")
 
@@ -152,7 +150,7 @@ class ContextManagerSpec extends MongoSpec {
 
             // verify
             result shouldBe Some(context)
-            mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 1)
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -171,7 +169,7 @@ class ContextManagerSpec extends MongoSpec {
 
         // verify
         created shouldBe None
-        mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 0)
+        mongoTestUtils.countAll(collection) map (_ shouldBe 0)
 
       }
 
@@ -180,7 +178,7 @@ class ContextManagerSpec extends MongoSpec {
     scenario("context.name exists --> success") {
 
       // prepare
-      ContextManager.create(Context(displayName = "automated-test")) flatMap {
+      ContextManager.create(DefaultModels.context()) flatMap {
 
         case None => fail("failed during preparation")
 
@@ -191,7 +189,7 @@ class ContextManagerSpec extends MongoSpec {
 
             // verify
             result shouldBe Some(context)
-            mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 1)
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -210,7 +208,7 @@ class ContextManagerSpec extends MongoSpec {
 
         // verify
         created shouldBe false
-        mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 0)
+        mongoTestUtils.countAll(collection) map (_ shouldBe 0)
 
       }
 
@@ -219,7 +217,7 @@ class ContextManagerSpec extends MongoSpec {
     scenario("context.id exists --> success") {
 
       // prepare
-      ContextManager.create(Context(displayName = "automated-test")) flatMap {
+      ContextManager.create(DefaultModels.context()) flatMap {
 
         case None => fail("failed during preparation")
 
@@ -230,7 +228,7 @@ class ContextManagerSpec extends MongoSpec {
 
             // verify
             result shouldBe true
-            mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 0)
+            mongoTestUtils.countAll(collection) map (_ shouldBe 0)
 
           }
 
