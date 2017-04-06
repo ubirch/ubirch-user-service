@@ -30,7 +30,6 @@ object UserManager extends StrictLogging
 
   def create(user: User)(implicit mongo: MongoUtil): Future[Option[User]] = {
 
-    // TODO automated tests
     findByProviderIdExternalId(providerId = user.providerId, externalUserId = user.externalId) flatMap {
 
       case Some(_: User) =>
@@ -61,7 +60,6 @@ object UserManager extends StrictLogging
 
   def update(user: User)(implicit mongo: MongoUtil): Future[Option[User]] = {
 
-    // TODO automated tests
     val selector = document("id" -> user.id)
     mongo.collection(collectionName) flatMap {
 
@@ -83,7 +81,6 @@ object UserManager extends StrictLogging
 
   def findById(id: UUID)(implicit mongo: MongoUtil): Future[Option[User]] = {
 
-    // TODO automated tests
     val selector = document("id" -> id)
 
     mongo.collection(collectionName) flatMap {
