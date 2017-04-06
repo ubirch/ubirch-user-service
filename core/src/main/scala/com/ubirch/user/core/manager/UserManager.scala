@@ -24,9 +24,9 @@ object UserManager extends StrictLogging
 
   private val collectionName = Config.mongoCollectionUser
 
-  implicit protected def contextWriter: BSONDocumentWriter[User] = Macros.writer[User]
+  implicit protected def userWriter: BSONDocumentWriter[User] = Macros.writer[User]
 
-  implicit protected def contextReader: BSONDocumentReader[User] = Macros.reader[User]
+  implicit protected def userReader: BSONDocumentReader[User] = Macros.reader[User]
 
   def create(user: User)(implicit mongo: MongoUtil): Future[Option[User]] = {
 
@@ -69,7 +69,7 @@ object UserManager extends StrictLogging
           logger.info(s"updated user: id=${user.id}")
           Some(user)
         } else {
-          logger.error(s"failed to update user: context=$user")
+          logger.error(s"failed to update user: user=$user")
           None
         }
 
