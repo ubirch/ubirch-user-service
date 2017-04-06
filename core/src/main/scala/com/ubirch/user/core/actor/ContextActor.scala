@@ -29,7 +29,7 @@ class ContextActor(implicit mongo: MongoUtil) extends Actor
 
     case get: GetContext =>
       val sender = context.sender()
-      ContextManager.get(get.id) map (sender ! _)
+      ContextManager.findById(get.id) map (sender ! _)
 
     case find: FindContextByName =>
       val sender = context.sender()

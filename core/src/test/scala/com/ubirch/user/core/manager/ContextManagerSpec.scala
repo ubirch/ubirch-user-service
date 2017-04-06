@@ -83,16 +83,121 @@ class ContextManagerSpec extends MongoSpec {
   // TODO context.id does not exist --> fail
   // TODO context.id exists --> success
 
-  // get()
-  // TODO context.id does not exist --> fail
-  // TODO context.id exists --> success
+  feature("findById()") {
 
-  // findByName()
-  // TODO context.name does not exist --> fail
-  // TODO context.name exists --> success
+    scenario("context.id does not exist --> fail") {
 
-  // delete()
-  // TODO context.id does not exist --> fail
-  // TODO context.id exists --> success
+      // test
+      ContextManager.findById(UUIDUtil.uuid) flatMap { created =>
+
+        // verify
+        created shouldBe None
+        mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 0)
+
+      }
+
+    }
+
+    scenario("context.id exists --> success") {
+
+      // prepare
+      ContextManager.create(Context(displayName = "automated-test")) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(context) =>
+
+          // test
+          ContextManager.findById(context.id) flatMap { result =>
+
+            // verify
+            result shouldBe Some(context)
+            mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+  }
+
+  feature("findByName()") {
+
+    scenario("context.name does not exist --> fail") {
+
+      // test
+      ContextManager.findByName("automated-test") flatMap { created =>
+
+        // verify
+        created shouldBe None
+        mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 0)
+
+      }
+
+    }
+
+    scenario("context.name exists --> success") {
+
+      // prepare
+      ContextManager.create(Context(displayName = "automated-test")) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(context) =>
+
+          // test
+          ContextManager.findByName(context.displayName) flatMap { result =>
+
+            // verify
+            result shouldBe Some(context)
+            mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+  }
+
+  feature("delete()") {
+
+    scenario("context.id does not exist --> fail") {
+
+      // test
+      ContextManager.delete(UUIDUtil.uuid) flatMap { created =>
+
+        // verify
+        created shouldBe false
+        mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 0)
+
+      }
+
+    }
+
+    scenario("context.id exists --> success") {
+
+      // prepare
+      ContextManager.create(Context(displayName = "automated-test")) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(context) =>
+
+          // test
+          ContextManager.delete(context.id) flatMap { result =>
+
+            // verify
+            result shouldBe true
+            mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 0)
+
+          }
+
+      }
+
+    }
+
+  }
 
 }

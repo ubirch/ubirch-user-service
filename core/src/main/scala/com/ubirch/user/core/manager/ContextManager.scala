@@ -31,7 +31,7 @@ object ContextManager extends StrictLogging
     mongo.collection(Config.mongoCollectionContext) flatMap { collection =>
 
       for {
-        findById <- get(context.id)
+        findById <- findById(context.id)
         findByName <- findByName(context.displayName)
       } yield {
 
@@ -63,7 +63,6 @@ object ContextManager extends StrictLogging
 
   def update(context: Context)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
-    // TODO automated tests
     val selector = document("id" -> context.id)
     val update = contextWriter.write(context)
 
@@ -85,9 +84,8 @@ object ContextManager extends StrictLogging
 
   }
 
-  def get(id: UUID)(implicit mongo: MongoUtil): Future[Option[Context]] = {
+  def findById(id: UUID)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
-    // TODO automated tests
     val query = document("id" -> id)
 
     mongo.collection(Config.mongoCollectionContext) flatMap {
@@ -98,7 +96,6 @@ object ContextManager extends StrictLogging
 
   def findByName(name: String)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
-    // TODO automated tests
     val query = document("displayName" -> name)
 
     mongo.collection(Config.mongoCollectionContext) flatMap {
@@ -109,7 +106,6 @@ object ContextManager extends StrictLogging
 
   def delete(id: UUID)(implicit mongo: MongoUtil): Future[Boolean] = {
 
-    // TODO automated tests
     val selector = document("id" -> id)
 
     mongo.collection(Config.mongoCollectionContext) flatMap {

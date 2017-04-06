@@ -2,7 +2,6 @@ package com.ubirch.user.model.db
 
 import java.util.UUID
 
-import com.ubirch.util.date.DateUtil
 import com.ubirch.util.uuid.UUIDUtil
 
 import org.joda.time.DateTime
@@ -13,6 +12,6 @@ import org.joda.time.DateTime
   */
 case class Context(id: UUID = UUIDUtil.uuid,
                    displayName: String,
-                   created: DateTime = DateUtil.nowUTC,
-                   updated: DateTime = DateUtil.nowUTC
+                   created: DateTime = DateTime.now,
+                   updated: DateTime = DateTime.now
                   )
