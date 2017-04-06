@@ -2,8 +2,12 @@ package com.ubirch.user.core.manager
 
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
-import com.ubirch.user.model.db.Group
-import com.ubirch.util.uuid.UUIDUtil
+import com.ubirch.user.config.Config
+import com.ubirch.user.model.db.{Context, Group, User}
+import com.ubirch.util.mongo.connection.MongoUtil
+import com.ubirch.util.mongo.format.MongoFormats
+
+import reactivemongo.bson.{BSONDocumentReader, BSONDocumentWriter, Macros, document}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -12,35 +16,51 @@ import scala.concurrent.Future
   * author: cvandrei
   * since: 2017-03-30
   */
-object GroupsManager extends StrictLogging {
+object GroupsManager extends StrictLogging
+  with MongoFormats {
+
+  private val collectionName = Config.mongoCollectionGroup
+
+  implicit protected def groupWriter: BSONDocumentWriter[Group] = Macros.writer[Group]
+
+  implicit protected def groupReader: BSONDocumentReader[Group] = Macros.reader[Group]
 
   def findByContextAndUser(contextName: String,
                            providerId: String,
                            externalUserId: String
-                                        ): Future[Seq[Group]] = {
+                          )
+                          (implicit mongo: MongoUtil): Future[Seq[Group]] = {
 
-    // TODO implement
-    val ownerId = UUIDUtil.uuid
-    val contextId = UUIDUtil.uuid
-    val allowedUser1 = UUIDUtil.uuid
-    val allowedUser2 = UUIDUtil.uuid
+    // TODO automated tests
+    for {
 
-    Future(
-      Seq(
-        Group(
-          displayName = "display-name-group-1",
-          ownerId = ownerId,
-          contextId = contextId,
-          allowedUsers = Seq(allowedUser1, allowedUser2)
-        ),
-        Group(
-          displayName = "display-name-group-2",
-          ownerId = ownerId,
-          contextId = contextId,
-          allowedUsers = Seq(allowedUser1)
+      userOpt <- UserManager.findByProviderIdAndExternalId(providerId = providerId, externalUserId = externalUserId)
+      contextOpt <- ContextManager.findByName(contextName)
+      groups <- findGroupsFuture(userOpt, contextOpt)
+
+    } yield groups
+
+  }
+
+  private def findGroupsFuture(userOpt: Option[User], contextOpt: Option[Context])(implicit mongo: MongoUtil): Future[Seq[Group]] = {
+
+    if (userOpt.isDefined && contextOpt.isDefined) {
+
+      mongo.collection(collectionName) flatMap {
+
+        val selector = document(
+          "ownerId" -> userOpt.get.id,
+          "contextId" -> contextOpt.get.id
         )
-      )
-    )
+        _.find(selector)
+          .cursor[Group]()
+          .collect[Seq]()
+
+      }
+
+    } else {
+      Future(Seq.empty)
+    }
 
   }
 
