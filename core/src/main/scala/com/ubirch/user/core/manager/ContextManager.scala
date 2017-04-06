@@ -22,13 +22,15 @@ import scala.util.{Failure, Success}
 object ContextManager extends StrictLogging
   with MongoFormats {
 
+  private val collectionName = Config.mongoCollectionContext
+
   implicit protected def contextWriter: BSONDocumentWriter[Context] = Macros.writer[Context]
 
   implicit protected def contextReader: BSONDocumentReader[Context] = Macros.reader[Context]
 
   def create(context: Context)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
-    mongo.collection(Config.mongoCollectionContext) flatMap { collection =>
+    mongo.collection(collectionName) flatMap { collection =>
 
       for {
         findById <- findById(context.id)
@@ -48,7 +50,7 @@ object ContextManager extends StrictLogging
               logger.error("failed to create context", e)
               throw e
 
-            case Success(_) => logger.info(s"created new context: $context")
+            case Success(_) => logger.debug(s"created new context: $context")
 
           }
           Some(context)
@@ -66,7 +68,7 @@ object ContextManager extends StrictLogging
     val selector = document("id" -> context.id)
     val update = contextWriter.write(context)
 
-    mongo.collection(Config.mongoCollectionContext) flatMap {
+    mongo.collection(collectionName) flatMap {
 
       _.update(selector, update) map { writeResult =>
 
@@ -86,20 +88,20 @@ object ContextManager extends StrictLogging
 
   def findById(id: UUID)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
-    val query = document("id" -> id)
+    val selector = document("id" -> id)
 
-    mongo.collection(Config.mongoCollectionContext) flatMap {
-      _.find(query).one[Context]
+    mongo.collection(collectionName) flatMap {
+      _.find(selector).one[Context]
     }
 
   }
 
   def findByName(name: String)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
-    val query = document("displayName" -> name)
+    val selector = document("displayName" -> name)
 
-    mongo.collection(Config.mongoCollectionContext) flatMap {
-      _.find(query).one[Context]
+    mongo.collection(collectionName) flatMap {
+      _.find(selector).one[Context]
     }
 
   }
@@ -108,7 +110,7 @@ object ContextManager extends StrictLogging
 
     val selector = document("id" -> id)
 
-    mongo.collection(Config.mongoCollectionContext) flatMap {
+    mongo.collection(collectionName) flatMap {
       _.remove(selector) map { writeResult =>
 
         if (writeResult.ok && writeResult.n == 1) {
