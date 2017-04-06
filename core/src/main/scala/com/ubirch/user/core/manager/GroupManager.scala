@@ -30,17 +30,20 @@ object GroupManager extends StrictLogging
 
   def create(group: Group)(implicit mongo: MongoUtil): Future[Option[Group]] = {
 
-    // TODO automated tests
     mongo.collection(collection) map { collection =>
 
-      collection.insert[Group](group) onComplete {
+      try {
+        collection.insert[Group](group) onComplete {
 
-        case Failure(e) =>
-          logger.error("failed to create group", e)
-          throw e
+          case Failure(e) =>
+            logger.error("failed to create group", e)
+            throw e
 
-        case Success(_) => logger.debug(s"created new group: $group")
+          case Success(_) => logger.debug(s"created new group: $group")
 
+        }
+      } catch {
+        case t: Throwable => None
       }
       Some(group)
 
@@ -50,7 +53,6 @@ object GroupManager extends StrictLogging
 
   def update(group: Group)(implicit mongo: MongoUtil): Future[Option[Group]] = {
 
-    // TODO automated tests
     val selector = document("id" -> group.id)
     mongo.collection(collection) flatMap {
 
@@ -72,7 +74,6 @@ object GroupManager extends StrictLogging
 
   def findById(id: UUID)(implicit mongo: MongoUtil): Future[Option[Group]] = {
 
-    // TODO automated tests
     val selector = document("id" -> id)
 
     mongo.collection(collection) flatMap {
@@ -83,7 +84,6 @@ object GroupManager extends StrictLogging
 
   def delete(id: UUID)(implicit mongo: MongoUtil): Future[Boolean] = {
 
-    // TODO automated tests
     val selector = document("id" -> id)
 
     mongo.collection(collection) flatMap {

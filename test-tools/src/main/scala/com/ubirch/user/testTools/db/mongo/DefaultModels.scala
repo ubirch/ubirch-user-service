@@ -1,6 +1,9 @@
 package com.ubirch.user.testTools.db.mongo
 
-import com.ubirch.user.model.db.{Context, User}
+import java.util.UUID
+
+import com.ubirch.user.model.db.{Context, Group, User}
+import com.ubirch.util.uuid.UUIDUtil
 
 import scala.util.Random
 
@@ -27,6 +30,21 @@ object DefaultModels {
       displayName = displayName,
       providerId = providerId,
       externalId = externalId
+    )
+
+  }
+
+  def group(displayName: String = s"group-${Random.nextInt}",
+            ownerId: UUID = UUIDUtil.uuid,
+            contextId: UUID = UUIDUtil.uuid,
+            allowedUsers: Seq[UUID] = Seq.empty
+           ): Group = {
+
+    Group(
+      displayName = displayName,
+      ownerId = ownerId,
+      contextId = contextId,
+      allowedUsers = allowedUsers
     )
 
   }
