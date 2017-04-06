@@ -11,6 +11,7 @@ import com.ubirch.user.model._
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
 import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
+import com.ubirch.util.model.JsonErrorResponse
 import com.ubirch.util.rest.akka.directives.CORSDirective
 
 import akka.actor.{ActorSystem, Props}
@@ -90,13 +91,20 @@ trait GroupRoute extends MyJsonProtocol
     onComplete(groupActor ? CreateGroup(dbGroup)) {
 
       case Failure(t) =>
-        logger.error("create user call responded with an unhandled message (check GroupRoute for bugs!!!)")
+        logger.error("create user call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
-          case g: db.Group => complete(Json4sUtil.any2any[rest.Group](g))
+
+          case None =>
+            val jsonError = JsonErrorResponse(errorType = "QueryError", errorMessage = "failed to create group")
+            complete(requestErrorResponse(jsonError))
+
+          case Some(g: db.Group) => complete(Json4sUtil.any2any[rest.Group](g))
+
           case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create restGroup"))
+
         }
 
     }
@@ -106,16 +114,24 @@ trait GroupRoute extends MyJsonProtocol
   private def updateGroup(restGroup: Group): Route = {
 
     val dbGroup = Json4sUtil.any2any[db.Group](restGroup)
+    // TODO find by name first and ignore id
     onComplete(groupActor ? UpdateGroup(dbGroup)) {
 
       case Failure(t) =>
-        logger.error("update restGroup call responded with an unhandled message (check GroupRoute for bugs!!!)")
+        logger.error("update restGroup call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
-          case g: db.Group => complete(Json4sUtil.any2any[rest.Group](g))
+
+          case None =>
+            val jsonError = JsonErrorResponse(errorType = "QueryError", errorMessage = "failed to update group")
+            complete(requestErrorResponse(jsonError))
+
+          case Some(g: db.Group) => complete(Json4sUtil.any2any[rest.Group](g))
+
           case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update restGroup"))
+
         }
 
     }
@@ -127,13 +143,20 @@ trait GroupRoute extends MyJsonProtocol
     onComplete(groupActor ? FindGroup(groupId)) {
 
       case Failure(t) =>
-        logger.error("findGroup call responded with an unhandled message (check GroupRoute for bugs!!!)")
+        logger.error("findGroup call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
-          case g: db.Group => complete(Json4sUtil.any2any[rest.Group](g))
+
+          case None =>
+            val jsonError = JsonErrorResponse(errorType = "QueryError", errorMessage = "failed to find group")
+            complete(requestErrorResponse(jsonError))
+
+          case Some(g: db.Group) => complete(Json4sUtil.any2any[rest.Group](g))
+
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query restGroup"))
+
         }
 
     }
@@ -150,7 +173,7 @@ trait GroupRoute extends MyJsonProtocol
 
       case Success(resp) =>
         resp match {
-          case g: db.Group => complete(Json4sUtil.any2any[rest.Group](g))
+          case deleted: Boolean if deleted => complete(StatusCodes.OK)
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete restGroup"))
         }
 

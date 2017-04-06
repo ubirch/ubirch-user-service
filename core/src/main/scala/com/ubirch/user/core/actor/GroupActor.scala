@@ -4,6 +4,7 @@ import java.util.UUID
 
 import com.ubirch.user.core.manager.GroupManager
 import com.ubirch.user.model.db.Group
+import com.ubirch.util.uuid.UUIDUtil
 
 import akka.actor.{Actor, ActorLogging}
 
@@ -20,7 +21,8 @@ class GroupActor extends Actor
 
     case create: CreateGroup =>
       val sender = context.sender()
-      GroupManager.create(create.group) map (sender ! _)
+      val toCreate = create.group.copy(id = UUIDUtil.uuid)
+      GroupManager.create(toCreate) map (sender ! _)
 
     case update: UpdateGroup =>
       val sender = context.sender()

@@ -4,6 +4,7 @@ import java.util.UUID
 
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
+import com.ubirch.user.config.Config
 import com.ubirch.user.model.db.Group
 import com.ubirch.util.uuid.UUIDUtil
 
@@ -16,44 +17,43 @@ import scala.concurrent.Future
   */
 object GroupManager extends StrictLogging {
 
-  def create(group: Group): Future[Group] = {
+  private val collection = Config.mongoCollectionGroup
+
+  def create(group: Group): Future[Option[Group]] = {
 
     // TODO implement
-    Future(group)
+    Future(Some(group))
 
   }
 
-  def update(group: Group): Future[Group] = {
+  def update(group: Group): Future[Option[Group]] = {
 
     // TODO implement
-    Future(group)
+    Future(Some(group))
 
   }
 
-  def findById(id: UUID): Future[Group] = {
+  def findById(id: UUID): Future[Option[Group]] = {
 
     // TODO implement
     Future(
-      Group(
-        displayName = "displayName-find",
-        ownerId = UUIDUtil.uuid,
-        contextId = UUIDUtil.uuid,
-        allowedUsers = Seq.empty
+      Some(
+        Group(
+          displayName = "displayName-find",
+          ownerId = UUIDUtil.uuid,
+          contextId = UUIDUtil.uuid,
+          allowedUsers = Seq.empty
+        )
       )
     )
 
   }
 
-  def delete(id: UUID): Future[Group] = {
+  def delete(id: UUID): Future[Boolean] = {
 
     // TODO implement
     Future(
-      Group(
-        displayName = "displayName-delete",
-        ownerId = UUIDUtil.uuid,
-        contextId = UUIDUtil.uuid,
-        allowedUsers = Seq.empty
-      )
+      true
     )
 
   }
