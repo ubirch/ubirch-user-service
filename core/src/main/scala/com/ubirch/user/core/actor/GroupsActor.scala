@@ -19,7 +19,7 @@ class GroupsActor extends Actor
     case find: FindGroups =>
 
       val sender = context.sender()
-      GroupsManager.findByContextNameAndExternalUserId(
+      GroupsManager.findByContextAndUser(
         contextName = find.contextName,
         providerId = find.providerId,
         externalUserId = find.externalUserId
