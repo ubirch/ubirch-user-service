@@ -5,12 +5,6 @@ import com.ubirch.user.model.db.Context
 import com.ubirch.user.testTools.db.mongo.MongoSpec
 import com.ubirch.util.uuid.UUIDUtil
 
-import reactivemongo.api.commands.bson.BSONCountCommand.Count
-import reactivemongo.api.commands.bson.BSONCountCommandImplicits._
-import reactivemongo.bson.BSONDocument
-
-import scala.concurrent.Future
-
 /**
   * author: cvandrei
   * since: 2017-04-05
@@ -29,7 +23,7 @@ class ContextManagerSpec extends MongoSpec {
 
         // verify
         created shouldBe Some(context)
-        countAll() map(_ shouldBe 1)
+        mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 1)
 
       }
 
@@ -51,7 +45,7 @@ class ContextManagerSpec extends MongoSpec {
 
             // verify
             created shouldBe None
-            countAll() map(_ shouldBe 1)
+            mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 1)
 
           }
 
@@ -75,7 +69,7 @@ class ContextManagerSpec extends MongoSpec {
 
             // verify
             created shouldBe None
-            countAll() map(_ shouldBe 1)
+            mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 1)
 
           }
 
@@ -100,17 +94,5 @@ class ContextManagerSpec extends MongoSpec {
   // delete()
   // TODO context.id does not exist --> fail
   // TODO context.id exists --> success
-
-  private def countAll(): Future[Int] = {
-
-    val command = Count(BSONDocument())
-    for {
-      collection <- mongo.collection(Config.mongoCollectionContext)
-      cmdResult <- collection.runCommand(command)
-    } yield {
-      cmdResult.value
-    }
-
-  }
 
 }
