@@ -12,6 +12,7 @@ import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
 import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
 import com.ubirch.util.model.JsonErrorResponse
+import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.rest.akka.directives.CORSDirective
 
 import akka.actor.{ActorSystem, Props}
@@ -31,7 +32,7 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-03-30
   */
-trait GroupRoute extends MyJsonProtocol
+class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
   with CORSDirective
   with ResponseUtil
   with StrictLogging {
@@ -40,7 +41,7 @@ trait GroupRoute extends MyJsonProtocol
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
   implicit val timeout = Timeout(Config.actorTimeout seconds)
 
-  private val groupActor = system.actorOf(new RoundRobinPool(Config.akkaNumberOfWorkers).props(Props[GroupActor]), ActorNames.GROUP)
+  private val groupActor = system.actorOf(new RoundRobinPool(Config.akkaNumberOfWorkers).props(Props(new GroupActor)), ActorNames.GROUP)
 
   val route: Route = {
 

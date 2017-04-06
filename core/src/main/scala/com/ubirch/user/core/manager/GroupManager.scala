@@ -6,6 +6,7 @@ import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.Config
 import com.ubirch.user.model.db.Group
+import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.uuid.UUIDUtil
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -19,21 +20,21 @@ object GroupManager extends StrictLogging {
 
   private val collection = Config.mongoCollectionGroup
 
-  def create(group: Group): Future[Option[Group]] = {
+  def create(group: Group)(implicit mongo: MongoUtil): Future[Option[Group]] = {
 
     // TODO implement
     Future(Some(group))
 
   }
 
-  def update(group: Group): Future[Option[Group]] = {
+  def update(group: Group)(implicit mongo: MongoUtil): Future[Option[Group]] = {
 
     // TODO implement
     Future(Some(group))
 
   }
 
-  def findById(id: UUID): Future[Option[Group]] = {
+  def findById(id: UUID)(implicit mongo: MongoUtil): Future[Option[Group]] = {
 
     // TODO implement
     Future(
@@ -49,7 +50,7 @@ object GroupManager extends StrictLogging {
 
   }
 
-  def delete(id: UUID): Future[Boolean] = {
+  def delete(id: UUID)(implicit mongo: MongoUtil): Future[Boolean] = {
 
     // TODO implement
     Future(

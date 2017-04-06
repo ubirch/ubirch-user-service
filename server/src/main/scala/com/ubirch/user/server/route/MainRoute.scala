@@ -15,7 +15,7 @@ class MainRoute(implicit mongo: MongoUtil) {
   val welcome = new WelcomeRoute {}
   val context = new ContextRoute()
   val user = new UserRoute()
-  val group = new GroupRoute {}
+  val group = new GroupRoute()
   val groups = new GroupsRoute {}
 
   val myRoute: Route = {

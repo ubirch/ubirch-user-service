@@ -4,6 +4,7 @@ import java.util.UUID
 
 import com.ubirch.user.core.manager.GroupManager
 import com.ubirch.user.model.db.Group
+import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.uuid.UUIDUtil
 
 import akka.actor.{Actor, ActorLogging}
@@ -14,7 +15,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
   * author: cvandrei
   * since: 2017-03-30
   */
-class GroupActor extends Actor
+class GroupActor(implicit mongo: MongoUtil) extends Actor
   with ActorLogging {
 
   override def receive: Receive = {
