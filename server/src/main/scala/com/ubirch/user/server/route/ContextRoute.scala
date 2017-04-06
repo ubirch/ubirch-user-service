@@ -41,7 +41,7 @@ class ContextRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
   implicit val timeout = Timeout(Config.actorTimeout seconds)
 
-  private val contextActor = system.actorOf(new RoundRobinPool(Config.akkaNumberOfWorkers).props(Props(new ContextActor())), ActorNames.CONTEXT)
+  private val contextActor = system.actorOf(new RoundRobinPool(Config.akkaNumberOfWorkers).props(Props(new ContextActor)), ActorNames.CONTEXT)
 
   val route: Route = {
 

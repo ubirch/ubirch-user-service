@@ -1,19 +1,20 @@
 package com.ubirch.user.server.route
 
-import java.util.UUID
-
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.actor.{ActorNames, CreateUser, DeleteUser, FindUser, UpdateUser, UserActor}
-import com.ubirch.user.model.rest.User
 import com.ubirch.user.model._
+import com.ubirch.user.model.rest.User
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
 import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
+import com.ubirch.util.model.JsonErrorResponse
+import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.rest.akka.directives.CORSDirective
 
 import akka.actor.{ActorSystem, Props}
+import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
 import akka.pattern.ask
 import akka.routing.RoundRobinPool
@@ -29,7 +30,7 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-03-30
   */
-trait UserRoute extends MyJsonProtocol
+class UserRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
   with CORSDirective
   with ResponseUtil
   with StrictLogging {
@@ -38,7 +39,7 @@ trait UserRoute extends MyJsonProtocol
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
   implicit val timeout = Timeout(Config.actorTimeout seconds)
 
-  private val userActor = system.actorOf(new RoundRobinPool(Config.akkaNumberOfWorkers).props(Props[UserActor]), ActorNames.USER)
+  private val userActor = system.actorOf(new RoundRobinPool(Config.akkaNumberOfWorkers).props(Props(new UserActor)), ActorNames.USER)
 
   val route: Route = {
 
@@ -78,13 +79,20 @@ trait UserRoute extends MyJsonProtocol
     onComplete(userActor ? CreateUser(dbUser)) {
 
       case Failure(t) =>
-        logger.error("create user call responded with an unhandled message (check UserRoute for bugs!!!)")
+        logger.error("create user call responded with an unhandled message (check UserRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
-          case u: db.User => complete(Json4sUtil.any2any[rest.User](u))
+
+          case None =>
+            val jsonError = JsonErrorResponse(errorType = "CreateError", errorMessage = "user already exists")
+            complete(requestErrorResponse(jsonError))
+
+          case Some(u: db.User) => complete(Json4sUtil.any2any[rest.User](u))
+
           case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create user"))
+
         }
 
     }
@@ -105,13 +113,20 @@ trait UserRoute extends MyJsonProtocol
     ) {
 
       case Failure(t) =>
-        logger.error("update user call responded with an unhandled message (check UserRoute for bugs!!!)")
+        logger.error("update user call responded with an unhandled message (check UserRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
-          case u: db.User => complete(Json4sUtil.any2any[rest.User](u))
+
+          case None =>
+            val jsonError = JsonErrorResponse(errorType = "UpdateError", errorMessage = "failed to update user")
+            complete(requestErrorResponse(jsonError))
+
+          case Some(u: db.User) => complete(Json4sUtil.any2any[rest.User](u))
+
           case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update user"))
+
         }
 
     }
@@ -123,13 +138,20 @@ trait UserRoute extends MyJsonProtocol
     onComplete(userActor ? FindUser(providerId, externalUserId)) {
 
       case Failure(t) =>
-        logger.error("findUser call responded with an unhandled message (check UserRoute for bugs!!!)")
+        logger.error("findUser call responded with an unhandled message (check UserRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
-          case u: db.User => complete(Json4sUtil.any2any[rest.User](u))
+
+          case None =>
+            val jsonError = JsonErrorResponse(errorType = "QueryError", errorMessage = "failed to find user")
+            complete(requestErrorResponse(jsonError))
+
+          case Some(u: db.User) => complete(Json4sUtil.any2any[rest.User](u))
+
           case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query user"))
+
         }
 
     }
@@ -141,12 +163,12 @@ trait UserRoute extends MyJsonProtocol
     onComplete(userActor ? DeleteUser(providerId = providerId, externalUserId = externalUserId)) {
 
       case Failure(t) =>
-        logger.error("deleteUser call responded with an unhandled message (check UserRoute for bugs!!!)")
+        logger.error("deleteUser call responded with an unhandled message (check UserRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
-          case u: db.User => complete(Json4sUtil.any2any[rest.User](u))
+          case deleted: Boolean if deleted => complete(StatusCodes.OK)
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete user"))
         }
 
