@@ -79,9 +79,49 @@ class ContextManagerSpec extends MongoSpec {
 
   }
 
-  // update()
-  // TODO context.id does not exist --> fail
-  // TODO context.id exists --> success
+  feature("update()") {
+
+    scenario("context.id does not exist --> fail") {
+
+      // prepare
+      val context = Context(displayName = "automated-test")
+
+      // test
+      ContextManager.update(context) flatMap { updated =>
+
+        // verify
+        updated shouldBe None
+        mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 0)
+
+      }
+
+    }
+
+    scenario("context.id exists --> success") {
+
+      // prepare
+      ContextManager.create(Context(displayName = "automated-test")) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(context) =>
+
+          val update = context.copy(displayName = s"${context.displayName}-test")
+
+          // test
+          ContextManager.update(update) flatMap { result =>
+
+            // verify
+            result shouldBe Some(update)
+            mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+  }
 
   feature("findById()") {
 

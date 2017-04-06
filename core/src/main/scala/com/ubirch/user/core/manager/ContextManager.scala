@@ -70,7 +70,7 @@ object ContextManager extends StrictLogging
 
       _.update(selector, update) map { writeResult =>
 
-        if (writeResult.ok) {
+        if (writeResult.ok && writeResult.n == 1) {
           logger.info(s"updated context: id=${context.id}")
           Some(context)
         } else {
