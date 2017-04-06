@@ -87,6 +87,16 @@ object GroupManager extends StrictLogging
 
   }
 
+  def findByName(name: String)(implicit mongo: MongoUtil): Future[Option[Group]] = {
+
+    val selector = document("displayName" -> name)
+
+    mongo.collection(collectionName) flatMap {
+      _.find(selector).one[Group]
+    }
+
+  }
+
   def delete(id: UUID)(implicit mongo: MongoUtil): Future[Boolean] = {
 
     val selector = document("id" -> id)
