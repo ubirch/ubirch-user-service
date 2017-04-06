@@ -39,18 +39,19 @@ object UserManager extends StrictLogging
 
       case None =>
 
-        mongo.collection(collectionName) map { collection =>
+        mongo.collection(collectionName) flatMap { collection =>
 
-          collection.insert[User](user) onComplete {
+          collection.insert[User](user) map { writeResult =>
 
-            case Failure(e) =>
-              logger.error("failed to create user", e)
-              throw e
-
-            case Success(_) => logger.debug(s"created new user: $user")
+            if (writeResult.ok && writeResult.n == 1) {
+              logger.debug(s"created new user: $user")
+              Some(user)
+            } else {
+              logger.error("failed to create user")
+              None
+            }
 
           }
-          Some(user)
 
         }
 

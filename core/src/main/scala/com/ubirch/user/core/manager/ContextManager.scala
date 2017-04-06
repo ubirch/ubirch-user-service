@@ -9,11 +9,11 @@ import com.ubirch.user.model.db.Context
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
 
+import reactivemongo.api.collections.bson.BSONCollection
 import reactivemongo.bson.{BSONDocumentReader, BSONDocumentWriter, Macros, document}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.{Failure, Success}
 
 /**
   * author: cvandrei
@@ -30,36 +30,15 @@ object ContextManager extends StrictLogging
 
   def create(context: Context)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
-    mongo.collection(collectionName) flatMap { collection =>
+    for {
 
-      for {
-        findById <- findById(context.id)
-        findByName <- findByName(context.displayName)
-      } yield {
+      collection <- mongo.collection(collectionName)
+      findById <- findById(context.id)
+      findByName <- findByName(context.displayName)
 
-        if (findById.isDefined || findByName.isDefined) {
+      result <- executeInsert(findById, findByName, collection, context)
 
-          logger.error(s"unable to create context as it's displayName and/or id already exist: context=$context")
-          None
-
-        } else {
-
-          collection.insert[Context](context) onComplete {
-
-            case Failure(e) =>
-              logger.error("failed to create context", e)
-              throw e
-
-            case Success(_) => logger.debug(s"created new context: $context")
-
-          }
-          Some(context)
-
-        }
-
-      }
-
-    }
+    } yield result
 
   }
 
@@ -122,6 +101,33 @@ object ContextManager extends StrictLogging
         }
 
       }
+    }
+
+  }
+
+  private def executeInsert(findById: Option[Context],
+                            findByName: Option[Context],
+                            collection: BSONCollection,
+                            context: Context
+                           ): Future[Option[Context]] = {
+
+    if (findById.isDefined || findByName.isDefined) {
+      logger.error(s"unable to create context as it's displayName and/or id already exist: context=$context")
+      Future(None)
+    } else {
+
+      collection.insert[Context](context) map { writeResult =>
+
+        if (writeResult.ok && writeResult.n == 1) {
+          logger.debug(s"created new context: $context")
+          Some(context)
+        } else {
+          logger.error("failed to create context")
+          None
+        }
+
+      }
+
     }
 
   }

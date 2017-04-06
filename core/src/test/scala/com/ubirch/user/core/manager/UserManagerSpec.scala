@@ -24,6 +24,7 @@ class UserManagerSpec extends MongoSpec {
 
         // verify
         created shouldBe Some(user)
+        Thread.sleep(200)
         mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
       }

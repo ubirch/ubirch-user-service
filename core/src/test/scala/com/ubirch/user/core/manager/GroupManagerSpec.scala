@@ -24,15 +24,15 @@ class GroupManagerSpec extends MongoSpec {
 
         // verify
         created shouldBe Some(group)
+        Thread.sleep(200)
         mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
       }
 
     }
 
-    ignore("group already exists --> fail") {
+    scenario("group already exists --> fail") {
 
-      // TODO test ist broken --> fix me!!!
       // prepare
       GroupManager.create(DefaultModels.group()) flatMap {
 
@@ -44,8 +44,8 @@ class GroupManagerSpec extends MongoSpec {
           GroupManager.create(existingGroup) flatMap { created =>
 
             // verify
-            created shouldBe None
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+            created shouldBe None
 
           }
 

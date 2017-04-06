@@ -13,7 +13,6 @@ import reactivemongo.bson.{BSONDocumentReader, BSONDocumentWriter, Macros, docum
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.{Failure, Success}
 
 /**
   * author: cvandrei
@@ -22,7 +21,7 @@ import scala.util.{Failure, Success}
 object GroupManager extends StrictLogging
   with MongoFormats {
 
-  private val collection = Config.mongoCollectionGroup
+  private val collectionName = Config.mongoCollectionGroup
 
   implicit protected def groupWriter: BSONDocumentWriter[Group] = Macros.writer[Group]
 
@@ -30,22 +29,28 @@ object GroupManager extends StrictLogging
 
   def create(group: Group)(implicit mongo: MongoUtil): Future[Option[Group]] = {
 
-    mongo.collection(collection) map { collection =>
+    findById(group.id) flatMap {
 
-      try {
-        collection.insert[Group](group) onComplete {
+      case None =>
 
-          case Failure(e) =>
-            logger.error("failed to create group", e)
-            throw e
+        mongo.collection(collectionName) flatMap { collection =>
 
-          case Success(_) => logger.debug(s"created new group: $group")
+          collection.insert[Group](group) map { writeResult =>
+
+            if (writeResult.ok && writeResult.n == 1) {
+              logger.debug(s"created new group: $group")
+              Some(group)
+            } else {
+              logger.error("failed to create group")
+              None
+            }
+          }
 
         }
-      } catch {
-        case t: Throwable => None
-      }
-      Some(group)
+
+      case Some(_: Group) =>
+        logger.error("unable to create group that already exists")
+        Future(None)
 
     }
 
@@ -54,7 +59,7 @@ object GroupManager extends StrictLogging
   def update(group: Group)(implicit mongo: MongoUtil): Future[Option[Group]] = {
 
     val selector = document("id" -> group.id)
-    mongo.collection(collection) flatMap {
+    mongo.collection(collectionName) flatMap {
 
       _.update(selector, group) map { writeResult =>
 
@@ -76,7 +81,7 @@ object GroupManager extends StrictLogging
 
     val selector = document("id" -> id)
 
-    mongo.collection(collection) flatMap {
+    mongo.collection(collectionName) flatMap {
       _.find(selector).one[Group]
     }
 
@@ -86,7 +91,7 @@ object GroupManager extends StrictLogging
 
     val selector = document("id" -> id)
 
-    mongo.collection(collection) flatMap {
+    mongo.collection(collectionName) flatMap {
       _.remove(selector) map { writeResult =>
 
         if (writeResult.ok && writeResult.n == 1) {
