@@ -10,6 +10,7 @@ import com.ubirch.util.uuid.UUIDUtil
 import akka.actor.{Actor, ActorLogging}
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 /**
   * author: cvandrei
@@ -33,9 +34,17 @@ class GroupActor(implicit mongo: MongoUtil) extends Actor
       val sender = context.sender()
       GroupManager.findById(find.id) map (sender ! _)
 
+    case find: FindGroupByName =>
+      val sender = context.sender()
+      GroupManager.findByName(find.name) map (sender ! _)
+
     case delete: DeleteGroup =>
       val sender = context.sender()
       GroupManager.delete(delete.id) map (sender ! _)
+
+    case delete: DeleteGroupByName =>
+      val sender = context.sender()
+      deleteByName(delete.name) map (sender ! _)
 
     case addAllowed: AddAllowedUsers =>
       val sender = context.sender()
@@ -55,6 +64,20 @@ class GroupActor(implicit mongo: MongoUtil) extends Actor
 
   }
 
+  private def deleteByName(name: String): Future[Boolean] = {
+
+    GroupManager.findByName(name) flatMap {
+
+      case None =>
+        log.error("")
+        Future(false)
+
+      case Some(group) => GroupManager.delete(group.id)
+
+    }
+
+  }
+
 }
 
 case class CreateGroup(group: Group)
@@ -63,7 +86,11 @@ case class UpdateGroup(group: Group)
 
 case class FindGroup(id: UUID)
 
+case class FindGroupByName(name: String)
+
 case class DeleteGroup(id: UUID)
+
+case class DeleteGroupByName(name: String)
 
 case class AddAllowedUsers(groupId: UUID,
                            allowedUsers: Set[UUID]

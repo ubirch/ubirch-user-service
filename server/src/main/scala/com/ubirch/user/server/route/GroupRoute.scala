@@ -5,7 +5,7 @@ import java.util.UUID
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.Config
-import com.ubirch.user.core.actor.{ActorNames, AddAllowedUsers, CreateGroup, DeleteAllowedUsers, DeleteGroup, FindGroup, GroupActor, UpdateGroup}
+import com.ubirch.user.core.actor.{ActorNames, AddAllowedUsers, CreateGroup, DeleteAllowedUsers, DeleteGroup, DeleteGroupByName, FindGroup, FindGroupByName, GroupActor, UpdateGroup}
 import com.ubirch.user.model.rest.{AllowedUsers, Group}
 import com.ubirch.user.model._
 import com.ubirch.user.util.server.RouteConstants
@@ -66,6 +66,14 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
             findById(groupId)
           } ~ delete {
             deleteById(groupId)
+          }
+
+        } ~ path(RouteConstants.byName / Segment) { groupName =>
+
+          get {
+            findByName(groupName)
+          } ~ delete {
+            deleteByName(groupName)
           }
 
         } ~ path(RouteConstants.allowedUsers) {
@@ -164,9 +172,52 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
   }
 
+  private def findByName(groupName: String): Route = {
+
+    onComplete(groupActor ? FindGroupByName(groupName)) {
+
+      case Failure(t) =>
+        logger.error("findGroupByName call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
+
+      case Success(resp) =>
+        resp match {
+
+          case None =>
+            val jsonError = JsonErrorResponse(errorType = "QueryError", errorMessage = "failed to find group")
+            complete(requestErrorResponse(jsonError))
+
+          case Some(g: db.Group) => complete(Json4sUtil.any2any[rest.Group](g))
+
+          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query restGroup"))
+
+        }
+
+    }
+
+  }
+
   private def deleteById(groupId: UUID): Route = {
 
     onComplete(groupActor ? DeleteGroup(groupId)) {
+
+      case Failure(t) =>
+        logger.error("deleteGroup call responded with an unhandled message (check GroupRoute for bugs!!!)")
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
+
+      case Success(resp) =>
+        resp match {
+          case deleted: Boolean if deleted => complete(StatusCodes.OK)
+          case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete restGroup"))
+        }
+
+    }
+
+  }
+
+  private def deleteByName(name: String): Route = {
+
+    onComplete(groupActor ? DeleteGroupByName(name)) {
 
       case Failure(t) =>
         logger.error("deleteGroup call responded with an unhandled message (check GroupRoute for bugs!!!)")

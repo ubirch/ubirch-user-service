@@ -130,7 +130,7 @@ Responds with the created context (including it's id which is a UUID).
 
 Responds with the updated context (including it's id which is a UUID).
 
-#### Get
+#### Find by Id
 
     curl localhost:8092/api/userService/v1/context/$CONTEXT_ID
 
@@ -140,9 +140,15 @@ Responds with the updated context (including it's id which is a UUID).
 
 Responds with the context if it exists (including it's id which is a UUID).
 
-#### Delete
+#### Delete by Id
 
     curl -XDELETE localhost:8092/api/userService/v1/context/$CONTEXT_ID
+
+Responds with the deleted context (including it's id which is a UUID).
+
+#### Delete by Name
+
+    curl -XDELETE localhost:8092/api/userService/v1/context/byName/$CONTEXT_NAME
 
 Responds with the deleted context (including it's id which is a UUID).
 
