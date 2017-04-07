@@ -253,7 +253,7 @@ TODO
 
 ## Deployment Notes
 
-This service depends on MongoDB.
+This service depends on MongoDB (tested with 2.6 and 3.4).
 
 
 ## Automated Tests
