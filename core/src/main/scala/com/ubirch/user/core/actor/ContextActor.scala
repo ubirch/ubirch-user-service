@@ -5,6 +5,7 @@ import java.util.UUID
 import com.ubirch.user.core.manager.ContextManager
 import com.ubirch.user.model.db.Context
 import com.ubirch.util.mongo.connection.MongoUtil
+import com.ubirch.util.uuid.UUIDUtil
 
 import akka.actor.{Actor, ActorLogging}
 
@@ -21,7 +22,8 @@ class ContextActor(implicit mongo: MongoUtil) extends Actor
 
     case create: CreateContext =>
       val sender = context.sender()
-      ContextManager.create(create.context) map (sender ! _)
+      val toCreate = create.context.copy(id = UUIDUtil.uuid)
+      ContextManager.create(toCreate) map (sender ! _)
 
     case update: UpdateContext =>
       val sender = context.sender()
