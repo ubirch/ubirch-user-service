@@ -48,10 +48,15 @@ object GroupsManager extends StrictLogging
 
       mongo.collection(collectionName) flatMap {
 
-        // TODO search "ownerId" and "allowedUsers" for userId
+        val userId = userOpt.get.id
         val selector = document(
-          "ownerId" -> userOpt.get.id,
-          "contextId" -> contextOpt.get.id
+          document("contextId" -> contextOpt.get.id),
+          document("$or" ->
+            Set(
+              document("ownerId" -> userId),
+              document("allowedUsers" -> document("$all" -> Set(userId)))
+            )
+          )
         )
         _.find(selector)
           .cursor[Group]()
