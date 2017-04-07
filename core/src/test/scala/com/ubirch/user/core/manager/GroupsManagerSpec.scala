@@ -1,5 +1,6 @@
 package com.ubirch.user.core.manager
 
+import com.ubirch.user.core.manager.testUtils.DataHelpers
 import com.ubirch.user.testTools.db.mongo.{DefaultModels, MongoSpec}
 
 /**
@@ -7,6 +8,8 @@ import com.ubirch.user.testTools.db.mongo.{DefaultModels, MongoSpec}
   * since: 2017-04-07
   */
 class GroupsManagerSpec extends MongoSpec {
+
+  private val dataHelpers = new DataHelpers
 
   feature("findByContextAndUser") {
 
@@ -30,7 +33,76 @@ class GroupsManagerSpec extends MongoSpec {
 
     }
 
-    // TODO remaining tests
+    scenario("user is group owner") {
+
+      // prepare
+      val contextModel = DefaultModels.context()
+      val ownerModel = DefaultModels.user(displayName = "test-user-1", externalId = "1234")
+      val user2Model = DefaultModels.user(displayName = "test-user-2", externalId = "1235")
+
+      for {
+        contextOpt <- ContextManager.create(contextModel)
+        ownerOpt <- UserManager.create(ownerModel)
+        user2Opt <- UserManager.create(user2Model)
+        groupOpt <- dataHelpers.createGroup(contextOpt, ownerOpt, user2Opt)
+
+        // test
+        result <- dataHelpers.findGroup(contextOpt.get, ownerOpt.get)
+
+      } yield {
+        // verify
+        result shouldBe Set(groupOpt.get)
+      }
+
+    }
+
+    scenario("user is allowed to access the group") {
+
+      // prepare
+      val contextModel = DefaultModels.context()
+      val ownerModel = DefaultModels.user(displayName = "test-user-1", externalId = "1234")
+      val user2Model = DefaultModels.user(displayName = "test-user-2", externalId = "1235")
+
+      for {
+        contextOpt <- ContextManager.create(contextModel)
+        ownerOpt <- UserManager.create(ownerModel)
+        user2Opt <- UserManager.create(user2Model)
+        groupOpt <- dataHelpers.createGroup(contextOpt, ownerOpt, user2Opt)
+
+        // test
+        result <- dataHelpers.findGroup(contextOpt.get, user2Opt.get)
+
+      } yield {
+        // verify
+        result shouldBe Set(groupOpt.get)
+      }
+
+    }
+
+    scenario("user owns no groups nor is allowed to access any of them") {
+
+      // prepare
+      val contextModel = DefaultModels.context()
+      val ownerModel = DefaultModels.user(displayName = "test-user-1", externalId = "1234")
+      val user2Model = DefaultModels.user(displayName = "test-user-2", externalId = "1235")
+      val user3Model = DefaultModels.user(displayName = "test-user-3", externalId = "1236")
+
+      for {
+        contextOpt <- ContextManager.create(contextModel)
+        ownerOpt <- UserManager.create(ownerModel)
+        user2Opt <- UserManager.create(user2Model)
+        user3Opt <- UserManager.create(user3Model)
+        groupOpt <- dataHelpers.createGroup(contextOpt, ownerOpt, user2Opt)
+
+        // test
+        result <- dataHelpers.findGroup(contextOpt.get, user3Opt.get)
+
+      } yield {
+        // verify
+        result shouldBe Set.empty
+      }
+
+    }
 
   }
 
