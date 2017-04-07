@@ -14,7 +14,7 @@ case class Group(id: UUID = UUIDUtil.uuid,
                  displayName: String,
                  ownerId: UUID,
                  contextId: UUID,
-                 allowedUsers: Seq[UUID],
+                 allowedUsers: Set[UUID],
                  created: DateTime = DateTime.now,
                  updated: DateTime = DateTime.now
                 )

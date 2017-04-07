@@ -7,5 +7,5 @@ import java.util.UUID
   * since: 2017-03-29
   */
 case class AllowedUsers(groupId: UUID,
-                        allowedUsers: Seq[UUID]
+                        allowedUsers: Set[UUID]
                        )

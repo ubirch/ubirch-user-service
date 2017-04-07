@@ -37,7 +37,7 @@ object DefaultModels {
   def group(displayName: String = s"group-${Random.nextInt}",
             ownerId: UUID = UUIDUtil.uuid,
             contextId: UUID = UUIDUtil.uuid,
-            allowedUsers: Seq[UUID] = Seq.empty
+            allowedUsers: Set[UUID] = Set.empty
            ): Group = {
 
     Group(

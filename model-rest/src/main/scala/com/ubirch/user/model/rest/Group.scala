@@ -10,5 +10,5 @@ case class Group(id: Option[UUID] = None,
                  displayName: String,
                  ownerId: UUID,
                  contextId: UUID,
-                 allowedUsers: Seq[UUID] = Seq.empty
+                 allowedUsers: Set[UUID] = Set.empty
                 )

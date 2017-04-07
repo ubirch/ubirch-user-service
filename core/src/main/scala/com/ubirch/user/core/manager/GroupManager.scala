@@ -117,14 +117,14 @@ object GroupManager extends StrictLogging
 
   }
 
-  def addAllowedUsers(groupId: UUID, allowedUsers: Seq[UUID]): Future[Boolean] = {
+  def addAllowedUsers(groupId: UUID, allowedUsers: Set[UUID]): Future[Boolean] = {
 
     // TODO implement
     Future(true)
 
   }
 
-  def deleteAllowedUsers(groupId: UUID, allowedUsers: Seq[UUID]): Future[Boolean] = {
+  def deleteAllowedUsers(groupId: UUID, allowedUsers: Set[UUID]): Future[Boolean] = {
 
     // TODO implement
     Future(true)

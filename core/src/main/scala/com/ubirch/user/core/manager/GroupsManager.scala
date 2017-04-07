@@ -29,7 +29,7 @@ object GroupsManager extends StrictLogging
                            providerId: String,
                            externalUserId: String
                           )
-                          (implicit mongo: MongoUtil): Future[Seq[Group]] = {
+                          (implicit mongo: MongoUtil): Future[Set[Group]] = {
 
     // TODO automated tests
     for {
@@ -42,7 +42,7 @@ object GroupsManager extends StrictLogging
 
   }
 
-  private def findGroupsFuture(userOpt: Option[User], contextOpt: Option[Context])(implicit mongo: MongoUtil): Future[Seq[Group]] = {
+  private def findGroupsFuture(userOpt: Option[User], contextOpt: Option[Context])(implicit mongo: MongoUtil): Future[Set[Group]] = {
 
     if (userOpt.isDefined && contextOpt.isDefined) {
 
@@ -60,13 +60,13 @@ object GroupsManager extends StrictLogging
         )
         _.find(selector)
           .cursor[Group]()
-          .collect[Seq]()
+          .collect[Set]()
 
       }
 
     } else {
       logger.info(s"user or context does not exist: user.isDefined=${userOpt.isDefined}, context.isDefined=${contextOpt.isDefined}")
-      Future(Seq.empty)
+      Future(Set.empty)
     }
 
   }

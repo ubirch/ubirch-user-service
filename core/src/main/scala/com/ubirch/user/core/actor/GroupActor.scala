@@ -66,9 +66,9 @@ case class FindGroup(id: UUID)
 case class DeleteGroup(id: UUID)
 
 case class AddAllowedUsers(groupId: UUID,
-                           allowedUsers: Seq[UUID]
+                           allowedUsers: Set[UUID]
                           )
 
 case class DeleteAllowedUsers(groupId: UUID,
-                              allowedUsers: Seq[UUID]
+                              allowedUsers: Set[UUID]
                              )

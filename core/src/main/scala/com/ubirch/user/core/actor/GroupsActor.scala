@@ -37,4 +37,4 @@ case class FindGroups(contextName: String,
                       externalUserId: String
                      )
 
-case class FoundGroups(groups: Seq[Group])
+case class FoundGroups(groups: Set[Group])
