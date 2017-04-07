@@ -31,7 +31,6 @@ object GroupsManager extends StrictLogging
                           )
                           (implicit mongo: MongoUtil): Future[Set[Group]] = {
 
-    // TODO automated tests
     for {
 
       userOpt <- UserManager.findByProviderIdAndExternalId(providerId = providerId, externalUserId = externalUserId)
