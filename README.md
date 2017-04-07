@@ -277,7 +277,15 @@ more details here: https://github.com/scoverage/sbt-scoverage
 
 ## Local Setup
 
-TODO
+1) Start [MongoDB 3.4](https://www.mongodb.com/download-center?jmp=nav)
+
+2) Delete Existing Data
+
+    ./sbt "cmdtools/runMain com.ubirch.user.cmd.MongoDelete"
+
+3) Create Test Data
+
+    ./sbt "cmdtools/runMain com.ubirch.user.cmd.InitData"
 
 
 ## Create Docker Image

@@ -1,4 +1,4 @@
-package com.ubirch.user.core.manager.testUtils
+package com.ubirch.user.testTools.external
 
 import java.util.UUID
 

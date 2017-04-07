@@ -1,4 +1,4 @@
-package com.ubirch.user.testTools.db.mongo
+package com.ubirch.user.model.db.tools
 
 import java.util.UUID
 

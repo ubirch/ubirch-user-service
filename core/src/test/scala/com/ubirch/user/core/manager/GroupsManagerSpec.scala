@@ -1,7 +1,8 @@
 package com.ubirch.user.core.manager
 
 import com.ubirch.user.core.manager.testUtils.DataHelpers
-import com.ubirch.user.testTools.db.mongo.{DefaultModels, MongoSpec}
+import com.ubirch.user.model.db.tools.DefaultModels
+import com.ubirch.user.testTools.db.mongo.MongoSpec
 
 /**
   * author: cvandrei

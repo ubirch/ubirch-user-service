@@ -43,14 +43,14 @@ lazy val config = project
 
 lazy val cmdtools = project
   .settings(commonSettings: _*)
-  .dependsOn(config, testTools)
+  .dependsOn(modelDbTools, testToolsExt)
   .settings(
     description := "command line tools"
   )
 
 lazy val core = project
   .settings(commonSettings: _*)
-  .dependsOn(config, modelDb, modelRest, util, testTools % "test")
+  .dependsOn(config, modelDb, modelDbTools, modelRest, util, testTools % "test")
   .settings(
     description := "business logic",
     libraryDependencies ++= depCore
@@ -61,6 +61,15 @@ lazy val modelDb = (project in file("model-db"))
   .settings(
     name := "model-db",
     description := "database JSON models",
+    libraryDependencies ++= depModelDb
+  )
+
+lazy val modelDbTools = (project in file("model-db-tools"))
+  .settings(commonSettings: _*)
+  .dependsOn(modelDb)
+  .settings(
+    name := "model-db-tools",
+    description := "tools for database JSON models",
     libraryDependencies ++= depModelDb
   )
 
@@ -95,6 +104,15 @@ lazy val testTools = (project in file("test-tools"))
   .settings(
     name := "test-tools",
     description := "tools useful in automated tests",
+    libraryDependencies ++= depTestTools
+  )
+
+lazy val testToolsExt = (project in file("test-tools-ext"))
+  .settings(commonSettings: _*)
+  .dependsOn(core, modelDb)
+  .settings(
+    name := "test-tools-ext",
+    description := "tools useful in automated tests (not in test-tools to avoid circular dependencies between _test-tools_ and _core_)",
     libraryDependencies ++= depTestTools
   )
 
