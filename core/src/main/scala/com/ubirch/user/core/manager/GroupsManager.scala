@@ -48,6 +48,7 @@ object GroupsManager extends StrictLogging
 
       mongo.collection(collectionName) flatMap {
 
+        // TODO search "ownerId" and "allowedUsers" for userId
         val selector = document(
           "ownerId" -> userOpt.get.id,
           "contextId" -> contextOpt.get.id
@@ -59,6 +60,7 @@ object GroupsManager extends StrictLogging
       }
 
     } else {
+      logger.info(s"user or context does not exist: user.isDefined=${userOpt.isDefined}, context.isDefined=${contextOpt.isDefined}")
       Future(Seq.empty)
     }
 
