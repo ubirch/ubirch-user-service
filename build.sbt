@@ -170,8 +170,8 @@ lazy val depUtils = Seq(
 
 // VERSIONS
 val akkaV = "2.4.17"
-val akkaHttpV = "10.0.3"
-val json4sV = "3.4.2"
+val akkaHttpV = "10.0.5"
+val json4sV = "3.5.1"
 
 val scalaTestV = "3.0.1"
 
@@ -205,17 +205,17 @@ lazy val excludedLoggers = Seq(
 
 lazy val ubirchConfig = ubirchUtilG %% "config" % "0.1" excludeAll(excludedLoggers: _*)
 lazy val ubirchDate = ubirchUtilG %% "date" % "0.1" excludeAll(excludedLoggers: _*)
-lazy val ubirchJson = ubirchUtilG %% "json" % "0.3.3" excludeAll(excludedLoggers: _*)
-lazy val ubirchJsonAutoConvert = ubirchUtilG %% "json-auto-convert" % "0.3.3" excludeAll(excludedLoggers: _*)
+lazy val ubirchJson = ubirchUtilG %% "json" % "0.3.4" excludeAll(excludedLoggers: _*)
+lazy val ubirchJsonAutoConvert = ubirchUtilG %% "json-auto-convert" % "0.3.4" excludeAll(excludedLoggers: _*)
 lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.1.0" excludeAll(
   excludedLoggers++ Seq(ExclusionRule(organization = akkaG, name = "akka-actor")): _*
   )
 lazy val ubirchMongo = ubirchUtilG %% "mongo-utils" % "0.1.0" excludeAll(
   excludedLoggers++ Seq(ExclusionRule(organization = akkaG, name = "akka-actor")): _*
   )
-lazy val ubirchRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.3.3" excludeAll(excludedLoggers: _*)
-lazy val ubirchRestAkkaHttpTest = ubirchUtilG %% "rest-akka-http-test" % "0.3.3" excludeAll(excludedLoggers: _*)
-lazy val ubirchResponse = ubirchUtilG %% "response-util" % "0.1.2" excludeAll(excludedLoggers: _*)
+lazy val ubirchRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.3.4" excludeAll(excludedLoggers: _*)
+lazy val ubirchRestAkkaHttpTest = ubirchUtilG %% "rest-akka-http-test" % "0.3.4" excludeAll(excludedLoggers: _*)
+lazy val ubirchResponse = ubirchUtilG %% "response-util" % "0.1.3" excludeAll(excludedLoggers: _*)
 lazy val ubirchUuid = ubirchUtilG %% "uuid" % "0.1.1" excludeAll(excludedLoggers: _*)
 
 /*
