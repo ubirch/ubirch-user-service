@@ -252,7 +252,7 @@ lazy val mergeStrategy = Seq(
   }
 )
 
-private def generateDockerFile(file: File, jarFile: sbt.File): Seq[File] = {
+def generateDockerFile(file: File, jarFile: sbt.File): Seq[File] = {
   val contents =
     s"""SOURCE=server/target/scala-2.11/${jarFile.getName}
        |TARGET=${jarFile.getName}
