@@ -32,7 +32,16 @@ lazy val commonSettings = Seq(
 
 lazy val userService = (project in file("."))
   .settings(commonSettings: _*)
-  .aggregate(cmdtools, config, core, modelDb, modelRest, server, testTools, util)
+  .aggregate(
+    cmdtools,
+    config,
+    core,
+    modelDb,
+    modelRest,
+    server,
+    testTools,
+    util
+  )
 
 lazy val config = project
   .settings(commonSettings: _*)
@@ -94,7 +103,7 @@ lazy val server = project
     ),
     mainClass in(Compile, run) := Some("com.ubirch.user.server.Boot"),
     resourceGenerators in Compile += Def.task {
-      generateDockerFile(baseDirectory.value / ".." / "Dockerfile", name.value, version.value, (assemblyOutputPath in assembly).value)
+      generateDockerFile(baseDirectory.value / ".." / "Dockerfile", (assemblyOutputPath in assembly).value)
     }.taskValue
   )
 
@@ -243,18 +252,11 @@ lazy val mergeStrategy = Seq(
   }
 )
 
-def generateDockerFile(file: File, nameString: String, versionString: String, jarFile: sbt.File): Seq[File] = {
-  val jarTargetPath = s"/opt/jar/${jarFile.name}"
+private def generateDockerFile(file: File, jarFile: sbt.File): Seq[File] = {
   val contents =
-    s"""FROM ubirch/java
-       		  |RUN mkdir -p /opt/ubirch/etc
-       	 |ADD server/target/scala-2.11/${jarFile.getName} $jarTargetPath
-       		  |ADD config/src/main/resources/application.docker.conf /opt/ubirch/etc/application.conf
-       		  |ADD config/src/main/resources/logback.docker.xml /opt/ubirch/etc/logback.xml
-       |EXPOSE 8080
-       	 |ENTRYPOINT ["java","-Dlogback.configurationFile=/opt/ubirch/etc/logback.xml", "-Dconfig.file=/opt/ubirch/etc/application.conf","-jar", "$jarTargetPath","-Dfile.encoding=UTF-8", "-XX:+UseCMSInitiatingOccupancyOnly","-XX:+DisableExplicitGC","-XX:CMSInitiatingOccupancyFraction=75", "-XX:+UseParNewGC","-XX:+UseConcMarkSweepGC", "-Xms1g", "-Xmx2g", "-Djava.awt.headless=true"]
-       	 |""".stripMargin
+    s"""SOURCE=server/target/scala-2.11/${jarFile.getName}
+       |TARGET=${jarFile.getName}
+       |""".stripMargin
   IO.write(file, contents)
   Seq(file)
 }
-
