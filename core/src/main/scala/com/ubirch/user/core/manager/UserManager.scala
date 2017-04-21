@@ -13,7 +13,6 @@ import reactivemongo.bson.{BSONDocumentReader, BSONDocumentWriter, Macros, docum
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.{Failure, Success}
 
 /**
   * author: cvandrei
