@@ -22,29 +22,36 @@ object InitData extends App
 
   private val dataHelpers = new DataHelpers
 
-  val contextModel = DefaultModels.context()
+  val contextUbirchDev = DefaultModels.context(displayName = "ubirch-dev")
+  val contextTrackleDev = DefaultModels.context(displayName = "trackle-dev")
   val ownerModel = DefaultModels.user(displayName = "test-user-1", externalId = "1234")
   val user2Model = DefaultModels.user(displayName = "test-user-2", externalId = "1235")
   val user3Model = DefaultModels.user(displayName = "test-user-3", externalId = "1236")
 
   val foo = for {
 
-    contextOpt <- ContextManager.create(contextModel)
+    contextUbirchOpt <- ContextManager.create(contextUbirchDev)
+    contextTrackleOpt <- ContextManager.create(contextTrackleDev)
     ownerOpt <- UserManager.create(ownerModel)
     user2Opt <- UserManager.create(user2Model)
     user3Opt <- UserManager.create(user3Model)
-    groupOpt <- dataHelpers.createGroup(contextOpt, ownerOpt, user2Opt)
+    groupOpt <- dataHelpers.createGroup(contextUbirchOpt, ownerOpt, user2Opt)
 
   } yield {
 
+    if (contextUbirchOpt.isDefined) {
+      logger.info(s"=== created context: name=${contextUbirchOpt.get.displayName}")
+    }
+    if (contextTrackleOpt.isDefined) {
+      logger.info(s"=== created context: name=${contextTrackleOpt.get.displayName}")
+    }
+
     mongo.close()
-    CreatedData(contextOpt.get, ownerOpt.get, groupOpt.get, user2Opt.get, user3Opt.get)
+    CreatedData(contextUbirchOpt.get, ownerOpt.get, groupOpt.get, user2Opt.get, user3Opt.get)
 
   }
 
   foo map { created =>
-
-    logger.info(s"=== created context: name=${created.context.displayName}")
 
     val owner = created.owner
     val ownerString = s"id=${owner.id}; provider=${owner.providerId}; externalId=${owner.externalId}"
