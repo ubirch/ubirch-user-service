@@ -83,6 +83,7 @@ class UserRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
+
         resp match {
 
           case None =>

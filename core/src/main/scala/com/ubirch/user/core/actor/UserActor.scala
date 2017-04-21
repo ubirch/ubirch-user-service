@@ -30,7 +30,7 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
       val updated = UserManager.findByProviderIdAndExternalId(update.providerId, externalUserId = update.externalUserId) flatMap {
 
         case None =>
-          log.error(s"unable to update use as it does not exist: provider=${update.providerId}, externalId=${update.externalUserId}")
+          log.error(s"unable to update user as it does not exist: provider=${update.providerId}, externalId=${update.externalUserId}")
           Future(None)
 
         case Some(u: User) =>
