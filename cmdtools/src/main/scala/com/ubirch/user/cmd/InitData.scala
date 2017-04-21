@@ -39,6 +39,8 @@ object InitData extends App
 
   } yield {
 
+    mongo.close()
+
     if (contextUbirchOpt.isDefined) {
       logger.info(s"=== created context: name=${contextUbirchOpt.get.displayName}")
     }
@@ -46,7 +48,6 @@ object InitData extends App
       logger.info(s"=== created context: name=${contextTrackleOpt.get.displayName}")
     }
 
-    mongo.close()
     CreatedData(contextUbirchOpt.get, ownerOpt.get, groupOpt.get, user2Opt.get, user3Opt.get)
 
   }
