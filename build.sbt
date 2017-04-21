@@ -37,17 +37,12 @@ lazy val userService = (project in file("."))
     config,
     core,
     modelDb,
+    modelDbTools,
     modelRest,
     server,
     testTools,
+    testToolsExt,
     util
-  )
-
-lazy val config = project
-  .settings(commonSettings: _*)
-  .settings(
-    description := "user-service specific config and config tools",
-    libraryDependencies += ubirchConfig
   )
 
 lazy val cmdtools = project
@@ -55,6 +50,13 @@ lazy val cmdtools = project
   .dependsOn(modelDbTools, testToolsExt)
   .settings(
     description := "command line tools"
+  )
+
+lazy val config = project
+  .settings(commonSettings: _*)
+  .settings(
+    description := "user-service specific config and config tools",
+    libraryDependencies += ubirchConfig
   )
 
 lazy val core = project
