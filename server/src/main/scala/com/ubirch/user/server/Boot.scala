@@ -33,8 +33,7 @@ object Boot extends App with StrictLogging {
   implicit val mongo: MongoUtil = new MongoUtil(ConfigKeys.MONGO_PREFIX)
 
   val bindingFuture = start()
-
-  stop()
+  registerShutdownHooks()
 
   private def start(): Future[ServerBinding] = {
 
@@ -47,7 +46,7 @@ object Boot extends App with StrictLogging {
 
   }
 
-  private def stop() = {
+  private def registerShutdownHooks() = {
 
     Runtime.getRuntime.addShutdownHook(new Thread() {
 
