@@ -3,9 +3,7 @@ package com.ubirch.user.cmd
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.ConfigKeys
-import com.ubirch.user.core.manager.{ContextManager, UserManager}
 import com.ubirch.user.model.db.{Context, Group, User}
-import com.ubirch.user.model.db.tools.DefaultModels
 import com.ubirch.user.testTools.external.DataHelpers
 import com.ubirch.util.mongo.connection.MongoUtil
 
@@ -22,19 +20,13 @@ object InitData extends App
 
   private val dataHelpers = new DataHelpers
 
-  val contextUbirchDev = DefaultModels.context(displayName = "ubirch-dev")
-  val contextTrackleDev = DefaultModels.context(displayName = "trackle-dev")
-  val ownerModel = DefaultModels.user(displayName = "test-user-1", externalId = "1234")
-  val user2Model = DefaultModels.user(displayName = "test-user-2", externalId = "1235")
-  val user3Model = DefaultModels.user(displayName = "test-user-3", externalId = "1236")
+  val dataCreated = for {
 
-  val foo = for {
-
-    contextUbirchOpt <- ContextManager.create(contextUbirchDev)
-    contextTrackleOpt <- ContextManager.create(contextTrackleDev)
-    ownerOpt <- UserManager.create(ownerModel)
-    user2Opt <- UserManager.create(user2Model)
-    user3Opt <- UserManager.create(user3Model)
+    contextUbirchOpt <- dataHelpers.createContext(displayName = "ubirch-dev")
+    contextTrackleOpt <- dataHelpers.createContext(displayName = "trackle-dev")
+    ownerOpt <- dataHelpers.createUser(displayName = "test-user-1", externalId = "1234")
+    user2Opt <- dataHelpers.createUser(displayName = "test-user-2", externalId = "1235")
+    user3Opt <- dataHelpers.createUser(displayName = "test-user-3", externalId = "1236")
     groupOpt <- dataHelpers.createGroup(contextUbirchOpt, ownerOpt, user2Opt)
 
   } yield {
@@ -52,7 +44,7 @@ object InitData extends App
 
   }
 
-  foo map { created =>
+  dataCreated map { created =>
 
     val owner = created.owner
     val ownerString = s"id=${owner.id}; provider=${owner.providerId}; externalId=${owner.externalId}"
