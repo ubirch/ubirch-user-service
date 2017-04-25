@@ -21,7 +21,7 @@ import scala.util.Random
 class DataHelpers(implicit mongo: MongoUtil) {
 
   def createUser(id: UUID = UUIDUtil.uuid,
-                 displayName: String = s"automated-test-${Random.nextLong()}",
+                 displayName: String = s"automated-test-${UUIDUtil.uuid}",
                  providerId: String = "google",
                  externalId: String = s"${Random.nextLong()}",
                  created: DateTime = DateTime.now(DateTimeZone.UTC),
@@ -42,7 +42,7 @@ class DataHelpers(implicit mongo: MongoUtil) {
   }
 
   def createContext(id: UUID = UUIDUtil.uuid,
-                    displayName: String = s"automated-test-${Random.nextLong()}",
+                    displayName: String = s"automated-test-${UUIDUtil.uuid}",
                     created: DateTime = DateTime.now(DateTimeZone.UTC),
                     updated: DateTime = DateTime.now(DateTimeZone.UTC)
                    ): Future[Option[Context]] = {

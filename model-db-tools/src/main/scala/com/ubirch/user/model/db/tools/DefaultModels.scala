@@ -5,8 +5,6 @@ import java.util.UUID
 import com.ubirch.user.model.db.{Context, Group, User}
 import com.ubirch.util.uuid.UUIDUtil
 
-import scala.util.Random
-
 /**
   * author: cvandrei
   * since: 2017-04-06
@@ -23,7 +21,7 @@ object DefaultModels {
 
   def user(displayName: String = "automated-test-user",
            providerId: String = "google",
-           externalId: String = Random.nextInt().toString
+           externalId: String = UUIDUtil.uuidStr
           ): User = {
 
     User(
@@ -34,7 +32,7 @@ object DefaultModels {
 
   }
 
-  def group(displayName: String = s"group-${Random.nextInt}",
+  def group(displayName: String = s"group-${UUIDUtil.uuid}",
             ownerId: UUID = UUIDUtil.uuid,
             contextId: UUID = UUIDUtil.uuid,
             allowedUsers: Set[UUID] = Set.empty
