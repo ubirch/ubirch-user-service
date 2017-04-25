@@ -93,6 +93,36 @@ class DataHelpers(implicit mongo: MongoUtil) {
 
   }
 
+  def createGroupWithoutContext(ownerOpt: Option[User],
+                                allowedUsersOpt: Option[User]*
+                               ): Future[Option[Group]] = {
+
+    if (ownerOpt.isEmpty) {
+      throw new Exception("failed to prepare owner")
+    }
+
+    for (userOpt <- allowedUsersOpt) {
+      if (userOpt.isEmpty) {
+        throw new Exception("failed to prepare allowedUsers")
+      }
+    }
+
+    val allowedUsers: Seq[UUID] = allowedUsersOpt map { userOpt =>
+      userOpt.get.id
+    }
+    val group = DefaultModels.group(
+      ownerId = ownerOpt.get.id,
+      contextId = UUIDUtil.uuid,
+      allowedUsers = allowedUsers.toSet
+    )
+
+    GroupManager.create(group) map {
+      case None => throw new Exception("failed to prepare group")
+      case Some(g) => Some(g)
+    }
+
+  }
+
   def findGroup(context: Context, user: User): Future[Set[Group]] = {
 
     GroupsManager.findByContextAndUser(
