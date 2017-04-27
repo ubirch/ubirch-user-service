@@ -35,17 +35,13 @@ object InitData extends App
 
     mongo.close()
 
-    if (contextUbirchOpt.isDefined) {
-      logger.info(s"=== created context: name=${contextUbirchOpt.get.displayName}")
-    }
-    if (contextTrackleOpt.isDefined) {
-      logger.info(s"=== created context: name=${contextTrackleOpt.get.displayName}")
-    }
-    if (contextUbirchAdminUiOpt.isDefined) {
-      logger.info(s"=== created context: name=${contextUbirchAdminUiOpt.get.displayName}")
-    }
-    if (contextTrackleAdminUiOpt.isDefined) {
-      logger.info(s"=== created context: name=${contextTrackleAdminUiOpt.get.displayName}")
+    val contextSet = Set(contextUbirchOpt, contextTrackleOpt, contextUbirchAdminUiOpt, contextTrackleAdminUiOpt)
+    for (context <- contextSet) {
+      if (context.isDefined) {
+        logger.info(s"=== created context: name=${context.get.displayName}")
+      } else {
+        logger.error(s"=== failed to create context: name=${context.get.displayName}")
+      }
     }
 
     CreatedData(contextUbirchOpt.get, ownerOpt.get, groupOpt.get, user2Opt.get, user3Opt.get)
