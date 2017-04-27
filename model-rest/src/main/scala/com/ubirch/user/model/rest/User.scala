@@ -9,5 +9,6 @@ import java.util.UUID
 case class User(id: Option[UUID] = None,
                 displayName: String,
                 providerId: String,
-                externalId: String
+                externalId: String,
+                locale: String
                )

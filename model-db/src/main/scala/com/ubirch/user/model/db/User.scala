@@ -14,6 +14,7 @@ case class User(id: UUID = UUIDUtil.uuid,
                 displayName: String,
                 providerId: String,
                 externalId: String,
+                locale: String,
                 created: DateTime = DateTime.now,
                 updated: DateTime = DateTime.now
                )

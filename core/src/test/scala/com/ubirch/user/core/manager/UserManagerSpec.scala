@@ -74,7 +74,7 @@ class UserManagerSpec extends MongoSpec {
 
     }
 
-    scenario("user.id exists --> success") {
+    scenario("update displayName --> success") {
 
       // prepare
       UserManager.create(DefaultModels.user()) flatMap {
@@ -84,6 +84,35 @@ class UserManagerSpec extends MongoSpec {
         case Some(user) =>
 
           val update = user.copy(displayName = s"${user.displayName}-test")
+
+          // test
+          UserManager.update(update) flatMap { result =>
+
+            // verify
+            result shouldBe Some(update)
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+    scenario("update locale --> success") {
+
+      // prepare
+      UserManager.create(DefaultModels.user()) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(user) =>
+
+          val newLocale = if (user.locale == "en") {
+            "de"
+          } else {
+            "en"
+          }
+          val update = user.copy(locale = newLocale)
 
           // test
           UserManager.update(update) flatMap { result =>

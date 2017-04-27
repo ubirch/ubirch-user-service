@@ -24,6 +24,7 @@ class DataHelpers(implicit mongo: MongoUtil) {
                  displayName: String = s"automated-test-${UUIDUtil.uuid}",
                  providerId: String = "google",
                  externalId: String = s"${Random.nextLong()}",
+                 locale: String = "en",
                  created: DateTime = DateTime.now(DateTimeZone.UTC),
                  updated: DateTime = DateTime.now(DateTimeZone.UTC)
                 ): Future[Option[User]] = {
@@ -33,6 +34,7 @@ class DataHelpers(implicit mongo: MongoUtil) {
       displayName = displayName,
       providerId = providerId,
       externalId = externalId,
+      locale = locale,
       created = created,
       updated = updated
     )
