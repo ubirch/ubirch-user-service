@@ -24,7 +24,8 @@ object InitData extends App
 
     contextUbirchOpt <- dataHelpers.createContext(displayName = "ubirch-dev")
     contextTrackleOpt <- dataHelpers.createContext(displayName = "trackle-dev")
-    contextAdminUiOpt <- dataHelpers.createContext(displayName = "ubirch-admin-ui-dev")
+    contextUbirchAdminUiOpt <- dataHelpers.createContext(displayName = "ubirch-admin-ui-dev")
+    contextTrackleAdminUiOpt <- dataHelpers.createContext(displayName = "trackle-admin-ui-dev")
     ownerOpt <- dataHelpers.createUser(displayName = "test-user-1", externalId = "1234")
     user2Opt <- dataHelpers.createUser(displayName = "test-user-2", externalId = "1235")
     user3Opt <- dataHelpers.createUser(displayName = "test-user-3", externalId = "1236")
@@ -40,8 +41,11 @@ object InitData extends App
     if (contextTrackleOpt.isDefined) {
       logger.info(s"=== created context: name=${contextTrackleOpt.get.displayName}")
     }
-    if (contextAdminUiOpt.isDefined) {
-      logger.info(s"=== created context: name=${contextAdminUiOpt.get.displayName}")
+    if (contextUbirchAdminUiOpt.isDefined) {
+      logger.info(s"=== created context: name=${contextUbirchAdminUiOpt.get.displayName}")
+    }
+    if (contextTrackleAdminUiOpt.isDefined) {
+      logger.info(s"=== created context: name=${contextTrackleAdminUiOpt.get.displayName}")
     }
 
     CreatedData(contextUbirchOpt.get, ownerOpt.get, groupOpt.get, user2Opt.get, user3Opt.get)
