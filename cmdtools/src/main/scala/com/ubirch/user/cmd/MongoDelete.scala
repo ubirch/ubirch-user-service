@@ -19,7 +19,7 @@ object MongoDelete extends App
 
   private implicit val mongo = new MongoUtil(ConfigKeys.MONGO_PREFIX)
 
-  Await.result(mongo.db() map(_.drop), 60 seconds)
+  Await.result(mongo.db map(_.drop), 60 seconds)
   mongo.close()
 
 }

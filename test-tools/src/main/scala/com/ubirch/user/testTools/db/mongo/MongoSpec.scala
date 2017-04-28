@@ -20,7 +20,7 @@ class MongoSpec extends AsyncFeatureSpec
   protected val mongoTestUtils = new MongoTestUtils()
 
   override protected def beforeEach(): Unit = {
-    mongo.db() map (_.drop())
+    mongo.db map (_.drop())
     Thread.sleep(100)
   }
 
