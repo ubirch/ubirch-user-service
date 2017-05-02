@@ -29,10 +29,10 @@ TODO
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snaphots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.1.1"
+  "com.ubirch.user" %% "cmdtools" % "0.2.0-SNAPSHOT"
 )
 ```
 
@@ -40,10 +40,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snaphots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.1.1"
+  "com.ubirch.user" %% "config" % "0.2.0-SNAPSHOT"
 )
 ```
 
@@ -51,10 +51,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snaphots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.1.1"
+  "com.ubirch.user" %% "core" % "0.2.0-SNAPSHOT"
 )
 ```
 
@@ -62,10 +62,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snaphots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.1.1"
+  "com.ubirch.user" %% "model-db" % "0.2.0-SNAPSHOT"
 )
 ```
 
@@ -73,10 +73,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snaphots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.1.1"
+  "com.ubirch.user" %% "model-rest" % "0.2.0-SNAPSHOT"
 )
 ```
 
@@ -84,11 +84,11 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases"),
+  Resolver.sonatypeRepo("snaphots"),
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.1.1"
+  "com.ubirch.user" %% "server" % "0.2.0-SNAPSHOT"
 )
 ```
 
@@ -96,10 +96,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snaphots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.1.1"
+  "com.ubirch.user" %% "util" % "0.2.0-SNAPSHOT"
 )
 ```
 
