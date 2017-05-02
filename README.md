@@ -14,6 +14,10 @@ TODO
 
 * tbd
 
+### Version 0.1.1 (2017-05-02)
+
+* try to fix problem where a config key is not found
+
 ### Version 0.1.0 (2017-05-02)
 
 * initial release
@@ -25,10 +29,10 @@ TODO
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "cmdtools" % "0.1.1"
 )
 ```
 
@@ -36,10 +40,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "config" % "0.1.1"
 )
 ```
 
@@ -47,10 +51,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "core" % "0.1.1"
 )
 ```
 
@@ -58,10 +62,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "model-db" % "0.1.1"
 )
 ```
 
@@ -69,10 +73,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "model-rest" % "0.1.1"
 )
 ```
 
@@ -80,11 +84,11 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots"),
+  Resolver.sonatypeRepo("releases"),
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "server" % "0.1.1"
 )
 ```
 
@@ -92,10 +96,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "util" % "0.1.1"
 )
 ```
 
