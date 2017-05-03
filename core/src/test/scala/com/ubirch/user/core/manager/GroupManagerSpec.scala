@@ -105,7 +105,7 @@ class GroupManagerSpec extends MongoSpec {
     scenario("group.id does not exist --> fail") {
 
       // test
-      GroupManager.findById(UUIDUtil.uuid) flatMap { created =>
+      GroupManager.findById(UUIDUtil.uuidStr) flatMap { created =>
 
         // verify
         created shouldBe None
@@ -183,7 +183,7 @@ class GroupManagerSpec extends MongoSpec {
     scenario("group.id does not exist --> fail") {
 
       // test
-      GroupManager.delete(UUIDUtil.uuid) flatMap { result =>
+      GroupManager.delete(UUIDUtil.uuidStr) flatMap { result =>
 
         // verify
         result shouldBe false

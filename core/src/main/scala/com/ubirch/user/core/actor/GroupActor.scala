@@ -23,7 +23,7 @@ class GroupActor(implicit mongo: MongoUtil) extends Actor
 
     case create: CreateGroup =>
       val sender = context.sender()
-      val toCreate = create.group.copy(id = UUIDUtil.uuid)
+      val toCreate = create.group.copy(id = UUIDUtil.uuidStr)
       GroupManager.create(toCreate) map (sender ! _)
 
     case update: UpdateGroup =>
@@ -32,7 +32,7 @@ class GroupActor(implicit mongo: MongoUtil) extends Actor
 
     case find: FindGroup =>
       val sender = context.sender()
-      GroupManager.findById(find.id) map (sender ! _)
+      GroupManager.findById(find.id.toString) map (sender ! _)
 
     case find: FindGroupByName =>
       val sender = context.sender()
@@ -40,7 +40,7 @@ class GroupActor(implicit mongo: MongoUtil) extends Actor
 
     case delete: DeleteGroup =>
       val sender = context.sender()
-      GroupManager.delete(delete.id) map (sender ! _)
+      GroupManager.delete(delete.id.toString) map (sender ! _)
 
     case delete: DeleteGroupByName =>
       val sender = context.sender()

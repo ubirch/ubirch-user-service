@@ -22,7 +22,7 @@ class ContextActor(implicit mongo: MongoUtil) extends Actor
 
     case create: CreateContext =>
       val sender = context.sender()
-      val toCreate = create.context.copy(id = UUIDUtil.uuid)
+      val toCreate = create.context.copy(id = UUIDUtil.uuidStr)
       ContextManager.create(toCreate) map (sender ! _)
 
     case update: UpdateContext =>
@@ -31,7 +31,7 @@ class ContextActor(implicit mongo: MongoUtil) extends Actor
 
     case get: GetContext =>
       val sender = context.sender()
-      ContextManager.findById(get.id) map (sender ! _)
+      ContextManager.findById(get.id.toString) map (sender ! _)
 
     case find: FindContextByName =>
       val sender = context.sender()
@@ -39,7 +39,7 @@ class ContextActor(implicit mongo: MongoUtil) extends Actor
 
     case delete: DeleteContext =>
       val sender = context.sender()
-      ContextManager.delete(delete.id) map (sender ! _)
+      ContextManager.delete(delete.id.toString) map (sender ! _)
 
     case _ => log.error("unknown message")
 

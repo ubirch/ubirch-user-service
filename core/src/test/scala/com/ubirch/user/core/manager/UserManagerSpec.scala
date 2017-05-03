@@ -134,7 +134,7 @@ class UserManagerSpec extends MongoSpec {
     scenario("user.id does not exist --> fail") {
 
       // test
-      UserManager.findById(UUIDUtil.uuid) flatMap { created =>
+      UserManager.findById(UUIDUtil.uuidStr) flatMap { created =>
 
         // verify
         created shouldBe None
@@ -277,7 +277,7 @@ class UserManagerSpec extends MongoSpec {
     scenario("user.id does not exist --> fail") {
 
       // test
-      UserManager.delete(UUIDUtil.uuid) flatMap { result =>
+      UserManager.delete(UUIDUtil.uuidStr) flatMap { result =>
 
         // verify
         result shouldBe false

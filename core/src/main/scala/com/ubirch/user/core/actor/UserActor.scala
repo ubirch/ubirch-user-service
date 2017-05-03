@@ -21,7 +21,7 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
 
     case create: CreateUser =>
       val sender = context.sender()
-      val toCreate = create.user.copy(id = UUIDUtil.uuid)
+      val toCreate = create.user.copy(id = UUIDUtil.uuidStr)
       UserManager.create(toCreate) map (sender ! _)
 
     case update: UpdateUser =>

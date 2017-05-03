@@ -24,7 +24,8 @@ object InitData extends App
 
     contextUbirchOpt <- dataHelpers.createContext(displayName = "ubirch-dev")
     contextTrackleOpt <- dataHelpers.createContext(displayName = "trackle-dev")
-    contextUbirchAdminUiOpt <- dataHelpers.createContext(displayName = "ubirch-admin-ui-dev")
+    contextUbirchAdminUiDevOpt <- dataHelpers.createContext(displayName = "ubirch-admin-ui-dev")
+    contextUbirchAdminUiDemoOpt <- dataHelpers.createContext(displayName = "ubirch-admin-ui-demo")
     contextTrackleAdminUiOpt <- dataHelpers.createContext(displayName = "trackle-admin-ui-dev")
     ownerOpt <- dataHelpers.createUser(displayName = "test-user-1", externalId = "1234")
     user2Opt <- dataHelpers.createUser(displayName = "test-user-2", externalId = "1235")
@@ -35,7 +36,7 @@ object InitData extends App
 
     mongo.close()
 
-    val contextSet = Set(contextUbirchOpt, contextTrackleOpt, contextUbirchAdminUiOpt, contextTrackleAdminUiOpt)
+    val contextSet = Set(contextUbirchOpt, contextTrackleOpt, contextUbirchAdminUiDevOpt, contextUbirchAdminUiDemoOpt, contextTrackleAdminUiOpt)
     for (context <- contextSet) {
       if (context.isDefined) {
         logger.info(s"=== created context: name=${context.get.displayName}")

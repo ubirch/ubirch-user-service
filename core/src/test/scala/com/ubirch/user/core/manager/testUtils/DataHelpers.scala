@@ -1,7 +1,5 @@
 package com.ubirch.user.core.manager.testUtils
 
-import java.util.UUID
-
 import com.ubirch.user.core.manager.{GroupManager, GroupsManager}
 import com.ubirch.user.model.db.tools.DefaultModels
 import com.ubirch.user.model.db.{Context, Group, User}
@@ -35,7 +33,7 @@ class DataHelpers(implicit mongo: MongoUtil) {
       }
     }
 
-    val allowedUsers: Seq[UUID] = allowedUsersOpt map { userOpt =>
+    val allowedUsers: Seq[String] = allowedUsersOpt map { userOpt =>
       userOpt.get.id
     }
     val group = DefaultModels.group(
