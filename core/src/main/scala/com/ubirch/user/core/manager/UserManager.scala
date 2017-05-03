@@ -1,7 +1,5 @@
 package com.ubirch.user.core.manager
 
-import java.util.UUID
-
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.Config
@@ -79,7 +77,7 @@ object UserManager extends StrictLogging
 
   }
 
-  def findById(id: UUID)(implicit mongo: MongoUtil): Future[Option[User]] = {
+  def findById(id: String)(implicit mongo: MongoUtil): Future[Option[User]] = {
 
     val selector = document("id" -> id)
 
@@ -103,7 +101,7 @@ object UserManager extends StrictLogging
 
   }
 
-  def delete(id: UUID)(implicit mongo: MongoUtil): Future[Boolean] = {
+  def delete(id: String)(implicit mongo: MongoUtil): Future[Boolean] = {
 
     val selector = document("id" -> id)
 

@@ -77,7 +77,7 @@ object GroupManager extends StrictLogging
 
   }
 
-  def findById(id: UUID)(implicit mongo: MongoUtil): Future[Option[Group]] = {
+  def findById(id: String)(implicit mongo: MongoUtil): Future[Option[Group]] = {
 
     val selector = document("id" -> id)
 
@@ -97,7 +97,7 @@ object GroupManager extends StrictLogging
 
   }
 
-  def delete(id: UUID)(implicit mongo: MongoUtil): Future[Boolean] = {
+  def delete(id: String)(implicit mongo: MongoUtil): Future[Boolean] = {
 
     val selector = document("id" -> id)
 

@@ -1,7 +1,5 @@
 package com.ubirch.user.model.db.tools
 
-import java.util.UUID
-
 import com.ubirch.user.model.db.{Context, Group, User}
 import com.ubirch.util.uuid.UUIDUtil
 
@@ -35,9 +33,9 @@ object DefaultModels {
   }
 
   def group(displayName: String = s"group-${UUIDUtil.uuid}",
-            ownerId: UUID = UUIDUtil.uuid,
-            contextId: UUID = UUIDUtil.uuid,
-            allowedUsers: Set[UUID] = Set.empty
+            ownerId: String = UUIDUtil.uuidStr,
+            contextId: String = UUIDUtil.uuidStr,
+            allowedUsers: Set[String] = Set.empty
            ): Group = {
 
     Group(

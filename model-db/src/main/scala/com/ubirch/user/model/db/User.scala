@@ -1,7 +1,5 @@
 package com.ubirch.user.model.db
 
-import java.util.UUID
-
 import com.ubirch.util.uuid.UUIDUtil
 
 import org.joda.time.DateTime
@@ -10,7 +8,7 @@ import org.joda.time.DateTime
   * author: cvandrei
   * since: 2017-03-29
   */
-case class User(id: UUID = UUIDUtil.uuid,
+case class User(id: String = UUIDUtil.uuidStr,
                 displayName: String,
                 providerId: String,
                 externalId: String,

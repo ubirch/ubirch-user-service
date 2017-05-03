@@ -1,7 +1,5 @@
 package com.ubirch.user.testTools.external
 
-import java.util.UUID
-
 import com.ubirch.user.core.manager.{ContextManager, GroupManager, GroupsManager, UserManager}
 import com.ubirch.user.model.db.tools.DefaultModels
 import com.ubirch.user.model.db.{Context, Group, User}
@@ -20,7 +18,7 @@ import scala.util.Random
   */
 class DataHelpers(implicit mongo: MongoUtil) {
 
-  def createUser(id: UUID = UUIDUtil.uuid,
+  def createUser(id: String = UUIDUtil.uuidStr,
                  displayName: String = s"automated-test-${UUIDUtil.uuid}",
                  providerId: String = "google",
                  externalId: String = s"${Random.nextLong()}",
@@ -43,7 +41,7 @@ class DataHelpers(implicit mongo: MongoUtil) {
 
   }
 
-  def createContext(id: UUID = UUIDUtil.uuid,
+  def createContext(id: String = UUIDUtil.uuidStr,
                     displayName: String = s"automated-test-${UUIDUtil.uuid}",
                     created: DateTime = DateTime.now(DateTimeZone.UTC),
                     updated: DateTime = DateTime.now(DateTimeZone.UTC)
@@ -87,7 +85,7 @@ class DataHelpers(implicit mongo: MongoUtil) {
 
   }
 
-  def createGroup(contextId: UUID,
+  def createGroup(contextId: String,
                   ownerOpt: Option[User],
                   allowedUsersOpt: Option[User]*
                  ): Future[Option[Group]] = {
@@ -102,7 +100,7 @@ class DataHelpers(implicit mongo: MongoUtil) {
       }
     }
 
-    val allowedUsers: Seq[UUID] = allowedUsersOpt map { userOpt =>
+    val allowedUsers: Seq[String] = allowedUsersOpt map { userOpt =>
       userOpt.get.id
     }
     val group = DefaultModels.group(

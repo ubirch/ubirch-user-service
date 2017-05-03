@@ -65,7 +65,7 @@ class ContextManagerSpec extends MongoSpec {
 
         case Some(existingContext) =>
 
-          val context = existingContext.copy(id = UUIDUtil.uuid)
+          val context = existingContext.copy(id = UUIDUtil.uuidStr)
 
           // test
           ContextManager.create(context) flatMap { created =>
@@ -128,7 +128,7 @@ class ContextManagerSpec extends MongoSpec {
     scenario("context.id does not exist --> fail") {
 
       // test
-      ContextManager.findById(UUIDUtil.uuid) flatMap { created =>
+      ContextManager.findById(UUIDUtil.uuidStr) flatMap { created =>
 
         // verify
         created shouldBe None
@@ -206,7 +206,7 @@ class ContextManagerSpec extends MongoSpec {
     scenario("context.id does not exist --> fail") {
 
       // test
-      ContextManager.delete(UUIDUtil.uuid) flatMap { result =>
+      ContextManager.delete(UUIDUtil.uuidStr) flatMap { result =>
 
         // verify
         result shouldBe false
