@@ -22,11 +22,20 @@ object InitData extends App
 
   val dataCreated = for {
 
+    // context: *-local
+    contextUbirchLocalOpt <- dataHelpers.createContext(displayName = "ubirch-local")
+    contextTrackleLocalOpt <- dataHelpers.createContext(displayName = "trackle-local")
+    contextUbirchAdminUiLocalOpt <- dataHelpers.createContext(displayName = "ubirch-admin-ui-local")
+
+    // context: *-dev
     contextUbirchOpt <- dataHelpers.createContext(displayName = "ubirch-dev")
     contextTrackleOpt <- dataHelpers.createContext(displayName = "trackle-dev")
     contextUbirchAdminUiDevOpt <- dataHelpers.createContext(displayName = "ubirch-admin-ui-dev")
-    contextUbirchAdminUiDemoOpt <- dataHelpers.createContext(displayName = "ubirch-admin-ui-demo")
     contextTrackleAdminUiOpt <- dataHelpers.createContext(displayName = "trackle-admin-ui-dev")
+
+    // context: *-demo
+    contextUbirchAdminUiDemoOpt <- dataHelpers.createContext(displayName = "ubirch-admin-ui-demo")
+
     ownerOpt <- dataHelpers.createUser(displayName = "test-user-1", externalId = "1234")
     user2Opt <- dataHelpers.createUser(displayName = "test-user-2", externalId = "1235")
     user3Opt <- dataHelpers.createUser(displayName = "test-user-3", externalId = "1236")
