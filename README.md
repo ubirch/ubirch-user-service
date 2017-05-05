@@ -10,9 +10,9 @@ TODO
 
 ## Release History
 
-### Version 0.2.0 (tbd)
+### Version 0.2.0 (2017-05-05)
 
-* tbd
+* update all models to use `String` instead of `UUID`
 
 ### Version 0.1.1 (2017-05-02)
 
@@ -29,10 +29,10 @@ TODO
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snaphots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "cmdtools" % "0.2.0"
 )
 ```
 
@@ -40,10 +40,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snaphots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "config" % "0.2.0"
 )
 ```
 
@@ -51,10 +51,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snaphots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "core" % "0.2.0"
 )
 ```
 
@@ -62,10 +62,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snaphots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "model-db" % "0.2.0"
 )
 ```
 
@@ -73,10 +73,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snaphots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "model-rest" % "0.2.0"
 )
 ```
 
@@ -84,11 +84,11 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snaphots"),
+  Resolver.sonatypeRepo("releases"),
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "server" % "0.2.0"
 )
 ```
 
@@ -96,10 +96,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snaphots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.2.0-SNAPSHOT"
+  "com.ubirch.user" %% "util" % "0.2.0"
 )
 ```
 
