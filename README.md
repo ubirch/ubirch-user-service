@@ -12,7 +12,8 @@ TODO
 
 ### Version 0.2.1 (tbd)
 
-* tbd
+* update dependency `rest-akka-http` to 0.3.5
+* update dependency `rest-akka-http-test` to 0.3.5
 
 ### Version 0.2.0 (2017-05-05)
 
