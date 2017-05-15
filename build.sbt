@@ -32,6 +32,7 @@ lazy val commonSettings = Seq(
 lazy val userService = (project in file("."))
   .settings(commonSettings: _*)
   .aggregate(
+    clientRest,
     cmdtools,
     config,
     core,
@@ -42,6 +43,18 @@ lazy val userService = (project in file("."))
     testTools,
     testToolsExt,
     util
+  )
+
+lazy val clientRest = (project in file("client-rest"))
+  .settings(commonSettings: _*)
+  .dependsOn(modelRest)
+  .settings(
+    name := "client-rest",
+    description := "REST client of the user-service",
+    resolvers ++= Seq(
+      resolverTypesafeReleases
+    ),
+    libraryDependencies ++= depClientRest
   )
 
 lazy val cmdtools = project
@@ -137,6 +150,9 @@ lazy val util = project
  * MODULE DEPENDENCIES
  ********************************************************/
 
+lazy val depClientRest = Seq(
+) ++ playWS
+
 lazy val depServer = Seq(
 
   akkaSlf4j,
@@ -182,6 +198,7 @@ lazy val depUtils = Seq(
 val akkaV = "2.4.17"
 val akkaHttpV = "10.0.5"
 val json4sV = "3.5.1"
+val playV = "2.5.9"
 
 val scalaTestV = "3.0.1"
 
@@ -189,6 +206,7 @@ val scalaTestV = "3.0.1"
 val ubirchUtilG = "com.ubirch.util"
 val json4sG = "org.json4s"
 val akkaG = "com.typesafe.akka"
+val typesafePlayG = "com.typesafe.play"
 
 lazy val scalatest = "org.scalatest" %% "scalatest" % scalaTestV
 
@@ -207,6 +225,11 @@ lazy val akkaActor = akkaG %% "akka-actor" % akkaV
 lazy val akkaHttp = akkaG %% "akka-http" % akkaHttpV
 lazy val akkaSlf4j = akkaG %% "akka-slf4j" % akkaV
 
+lazy val playWS = Seq(
+  typesafePlayG %% "play-ws" % playV  excludeAll ExclusionRule(organization = s"${akkaActor.organization}", name = s"${akkaActor.name}"),
+  akkaActor
+)
+
 lazy val excludedLoggers = Seq(
   ExclusionRule(organization = "com.typesafe.scala-logging"),
   ExclusionRule(organization = "org.slf4j"),
@@ -217,12 +240,8 @@ lazy val ubirchConfig = ubirchUtilG %% "config" % "0.1" excludeAll(excludedLogge
 lazy val ubirchDate = ubirchUtilG %% "date" % "0.1" excludeAll(excludedLoggers: _*)
 lazy val ubirchJson = ubirchUtilG %% "json" % "0.3.4" excludeAll(excludedLoggers: _*)
 lazy val ubirchJsonAutoConvert = ubirchUtilG %% "json-auto-convert" % "0.3.4" excludeAll(excludedLoggers: _*)
-lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.2.0" excludeAll(
-  excludedLoggers++ Seq(ExclusionRule(organization = akkaG, name = "akka-actor")): _*
-  )
-lazy val ubirchMongo = ubirchUtilG %% "mongo-utils" % "0.2.0" excludeAll(
-  excludedLoggers++ Seq(ExclusionRule(organization = akkaG, name = "akka-actor")): _*
-  )
+lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.2.0" excludeAll(excludedLoggers: _*)
+lazy val ubirchMongo = ubirchUtilG %% "mongo-utils" % "0.2.1" excludeAll(excludedLoggers: _*)
 lazy val ubirchRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.3.5" excludeAll(excludedLoggers: _*)
 lazy val ubirchRestAkkaHttpTest = ubirchUtilG %% "rest-akka-http-test" % "0.3.5" excludeAll(excludedLoggers: _*)
 lazy val ubirchResponse = ubirchUtilG %% "response-util" % "0.1.3" excludeAll(excludedLoggers: _*)
@@ -233,6 +252,7 @@ lazy val ubirchUuid = ubirchUtilG %% "uuid" % "0.1.1" excludeAll(excludedLoggers
  ********************************************************/
 
 lazy val resolverSeebergerJson = Resolver.bintrayRepo("hseeberger", "maven")
+lazy val resolverTypesafeReleases = "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 
 /*
  * MISC

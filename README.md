@@ -14,6 +14,9 @@ TODO
 
 * update dependency `rest-akka-http` to 0.3.5
 * update dependency `rest-akka-http-test` to 0.3.5
+* update dependency `mongo-utils` to 0.2.1
+* update dependency `mongo-test-utils` to 0.2.1
+* add module `client-rest`
 
 ### Version 0.2.0 (2017-05-05)
 
@@ -29,6 +32,18 @@ TODO
 
 
 ## Scala Dependencies
+
+### `client-rest`
+
+```scala
+resolvers ++= Seq(
+  Resolver.sonatypeRepo("snapshots"),
+  "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
+)
+libraryDependencies ++= Seq(
+  "com.ubirch.user" %% "client-rest" % "0.2.1-SNAPSHOT"
+)
+```
 
 ### `cmdtools`
 
