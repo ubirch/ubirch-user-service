@@ -25,7 +25,7 @@ object UserClientRestConfig extends ConfigBase {
       externalUserId = externalUserId
     )
 
-    s"$host/$path"
+    s"$host$path"
 
   }
 
