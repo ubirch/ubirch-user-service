@@ -6,4 +6,8 @@ package com.ubirch.user.client.rest.config
   */
 object UserClientRestConfigKeys {
 
+  private val base = "ubirchUserService.client.rest"
+
+  val HOST = s"$base.host"
+
 }

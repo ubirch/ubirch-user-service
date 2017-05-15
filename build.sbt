@@ -47,7 +47,7 @@ lazy val userService = (project in file("."))
 
 lazy val clientRest = (project in file("client-rest"))
   .settings(commonSettings: _*)
-  .dependsOn(modelRest)
+  .dependsOn(config, modelRest, util)
   .settings(
     name := "client-rest",
     description := "REST client of the user-service",
