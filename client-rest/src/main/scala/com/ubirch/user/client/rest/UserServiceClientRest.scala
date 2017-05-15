@@ -1,24 +1,25 @@
 package com.ubirch.user.client.rest
 
+import com.typesafe.scalalogging.slf4j.StrictLogging
+
 import com.ubirch.user.client.rest.config.UserClientRestConfig
 import com.ubirch.user.model.rest.Group
 
 import play.api.libs.ws.WSClient
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-
 
 /**
   * author: cvandrei
   * since: 2017-05-15
   */
-object UserServiceClientRest {
+object UserServiceClientRest extends StrictLogging {
 
   def groups(contextName: String,
              providerId: String,
              externalUserId: String)
-            (implicit ws: WSClient): Future[Set[Group]] = {
-
+            (implicit ws: WSClient): Future[Option[Set[Group]]] = {
 
     val url = UserClientRestConfig.groups(
       contextName = contextName,
@@ -26,9 +27,17 @@ object UserServiceClientRest {
       externalUserId = externalUserId
     )
 
-    ws.url(url).get() map { response =>
-      // TODO process response
-      Set.empty
+    // TODO how about connection pooling? is it built in?
+    ws.url(url).get() map { res =>
+
+      if (200 == res.status) {
+        logger.error(s"call to user-service REST API failed: status=${res.status}, body=${res.body}")
+        None
+      } else {
+        // TODO convert response to Set[Group]
+        Some(Set.empty)
+      }
+
     }
 
   }

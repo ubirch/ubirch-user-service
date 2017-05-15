@@ -150,8 +150,7 @@ lazy val util = project
  * MODULE DEPENDENCIES
  ********************************************************/
 
-lazy val depClientRest = Seq(
-) ++ playWS
+lazy val depClientRest = scalaLogging ++ playWS
 
 lazy val depServer = Seq(
 
