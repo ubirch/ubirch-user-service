@@ -87,25 +87,7 @@ For a Java key store file:
 
 #### Usage
 
-```scala
-import play.api.libs.ws.WSClient
-import com.ubirch.user.client.rest.UserServiceClientRest
-
-implicit val ws: WSClient = // TODO init wsclient
-val contextName = "context-name"
-val providerId = "google"
-val externalUserId = "1234-asdf"
-UserServiceClientRest.groups(
-  contextName = contextName,
-  providerId = providerId,
-  externalUserId = externalUserId
-) map { groups =>
-
-  ws.close()
-  groupps foreach println 
-
-}
-```
+See `com.ubirch.user.client.rest.UserServiceClientRestDebug` for an example usage.
 
 ### `cmdtools`
 

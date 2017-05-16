@@ -5,6 +5,7 @@ import com.typesafe.scalalogging.slf4j.StrictLogging
 import com.ubirch.user.client.rest.config.UserClientRestConfig
 import com.ubirch.user.model.rest.Group
 
+import play.api.libs.json._
 import play.api.libs.ws.WSClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -15,6 +16,8 @@ import scala.concurrent.Future
   * since: 2017-05-15
   */
 object UserServiceClientRest extends StrictLogging {
+
+  implicit protected val groupRead: Reads[Group] = Json.reads[Group]
 
   def groups(contextName: String,
              providerId: String,
@@ -31,11 +34,10 @@ object UserServiceClientRest extends StrictLogging {
     ws.url(url).get() map { res =>
 
       if (200 == res.status) {
+        res.json.asOpt[Set[Group]]
+      } else {
         logger.error(s"call to user-service REST API failed: status=${res.status}, body=${res.body}")
         None
-      } else {
-        // TODO convert response to Set[Group]
-        Some(Set.empty)
       }
 
     }
