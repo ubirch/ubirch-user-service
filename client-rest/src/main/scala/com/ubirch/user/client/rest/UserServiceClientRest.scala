@@ -24,6 +24,7 @@ object UserServiceClientRest extends StrictLogging {
              externalUserId: String)
             (implicit ws: WSClient): Future[Option[Set[Group]]] = {
 
+    logger.debug("groups(): query groups through REST API")
     val url = UserClientRestConfig.groups(
       contextName = contextName,
       providerId = providerId,
@@ -34,6 +35,7 @@ object UserServiceClientRest extends StrictLogging {
     ws.url(url).get() map { res =>
 
       if (200 == res.status) {
+        logger.debug(s"groups(): got groups: ${res.body}")
         res.json.asOpt[Set[Group]]
       } else {
         logger.error(s"call to user-service REST API failed: status=${res.status}, body=${res.body}")
