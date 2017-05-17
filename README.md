@@ -12,8 +12,9 @@ TODO
 
 ### Version 0.2.1 (tbd)
 
-* update dependency `rest-akka-http` to 0.3.5
-* update dependency `rest-akka-http-test` to 0.3.5
+* update dependency `rest-akka-http` to 0.3.6
+* update dependency `rest-akka-http-test` to 0.3.6
+* update dependency `response-util` to 0.1.4
 * update dependency `mongo-utils` to 0.2.1
 * update dependency `mongo-test-utils` to 0.2.1
 * add module `client-rest`

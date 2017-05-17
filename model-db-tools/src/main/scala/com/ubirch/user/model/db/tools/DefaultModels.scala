@@ -9,7 +9,7 @@ import com.ubirch.util.uuid.UUIDUtil
   */
 object DefaultModels {
 
-  def context(displayName: String = "automated-test"): Context = {
+  def context(displayName: String = s"automated-test-${UUIDUtil.uuidStr}"): Context = {
 
     Context(
       displayName = displayName

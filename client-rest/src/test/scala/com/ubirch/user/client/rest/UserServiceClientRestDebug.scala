@@ -6,8 +6,8 @@ import com.ubirch.user.model.rest.Group
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import play.api.libs.ws.WSClient
-import play.api.libs.ws.ahc.AhcWSClient
+import play.api.libs.ws.StandaloneWSClient
+import play.api.libs.ws.ahc.StandaloneAhcWSClient
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -21,35 +21,42 @@ object UserServiceClientRestDebug extends App
   with StrictLogging {
 
   implicit val system = ActorSystem()
+  system.registerOnTermination {
+    System.exit(0)
+  }
   implicit val materializer = ActorMaterializer()
 
-  implicit val ws: WSClient = AhcWSClient()
+  implicit val ws: StandaloneWSClient = StandaloneAhcWSClient()
 
   // contextName, providerId and externalUserId have been created by InitData
   val contextName = "ubirch-dev"
   val providerId = "google"
   val externalUserId = "1234"
 
-  val futureGroups = UserServiceClientRest.groups(
-    contextName = contextName,
-    providerId = providerId,
-    externalUserId = externalUserId
-  )
-  val groupsOpt = Await.result(futureGroups, 5 seconds)
+  try {
 
-  groupsOpt match {
+    val futureGroups = UserServiceClientRest.groups(
+      contextName = contextName,
+      providerId = providerId,
+      externalUserId = externalUserId
+    )
+    val groupsOpt = Await.result(futureGroups, 5 seconds)
 
-    case None => logger.info("====== groups found: None")
+    groupsOpt match {
 
-    case Some(groups: Set[Group]) =>
-      logger.info(s"====== groups.size=${groups.size}")
-      groups foreach { g =>
-        logger.info(s"====== group=$g")
-      }
+      case None => logger.info("====== groups found: None")
 
+      case Some(groups: Set[Group]) =>
+        logger.info(s"====== groups.size=${groups.size}")
+        groups foreach { g =>
+          logger.info(s"====== group=$g")
+        }
+
+    }
+
+  } finally {
+    ws.close()
+    system.terminate()
   }
-
-  ws.close()
-  system.terminate()
 
 }
