@@ -32,16 +32,27 @@ object UserServiceClientRest extends StrictLogging {
     )
 
     // TODO how about connection pooling? is it built in?
-    ws.url(url).get() map { res =>
+    try {
 
-      if (200 == res.status) {
-        logger.debug(s"groups(): got groups: ${res.body}")
-        res.json.asOpt[Set[Group]]
-      } else {
-        logger.error(s"call to user-service REST API failed: status=${res.status}, body=${res.body}")
-        None
+      ws.url(url).get() map { res =>
+
+        if (200 == res.status) {
+          logger.debug(s"groups(): got groups: ${res.body}")
+          res.json.asOpt[Set[Group]]
+        } else {
+          logger.error(s"call to user-service REST API failed: status=${res.status}, body=${res.body}")
+          None
+        }
+
       }
 
+    } catch {
+      case e: Exception =>
+        logger.error("groups() failed with an Exception", e)
+        Future(None)
+      case re: RuntimeException =>
+        logger.error("groups() failed with a RuntimeException", re)
+        Future(None)
     }
 
   }
