@@ -16,7 +16,7 @@ lazy val commonSettings = Seq(
     url("https://github.com/ubirch/ubirch-user-service"),
     "scm:git:git@github.com:ubirch/ubirch-user-service.git"
   )),
-  version := "0.2.1-SNAPSHOT",
+  version := "0.3.0",
   test in assembly := {},
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
@@ -32,6 +32,7 @@ lazy val commonSettings = Seq(
 lazy val userService = (project in file("."))
   .settings(commonSettings: _*)
   .aggregate(
+    clientRest,
     cmdtools,
     config,
     core,
@@ -42,6 +43,18 @@ lazy val userService = (project in file("."))
     testTools,
     testToolsExt,
     util
+  )
+
+lazy val clientRest = (project in file("client-rest"))
+  .settings(commonSettings: _*)
+  .dependsOn(config, modelRest, util)
+  .settings(
+    name := "client-rest",
+    description := "REST client of the user-service",
+    resolvers ++= Seq(
+      resolverTypesafeReleases
+    ),
+    libraryDependencies ++= depClientRest
   )
 
 lazy val cmdtools = project
@@ -137,6 +150,8 @@ lazy val util = project
  * MODULE DEPENDENCIES
  ********************************************************/
 
+lazy val depClientRest = playWS ++ scalaLogging
+
 lazy val depServer = Seq(
 
   akkaSlf4j,
@@ -179,16 +194,17 @@ lazy val depUtils = Seq(
  ********************************************************/
 
 // VERSIONS
-val akkaV = "2.4.17"
-val akkaHttpV = "10.0.5"
+val akkaV = "2.4.18"
+val akkaHttpV = "10.0.6"
 val json4sV = "3.5.1"
-
+val playV = "1.0.0-M10"
 val scalaTestV = "3.0.1"
 
 // GROUP NAMES
 val ubirchUtilG = "com.ubirch.util"
 val json4sG = "org.json4s"
 val akkaG = "com.typesafe.akka"
+val typesafePlayG = "com.typesafe.play"
 
 lazy val scalatest = "org.scalatest" %% "scalatest" % scalaTestV
 
@@ -207,6 +223,11 @@ lazy val akkaActor = akkaG %% "akka-actor" % akkaV
 lazy val akkaHttp = akkaG %% "akka-http" % akkaHttpV
 lazy val akkaSlf4j = akkaG %% "akka-slf4j" % akkaV
 
+lazy val playWS = Seq(
+  typesafePlayG %% "play-ahc-ws-standalone" % playV,
+  akkaSlf4j
+)
+
 lazy val excludedLoggers = Seq(
   ExclusionRule(organization = "com.typesafe.scala-logging"),
   ExclusionRule(organization = "org.slf4j"),
@@ -217,15 +238,11 @@ lazy val ubirchConfig = ubirchUtilG %% "config" % "0.1" excludeAll(excludedLogge
 lazy val ubirchDate = ubirchUtilG %% "date" % "0.1" excludeAll(excludedLoggers: _*)
 lazy val ubirchJson = ubirchUtilG %% "json" % "0.3.4" excludeAll(excludedLoggers: _*)
 lazy val ubirchJsonAutoConvert = ubirchUtilG %% "json-auto-convert" % "0.3.4" excludeAll(excludedLoggers: _*)
-lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.2.0" excludeAll(
-  excludedLoggers++ Seq(ExclusionRule(organization = akkaG, name = "akka-actor")): _*
-  )
-lazy val ubirchMongo = ubirchUtilG %% "mongo-utils" % "0.2.0" excludeAll(
-  excludedLoggers++ Seq(ExclusionRule(organization = akkaG, name = "akka-actor")): _*
-  )
-lazy val ubirchRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.3.5" excludeAll(excludedLoggers: _*)
-lazy val ubirchRestAkkaHttpTest = ubirchUtilG %% "rest-akka-http-test" % "0.3.5" excludeAll(excludedLoggers: _*)
-lazy val ubirchResponse = ubirchUtilG %% "response-util" % "0.1.3" excludeAll(excludedLoggers: _*)
+lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.2.2" excludeAll(excludedLoggers: _*)
+lazy val ubirchMongo = ubirchUtilG %% "mongo-utils" % "0.2.2" excludeAll(excludedLoggers: _*)
+lazy val ubirchRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.3.6" excludeAll(excludedLoggers: _*)
+lazy val ubirchRestAkkaHttpTest = ubirchUtilG %% "rest-akka-http-test" % "0.3.6" excludeAll(excludedLoggers: _*)
+lazy val ubirchResponse = ubirchUtilG %% "response-util" % "0.1.4" excludeAll(excludedLoggers: _*)
 lazy val ubirchUuid = ubirchUtilG %% "uuid" % "0.1.1" excludeAll(excludedLoggers: _*)
 
 /*
@@ -233,6 +250,8 @@ lazy val ubirchUuid = ubirchUtilG %% "uuid" % "0.1.1" excludeAll(excludedLoggers
  ********************************************************/
 
 lazy val resolverSeebergerJson = Resolver.bintrayRepo("hseeberger", "maven")
+// TODO this resolver should not be needed anymore: play-ws standalone is deployed to maven nexus and sonatype (test by emptying all .ivy2 caches)
+lazy val resolverTypesafeReleases = "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 
 /*
  * MISC

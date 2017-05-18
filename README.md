@@ -10,10 +10,16 @@ TODO
 
 ## Release History
 
-### Version 0.2.1 (tbd)
+### Version 0.3.0 (2017-05-18)
 
-* update dependency `rest-akka-http` to 0.3.5
-* update dependency `rest-akka-http-test` to 0.3.5
+* update dependency `rest-akka-http` to 0.3.6
+* update dependency `rest-akka-http-test` to 0.3.6
+* update dependency `response-util` to 0.1.4
+* update dependency `mongo-utils` to 0.2.2
+* update dependency `mongo-test-utils` to 0.2.2
+* update to Akka HTTP 10.0.6
+* update to Akka 2.4.18
+* add module `client-rest`
 
 ### Version 0.2.0 (2017-05-05)
 
@@ -30,14 +36,70 @@ TODO
 
 ## Scala Dependencies
 
+### `client-rest`
+
+```scala
+resolvers ++= Seq(
+  Resolver.sonatypeRepo("releases"),
+  "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
+)
+libraryDependencies ++= Seq(
+  "com.ubirch.user" %% "client-rest" % "0.3.0"
+)
+```
+
+#### Configuration
+
+| Config Item                         | Mandatory  | Description                                                       |
+|:------------------------------------|:-----------|:------------------------------------------------------------------|
+| ubirchUserService.client.rest.host  | yes        | user-service host                                                 |
+
+#### Play Configs
+
+| Config Item                         | Mandatory  | Description                                                       |
+|:------------------------------------|:-----------|:------------------------------------------------------------------|
+| play.ws.compressionEnabled          | no         | use gzip/deflater encoding if true (default: false)               |
+| play.ws.useragent                   | no         | to configure the User-Agent header field                          |
+| play.ws.timeout.connection          | no         | connection timeout (default: 120 seconds)                         |
+| play.ws.timeout.idle                | no         | maximum idle time (connection established but waiting for more data) (default: 120 seconds) |
+| play.ws.timeout.request             | no         | request timeout (default: 120 seconds)                            |
+
+#### SSL Configuration
+
+See https://www.playframework.com/documentation/2.5.x/WSQuickStart for more details.
+
+For a single PEM file:
+
+    play.ws.ssl {
+      trustManager = {
+        stores = [
+          { type = "PEM", path = "/path/to/cert/globalsign.crt" }
+        ]
+      }
+    }
+
+For a Java key store file:
+
+    play.ws.ssl {
+      trustManager = {
+        stores = [
+          { type = "JKS", path = "exampletrust.jks" }
+        ]
+      }
+    }
+
+#### Usage
+
+See `com.ubirch.user.client.rest.UserServiceClientRestDebug` for an example usage.
+
 ### `cmdtools`
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "cmdtools" % "0.3.0"
 )
 ```
 
@@ -45,10 +107,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "config" % "0.3.0"
 )
 ```
 
@@ -56,10 +118,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "core" % "0.3.0"
 )
 ```
 
@@ -67,10 +129,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "model-db" % "0.3.0"
 )
 ```
 
@@ -78,10 +140,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "model-rest" % "0.3.0"
 )
 ```
 
@@ -89,11 +151,11 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots"),
+  Resolver.sonatypeRepo("releases"),
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "server" % "0.3.0"
 )
 ```
 
@@ -101,10 +163,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "util" % "0.3.0"
 )
 ```
 

@@ -1,5 +1,7 @@
 package com.ubirch.user.testTools.external
 
+import com.typesafe.scalalogging.slf4j.StrictLogging
+
 import com.ubirch.user.core.manager.{ContextManager, GroupManager, GroupsManager, UserManager}
 import com.ubirch.user.model.db.tools.DefaultModels
 import com.ubirch.user.model.db.{Context, Group, User}
@@ -16,7 +18,7 @@ import scala.util.Random
   * author: cvandrei
   * since: 2017-04-07
   */
-class DataHelpers(implicit mongo: MongoUtil) {
+class DataHelpers(implicit mongo: MongoUtil) extends StrictLogging {
 
   def createUser(id: String = UUIDUtil.uuidStr,
                  displayName: String = s"automated-test-${UUIDUtil.uuid}",
@@ -77,6 +79,7 @@ class DataHelpers(implicit mongo: MongoUtil) {
       }
     }
 
+    logger.info(s"== trying to create group: contextName=${contextOpt.get.displayName}, owner:${ownerOpt.get}")
     createGroup(
       contextId = contextOpt.get.id,
       ownerOpt = ownerOpt,
