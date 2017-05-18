@@ -42,7 +42,7 @@ resolvers ++= Seq(
   "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "client-rest" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "client-rest" % "0.2.1-SNAPSHOT" // based on akka-stream:2.5.0
 )
 ```
 
