@@ -10,13 +10,15 @@ TODO
 
 ## Release History
 
-### Version 0.2.1 (tbd)
+### Version 0.3.0 (2017-05-18)
 
 * update dependency `rest-akka-http` to 0.3.6
 * update dependency `rest-akka-http-test` to 0.3.6
 * update dependency `response-util` to 0.1.4
-* update dependency `mongo-utils` to 0.2.1
-* update dependency `mongo-test-utils` to 0.2.1
+* update dependency `mongo-utils` to 0.2.2
+* update dependency `mongo-test-utils` to 0.2.2
+* update to Akka HTTP 10.0.6
+* update to Akka 2.4.18
 * add module `client-rest`
 
 ### Version 0.2.0 (2017-05-05)
@@ -38,11 +40,11 @@ TODO
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots"),
+  Resolver.sonatypeRepo("releases"),
   "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "client-rest" % "0.2.1-SNAPSHOT" // based on akka-stream:2.5.0
+  "com.ubirch.user" %% "client-rest" % "0.3.0"
 )
 ```
 
@@ -94,10 +96,10 @@ See `com.ubirch.user.client.rest.UserServiceClientRestDebug` for an example usag
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "cmdtools" % "0.3.0"
 )
 ```
 
@@ -105,10 +107,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "config" % "0.3.0"
 )
 ```
 
@@ -116,10 +118,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "core" % "0.3.0"
 )
 ```
 
@@ -127,10 +129,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "model-db" % "0.3.0"
 )
 ```
 
@@ -138,10 +140,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "model-rest" % "0.3.0"
 )
 ```
 
@@ -149,11 +151,11 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots"),
+  Resolver.sonatypeRepo("releases"),
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "server" % "0.3.0"
 )
 ```
 
@@ -161,10 +163,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.2.1-SNAPSHOT"
+  "com.ubirch.user" %% "util" % "0.3.0"
 )
 ```
 
