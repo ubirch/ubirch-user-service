@@ -150,9 +150,7 @@ lazy val util = project
  * MODULE DEPENDENCIES
  ********************************************************/
 
-lazy val depClientRest = Seq(
-  playWS
-) ++ scalaLogging
+lazy val depClientRest = playWS ++ scalaLogging
 
 lazy val depServer = Seq(
 
@@ -225,7 +223,10 @@ lazy val akkaActor = akkaG %% "akka-actor" % akkaV
 lazy val akkaHttp = akkaG %% "akka-http" % akkaHttpV
 lazy val akkaSlf4j = akkaG %% "akka-slf4j" % akkaV
 
-lazy val playWS = typesafePlayG %% "play-ahc-ws-standalone" % playV
+lazy val playWS = Seq(
+  typesafePlayG %% "play-ahc-ws-standalone" % playV,
+  akkaSlf4j
+)
 
 lazy val excludedLoggers = Seq(
   ExclusionRule(organization = "com.typesafe.scala-logging"),
