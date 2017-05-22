@@ -5,9 +5,9 @@ import java.util.UUID
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.Config
-import com.ubirch.user.core.actor.{ActorNames, AddAllowedUsers, CreateGroup, DeleteAllowedUsers, DeleteGroup, DeleteGroupByName, FindGroup, FindGroupByName, GroupActor, UpdateGroup}
-import com.ubirch.user.model.rest.{AllowedUsers, Group}
+import com.ubirch.user.core.actor.{ActorNames, AddAllowedUsers, CreateGroup, DeleteAllowedUsers, DeleteGroup, DeleteGroupByName, FindGroup, FindGroupByName, FindMemberOf, FoundMemberOf, GroupActor, UpdateGroup}
 import com.ubirch.user.model._
+import com.ubirch.user.model.rest.{AllowedUsers, Group}
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
 import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
@@ -87,6 +87,17 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
               deleteAllowedUsers(allowedUsers)
             }
           }
+
+        } ~ path(RouteConstants.memberOf / Segment / Segment / Segment) { (contextName, providerId, externalUserId) =>
+
+            get {
+              findByContextNameAndExternalUserId(
+                contextName = contextName,
+                providerId = providerId,
+                externalUserId = externalUserId
+              )
+            }
+
         }
 
       }
@@ -263,6 +274,37 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
         resp match {
           case b: Boolean if b => complete(StatusCodes.OK)
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to add allowed users"))
+        }
+
+    }
+
+  }
+
+  private def findByContextNameAndExternalUserId(contextName: String,
+                                                 providerId: String,
+                                                 externalUserId: String
+                                                ): Route = {
+
+    onComplete(groupActor ? FindMemberOf(
+      contextName = contextName,
+      providerId = providerId,
+      externalUserId = externalUserId
+    )
+    ) {
+
+      case Failure(t) =>
+        logger.error("findGroups call responded with an unhandled message (check GroupsRoute for bugs!!!)", t)
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
+
+      case Success(resp) =>
+        resp match {
+
+          case found: FoundMemberOf =>
+            val restGroups = found.groups map Json4sUtil.any2any[rest.Group]
+            complete(restGroups)
+
+          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query groups"))
+
         }
 
     }

@@ -327,11 +327,11 @@ This is a convenience method and the same result would be achieved by updating a
 
 ### Groups Related
 
-#### Find Groups
+#### Find Groups A User is a Member Of
 
-_$CONTEXT_NAME_ and _$EXTERNAL_USER_ID_ are strings.
+_$CONTEXT_NAME_, _$PROVIDER_ID_ and _$EXTERNAL_USER_ID_ are strings.
 
-    curl localhost:8092/api/userService/v1/groups/$CONTEXT_NAME/$PROVIDER_ID/$EXTERNAL_USER_ID
+    curl localhost:8092/api/userService/v1/group/memberOf/$CONTEXT_NAME/$PROVIDER_ID/$EXTERNAL_USER_ID
 
 Responds with a list of groups associated to the given contextName and (providerId, externalUserId).
 

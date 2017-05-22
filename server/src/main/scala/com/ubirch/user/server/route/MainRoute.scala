@@ -16,7 +16,6 @@ class MainRoute(implicit mongo: MongoUtil) {
   val context = new ContextRoute {}
   val user = new UserRoute {}
   val group = new GroupRoute {}
-  val groups = new GroupsRoute {}
 
   val myRoute: Route = {
 
@@ -24,13 +23,12 @@ class MainRoute(implicit mongo: MongoUtil) {
       pathPrefix(RouteConstants.serviceName) {
         pathPrefix(RouteConstants.currentVersion) {
 
-          context.route ~
+          pathEndOrSingleSlash {
+            welcome.route
+          } ~
+            context.route ~
             user.route ~
-            group.route ~
-            groups.route ~
-            pathEndOrSingleSlash {
-              welcome.route
-            }
+            group.route
 
         }
       }

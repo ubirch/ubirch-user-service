@@ -17,7 +17,7 @@ object RouteConstants {
   final val user = "user"
   final val group = "group"
   final val allowedUsers = "allowedUsers"
-  final val groups = "groups"
+  final val memberOf = "memberOf"
 
   val pathPrefix = s"/$apiPrefix/$serviceName/$currentVersion"
 
@@ -36,7 +36,7 @@ object RouteConstants {
   def pathGroups(contextName: String,
                  providerId: String,
                  externalUserId: String): String = {
-    s"$pathPrefix/$groups/$contextName/$providerId/$externalUserId"
+    s"$pathPrefix/$group/$memberOf/$contextName/$providerId/$externalUserId"
   }
 
 }

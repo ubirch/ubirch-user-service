@@ -2,7 +2,7 @@ package com.ubirch.user.core.actor
 
 import java.util.UUID
 
-import com.ubirch.user.core.manager.GroupManager
+import com.ubirch.user.core.manager.{GroupManager, GroupsManager}
 import com.ubirch.user.model.db.Group
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.uuid.UUIDUtil
@@ -60,6 +60,15 @@ class GroupActor(implicit mongo: MongoUtil) extends Actor
         allowedUsers = deleteAllowed.allowedUsers
       ) map (sender ! _)
 
+    case find: FindMemberOf =>
+
+      val sender = context.sender()
+      GroupsManager.findByContextAndUser(
+        contextName = find.contextName,
+        providerId = find.providerId,
+        externalUserId = find.externalUserId
+      ) map (sender ! FoundMemberOf(_))
+
     case _ => log.error("unknown message")
 
   }
@@ -99,3 +108,10 @@ case class AddAllowedUsers(groupId: UUID,
 case class DeleteAllowedUsers(groupId: UUID,
                               allowedUsers: Set[UUID]
                              )
+
+case class FindMemberOf(contextName: String,
+                      providerId: String,
+                      externalUserId: String
+                     )
+
+case class FoundMemberOf(groups: Set[Group])
