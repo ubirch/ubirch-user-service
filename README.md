@@ -10,6 +10,10 @@ TODO
 
 ## Release History
 
+### Version 0.3.2 (tbd)
+
+* tbd
+
 ### Version 0.3.1 (2017-05-22)
 
 * update dependency `rest-akka-http` to 0.3.7
@@ -50,7 +54,7 @@ resolvers ++= Seq(
   "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "client-rest" % "0.3.1"
+  "com.ubirch.user" %% "client-rest" % "0.3.2-SNAPSHOT"
 )
 ```
 
@@ -102,10 +106,10 @@ See `com.ubirch.user.client.rest.UserServiceClientRestDebug` for an example usag
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.3.1"
+  "com.ubirch.user" %% "cmdtools" % "0.3.2-SNAPSHOT"
 )
 ```
 
@@ -116,7 +120,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.3.1"
+  "com.ubirch.user" %% "config" % "0.3.2-SNAPSHOT"
 )
 ```
 
@@ -127,7 +131,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.3.1"
+  "com.ubirch.user" %% "core" % "0.3.2-SNAPSHOT"
 )
 ```
 
@@ -138,7 +142,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.3.1"
+  "com.ubirch.user" %% "model-db" % "0.3.2-SNAPSHOT"
 )
 ```
 
@@ -149,7 +153,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.3.1"
+  "com.ubirch.user" %% "model-rest" % "0.3.2-SNAPSHOT"
 )
 ```
 
@@ -161,7 +165,7 @@ resolvers ++= Seq(
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.3.1"
+  "com.ubirch.user" %% "server" % "0.3.2-SNAPSHOT"
 )
 ```
 
@@ -172,7 +176,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.3.1"
+  "com.ubirch.user" %% "util" % "0.3.2-SNAPSHOT"
 )
 ```
 
