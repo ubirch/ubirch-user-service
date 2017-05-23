@@ -12,7 +12,7 @@ TODO
 
 ### Version 0.3.2 (tbd)
 
-* tbd
+* InitData inits all users with a group now (before only user1 had a group)
 
 ### Version 0.3.1 (2017-05-22)
 
