@@ -26,29 +26,34 @@ object InitData extends App
     contextUbirchLocalOpt <- dataHelpers.createContext(displayName = "ubirch-local")
     contextTrackleLocalOpt <- dataHelpers.createContext(displayName = "trackle-local")
     contextUbirchAdminUiLocalOpt <- dataHelpers.createContext(displayName = "ubirch-admin-ui-local")
+    contextTrackleAdminUiLocalOpt <- dataHelpers.createContext(displayName = "trackle-admin-ui-local")
+    localContexts = Set(contextUbirchLocalOpt, contextTrackleLocalOpt, contextUbirchAdminUiLocalOpt, contextTrackleAdminUiLocalOpt)
 
     // context: *-dev
-    contextUbirchOpt <- dataHelpers.createContext(displayName = "ubirch-dev")
-    contextTrackleOpt <- dataHelpers.createContext(displayName = "trackle-dev")
+    contextUbirchDevOpt <- dataHelpers.createContext(displayName = "ubirch-dev")
+    contextTrackleDevOpt <- dataHelpers.createContext(displayName = "trackle-dev")
     contextUbirchAdminUiDevOpt <- dataHelpers.createContext(displayName = "ubirch-admin-ui-dev")
-    contextTrackleAdminUiOpt <- dataHelpers.createContext(displayName = "trackle-admin-ui-dev")
+    contextTrackleAdminUiDevOpt <- dataHelpers.createContext(displayName = "trackle-admin-ui-dev")
+    devContexts = Set(contextUbirchDevOpt, contextTrackleDevOpt, contextUbirchAdminUiDevOpt, contextTrackleAdminUiDevOpt)
 
     // context: *-demo
     contextUbirchAdminUiDemoOpt <- dataHelpers.createContext(displayName = "ubirch-admin-ui-demo")
+    demoContexts = Set(contextUbirchAdminUiDemoOpt)
+
+    allContexts = localContexts ++ devContexts ++ demoContexts
 
     user1Opt <- dataHelpers.createUser(displayName = "test-user-1", externalId = "1234")
     user2Opt <- dataHelpers.createUser(displayName = "test-user-2", externalId = "1235")
     user3Opt <- dataHelpers.createUser(displayName = "test-user-3", externalId = "1236")
-    group1Opt <- dataHelpers.createGroup(contextUbirchOpt, user1Opt, user2Opt)
-    group2Opt <- dataHelpers.createGroup(contextUbirchOpt, user2Opt)
-    group3Opt <- dataHelpers.createGroup(contextUbirchOpt, user3Opt)
+    group1Opt <- dataHelpers.createGroup(contextUbirchDevOpt, user1Opt, user2Opt)
+    group2Opt <- dataHelpers.createGroup(contextUbirchDevOpt, user2Opt)
+    group3Opt <- dataHelpers.createGroup(contextUbirchDevOpt, user3Opt)
 
   } yield {
 
     mongo.close()
 
-    val contextSet = Set(contextUbirchOpt, contextTrackleOpt, contextUbirchAdminUiDevOpt, contextUbirchAdminUiDemoOpt, contextTrackleAdminUiOpt)
-    for (context <- contextSet) {
+    for (context <- allContexts) {
       if (context.isDefined) {
         logger.info(s"=== created context: name=${context.get.displayName}")
       } else {
@@ -57,9 +62,9 @@ object InitData extends App
     }
 
     Seq(
-      CreatedData(contextUbirchOpt.get, user1Opt.get, group1Opt.get, user2Opt.get, user3Opt.get),
-      CreatedData(contextUbirchOpt.get, user2Opt.get, group2Opt.get),
-      CreatedData(contextUbirchOpt.get, user3Opt.get, group3Opt.get)
+      CreatedData(contextUbirchDevOpt.get, user1Opt.get, group1Opt.get, user2Opt.get, user3Opt.get),
+      CreatedData(contextUbirchDevOpt.get, user2Opt.get, group2Opt.get),
+      CreatedData(contextUbirchDevOpt.get, user3Opt.get, group3Opt.get)
     )
 
   }
