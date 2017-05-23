@@ -36,10 +36,12 @@ object InitData extends App
     // context: *-demo
     contextUbirchAdminUiDemoOpt <- dataHelpers.createContext(displayName = "ubirch-admin-ui-demo")
 
-    ownerOpt <- dataHelpers.createUser(displayName = "test-user-1", externalId = "1234")
+    user1Opt <- dataHelpers.createUser(displayName = "test-user-1", externalId = "1234")
     user2Opt <- dataHelpers.createUser(displayName = "test-user-2", externalId = "1235")
     user3Opt <- dataHelpers.createUser(displayName = "test-user-3", externalId = "1236")
-    groupOpt <- dataHelpers.createGroup(contextUbirchOpt, ownerOpt, user2Opt)
+    group1Opt <- dataHelpers.createGroup(contextUbirchOpt, user1Opt, user2Opt)
+    group2Opt <- dataHelpers.createGroup(contextUbirchOpt, user2Opt)
+    group3Opt <- dataHelpers.createGroup(contextUbirchOpt, user3Opt)
 
   } yield {
 
@@ -54,22 +56,30 @@ object InitData extends App
       }
     }
 
-    CreatedData(contextUbirchOpt.get, ownerOpt.get, groupOpt.get, user2Opt.get, user3Opt.get)
+    Seq(
+      CreatedData(contextUbirchOpt.get, user1Opt.get, group1Opt.get, user2Opt.get, user3Opt.get),
+      CreatedData(contextUbirchOpt.get, user2Opt.get, group2Opt.get),
+      CreatedData(contextUbirchOpt.get, user3Opt.get, group3Opt.get)
+    )
 
   }
 
-  dataCreated map { created =>
+  dataCreated map { createdList =>
 
-    val owner = created.owner
-    val ownerString = s"id=${owner.id}; provider=${owner.providerId}; externalId=${owner.externalId}"
-    logger.info(s"=== created user (owner): $ownerString")
+    createdList foreach { created =>
 
-    for (user <- created.allowedUsers) {
-      val userString = s"id=${user.id}; provider=${user.providerId}; externalId=${user.externalId}"
-      logger.info(s"=== created user (allowedUser): $userString")
+      val owner = created.owner
+      val ownerString = s"id=${owner.id}; provider=${owner.providerId}; externalId=${owner.externalId}"
+      logger.info(s"=== created user (owner): $ownerString")
+
+      for (user <- created.allowedUsers) {
+        val userString = s"id=${user.id}; provider=${user.providerId}; externalId=${user.externalId}"
+        logger.info(s"=== created user (allowedUser): $userString")
+      }
+
+      logger.info(s"=== created group: id=${created.group.id}; id=${created.group.displayName}")
+
     }
-
-    logger.info(s"=== created group: id=${created.group.id}; id=${created.group.displayName}")
 
   }
 
