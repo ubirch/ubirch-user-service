@@ -282,4 +282,3 @@ def generateDockerFile(file: File, jarFile: sbt.File): Seq[File] = {
   IO.write(file, contents)
   Seq(file)
 }
-

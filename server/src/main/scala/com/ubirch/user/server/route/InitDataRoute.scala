@@ -109,31 +109,40 @@ class InitDataRoute (implicit mongo: MongoUtil) extends MyJsonProtocol
 
   private def createAdminUsers(contextSeq: Seq[Context]): Future[Option[Seq[Group]]] = {
 
-    val futureGroups = contextSeq map { ctx =>
+      createUser() flatMap {
 
-      for {
+        case None =>
+          logger.error("failed to create admin user")
+          Future(None)
 
-        Some(user) <- createUser()
-        groupOpt <- createGroup(user, ctx)
+        case Some(user: User) =>
 
-      } yield {
-        if (groupOpt.isEmpty) {
-          logger.error(s"failed to create admin user and/or group: context=${ctx.displayName}")
-        }
-        groupOpt
+          val futureGroups = contextSeq map { ctx =>
+
+            for {
+
+              groupOpt <- createGroup(user, ctx)
+
+            } yield {
+              if (groupOpt.isEmpty) {
+                logger.error(s"failed to create admin group: context=${ctx.displayName}")
+              }
+              groupOpt
+            }
+
+          }
+
+          FutureUtil.unfoldInnerFutures(futureGroups) map { results =>
+
+            if (results.contains(None)) {
+              None
+            } else {
+              Some(results.filter(_.isDefined).map(_.get))
+            }
+
+          }
+
       }
-
-    }
-
-    FutureUtil.unfoldInnerFutures(futureGroups) map { results =>
-
-      if (results.contains(None)) {
-        None
-      } else {
-        Some(results.filter(_.isDefined).map(_.get))
-      }
-
-    }
 
   }
 
@@ -142,27 +151,49 @@ class InitDataRoute (implicit mongo: MongoUtil) extends MyJsonProtocol
     val providerId = Config.adminUserProviderId
     val externalUserId = Config.adminUserExternalId
 
-    val user = User(
-      displayName = "Admin",
-      providerId = providerId,
-      externalId = externalUserId,
-      locale = "en"
-    )
+    UserManager.findByProviderIdAndExternalId(providerId = providerId, externalUserId = externalUserId) flatMap {
 
-    UserManager.create(user)
+      case None =>
+
+        val user = User(
+          displayName = "Admin",
+          providerId = providerId,
+          externalId = externalUserId,
+          locale = "en"
+        )
+
+        UserManager.create(user)
+
+      case Some(user: User) =>
+        logger.info("initData: admin user already exists")
+        Future(Some(user))
+
+    }
+
 
   }
 
   private def createGroup(user: User, context: Context): Future[Option[Group]] = {
 
-    val group = Group(
-      displayName = "Admin Group",
-      ownerId = user.id,
-      contextId = context.id,
-      allowedUsers = Set.empty
-    )
+    val name = "Admin Group"
+    GroupManager.findByContextAndOwner(contextId = context.id, ownerId = user.id) flatMap {
 
-    GroupManager.create(group)
+      case None =>
+
+        val group = Group(
+          displayName = name,
+          ownerId = user.id,
+          contextId = context.id,
+          allowedUsers = Set.empty
+        )
+
+        GroupManager.create(group)
+
+      case Some(existing: Group) =>
+        logger.info(s"admin group already exists: context.displayName=${context.displayName}")
+        Future(Some(existing))
+
+    }
 
   }
 
