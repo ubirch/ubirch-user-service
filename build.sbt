@@ -117,7 +117,7 @@ lazy val server = project
     ),
     mainClass in(Compile, run) := Some("com.ubirch.user.server.Boot"),
     resourceGenerators in Compile += Def.task {
-      generateDockerFile(baseDirectory.value / ".." / "Dockerfile", (assemblyOutputPath in assembly).value)
+      generateDockerFile(baseDirectory.value / ".." / "Dockerfile.input", (assemblyOutputPath in assembly).value)
     }.taskValue
   )
 
@@ -282,3 +282,4 @@ def generateDockerFile(file: File, jarFile: sbt.File): Seq[File] = {
   IO.write(file, contents)
   Seq(file)
 }
+

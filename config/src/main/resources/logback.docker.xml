@@ -8,17 +8,10 @@
     # ** e.g. 9200
     -->
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoders are assigned the type
-             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
-        <encoder>
-            <pattern>%date{ISO8601} %-5level - %msg -[%logger{36}] - [%thread]%n</pattern>
-        </encoder>
-    </appender>
-
     <appender name="ELASTIC" class="com.internetitem.logback.elasticsearch.ElasticsearchAppender">
-        <url>http://${ES_HOST}:${ES_PORT_HTTP}/_bulk</url>
-        <index>user-service-logs-%date{yyyy-MM-dd}</index>
+        <url>http://${ES_LOG_HOST}:${ES_LOG_PORT}/_bulk</url>
+        <authentication class="com.internetitem.logback.elasticsearch.config.BasicAuthentication"/>
+        <index>${ENVID}-user-service-logs-%date{yyyy-MM-dd}</index>
         <type>log</type>
         <loggerName>es-logger</loggerName> <!-- optional -->
         <errorLoggerName>es-error-logger</errorLoggerName> <!-- optional -->
@@ -68,8 +61,7 @@
 
     <logger name="com.ubirch" level="DEBUG"/>
 
-    <root level="DEBUG">
-        <!--<appender-ref ref="STDOUT"/>-->
+    <root level="INFO">
         <appender-ref ref="ELASTIC"/>
     </root>
 </configuration>
