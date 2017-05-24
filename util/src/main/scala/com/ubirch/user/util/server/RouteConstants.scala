@@ -18,6 +18,7 @@ object RouteConstants {
   final val group = "group"
   final val allowedUsers = "allowedUsers"
   final val memberOf = "memberOf"
+  final val initData = "initData"
 
   val pathPrefix = s"/$apiPrefix/$serviceName/$currentVersion"
 
@@ -38,5 +39,7 @@ object RouteConstants {
                  externalUserId: String): String = {
     s"$pathPrefix/$group/$memberOf/$contextName/$providerId/$externalUserId"
   }
+
+  final def pathInitData(env: String) = s"$pathPrefix/$initData/$env"
 
 }

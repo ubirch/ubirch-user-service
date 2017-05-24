@@ -1,6 +1,7 @@
 package com.ubirch.user.config
 
 import com.ubirch.util.config.ConfigBase
+import scala.collection.JavaConversions._
 
 /**
   * author: cvandrei
@@ -51,5 +52,17 @@ object Config extends ConfigBase {
   def mongoCollectionUser: String = config.getString(ConfigKeys.COLLECTION_USER)
 
   def mongoCollectionGroup: String = config.getString(ConfigKeys.COLLECTION_GROUP)
+
+  /*
+   * Init Data
+   ************************************************************************************************/
+
+  def adminUserProviderId: String = config.getString(ConfigKeys.ADMIN_PROVIDER_ID)
+
+  def adminUserExternalId: String = config.getString(ConfigKeys.ADMIN_EXTERNAL_ID)
+
+  def testUserContext: String = config.getString(ConfigKeys.TEST_USER_CONTEXT)
+
+  def contextPrefixList: List[String] = config.getStringList(ConfigKeys.CONTEXT_PREFIX_LIST).toList
 
 }

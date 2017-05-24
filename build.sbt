@@ -16,7 +16,7 @@ lazy val commonSettings = Seq(
     url("https://github.com/ubirch/ubirch-user-service"),
     "scm:git:git@github.com:ubirch/ubirch-user-service.git"
   )),
-  version := "0.3.2-SNAPSHOT",
+  version := "0.3.3-SNAPSHOT",
   test in assembly := {},
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
@@ -159,6 +159,7 @@ lazy val depServer = Seq(
   ubirchRestAkkaHttp,
   ubirchRestAkkaHttpTest % "test",
 
+  ubirchFutures,
   ubirchJsonAutoConvert,
   ubirchResponse
 
@@ -236,6 +237,7 @@ lazy val excludedLoggers = Seq(
 
 lazy val ubirchConfig = ubirchUtilG %% "config" % "0.1" excludeAll(excludedLoggers: _*)
 lazy val ubirchDate = ubirchUtilG %% "date" % "0.1" excludeAll(excludedLoggers: _*)
+lazy val ubirchFutures = ubirchUtilG %% "futures" % "0.1.1" excludeAll(excludedLoggers: _*)
 lazy val ubirchJson = ubirchUtilG %% "json" % "0.3.4" excludeAll(excludedLoggers: _*)
 lazy val ubirchJsonAutoConvert = ubirchUtilG %% "json-auto-convert" % "0.3.4" excludeAll(excludedLoggers: _*)
 lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.2.2" excludeAll(excludedLoggers: _*)
@@ -280,4 +282,3 @@ def generateDockerFile(file: File, jarFile: sbt.File): Seq[File] = {
   IO.write(file, contents)
   Seq(file)
 }
-
