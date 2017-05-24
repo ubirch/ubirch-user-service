@@ -37,4 +37,17 @@ object ConfigKeys {
   final val COLLECTION_USER = s"$mongoCollection.user"
   final val COLLECTION_GROUP = s"$mongoCollection.group"
 
+  /*
+   * Init Data
+   *********************************************************************************************/
+
+  private val adminPrefix = s"$CONFIG_PREFIX.adminUser"
+  final val ADMIN_PROVIDER_ID = s"$adminPrefix.providerId"
+  final val ADMIN_EXTERNAL_ID = s"$adminPrefix.externalId"
+
+  private val testUserPrefix = s"$CONFIG_PREFIX.testUser"
+  final val TEST_USER_CONTEXT = s"$testUserPrefix.Context"
+
+  final val CONTEXT_PREFIX_LIST = s"$CONFIG_PREFIX.contextPrefixList"
+
 }

@@ -16,7 +16,7 @@ lazy val commonSettings = Seq(
     url("https://github.com/ubirch/ubirch-user-service"),
     "scm:git:git@github.com:ubirch/ubirch-user-service.git"
   )),
-  version := "0.3.2-SNAPSHOT",
+  version := "0.3.2",
   test in assembly := {},
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
@@ -282,4 +282,3 @@ def generateDockerFile(file: File, jarFile: sbt.File): Seq[File] = {
   IO.write(file, contents)
   Seq(file)
 }
-

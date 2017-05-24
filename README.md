@@ -10,6 +10,12 @@ TODO
 
 ## Release History
 
+### Version 0.3.2 (2017-05-24)
+
+* `InitData` inits all users with a group now (before only user1 had a group)
+* replaced `InitData` with `InitUsers`
+* introduced endpoint `/initData/$ENV_NAME`
+
 ### Version 0.3.1 (2017-05-22)
 
 * update dependency `rest-akka-http` to 0.3.7
@@ -50,7 +56,7 @@ resolvers ++= Seq(
   "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "client-rest" % "0.3.1"
+  "com.ubirch.user" %% "client-rest" % "0.3.2"
 )
 ```
 
@@ -105,7 +111,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.3.1"
+  "com.ubirch.user" %% "cmdtools" % "0.3.2"
 )
 ```
 
@@ -116,7 +122,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.3.1"
+  "com.ubirch.user" %% "config" % "0.3.2"
 )
 ```
 
@@ -127,7 +133,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.3.1"
+  "com.ubirch.user" %% "core" % "0.3.2"
 )
 ```
 
@@ -138,7 +144,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.3.1"
+  "com.ubirch.user" %% "model-db" % "0.3.2"
 )
 ```
 
@@ -149,7 +155,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.3.1"
+  "com.ubirch.user" %% "model-rest" % "0.3.2"
 )
 ```
 
@@ -161,7 +167,7 @@ resolvers ++= Seq(
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.3.1"
+  "com.ubirch.user" %% "server" % "0.3.2"
 )
 ```
 
@@ -172,7 +178,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.3.1"
+  "com.ubirch.user" %% "util" % "0.3.2"
 )
 ```
 
@@ -332,6 +338,12 @@ _$CONTEXT_NAME_, _$PROVIDER_ID_ and _$EXTERNAL_USER_ID_ are strings.
 
 Responds with a list of groups associated to the given contextName and (providerId, externalUserId).
 
+### Init Data
+
+Creates all contexts (unless they already exist) for the given environment name and then create one admin user for each
+context.
+
+    curl localhost:8092/api/userService/v1/initData/$ENVIRONMENT_NAME
 
 ## Configuration
 
@@ -358,15 +370,27 @@ more details here: https://github.com/scoverage/sbt-scoverage
 
 ## Local Setup
 
-1) Start [MongoDB 3.4](https://www.mongodb.com/download-center?jmp=nav)
+1. Start [MongoDB 3.4](https://www.mongodb.com/download-center?jmp=nav)
 
-2) Delete Existing Data
+1. Delete Existing Data
 
     ./sbt "cmdtools/runMain com.ubirch.user.cmd.MongoDelete"
 
-3) Create Test Data
+1. Create Contexts
 
-    ./sbt "cmdtools/runMain com.ubirch.user.cmd.InitData"
+You can get the providerId and externalId by logging in through the auth-service and then checking the Redis datbaase.
+
+    export ADMIN_PROVIDER_ID=google
+    export ADMIN_EXTERNAL_ID=asdf-1234-ölkj-0897
+    curl localhost:8092/api/userService/v1/initData/$ENVIRONMENT_NAME
+
+1. Create Test Users
+
+Creates test users for the configured environment (see config key: _ubirchUserService.testUserContext_)
+
+    export TEST_USER_CONTEXT=ubirch-admin-ui
+    export ENV_NAME=local
+    ./sbt "cmdtools/runMain com.ubirch.user.cmd.InitUsers"
 
 
 ## Create Docker Image
