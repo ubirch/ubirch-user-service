@@ -10,7 +10,7 @@ TODO
 
 ## Release History
 
-### Version 0.3.2 (tbd)
+### Version 0.3.2 (2017-05-24)
 
 * `InitData` inits all users with a group now (before only user1 had a group)
 * replaced `InitData` with `InitUsers`
@@ -56,7 +56,7 @@ resolvers ++= Seq(
   "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "client-rest" % "0.3.2-SNAPSHOT"
+  "com.ubirch.user" %% "client-rest" % "0.3.2"
 )
 ```
 
@@ -108,10 +108,10 @@ See `com.ubirch.user.client.rest.UserServiceClientRestDebug` for an example usag
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.3.2-SNAPSHOT"
+  "com.ubirch.user" %% "cmdtools" % "0.3.2"
 )
 ```
 
@@ -122,7 +122,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.3.2-SNAPSHOT"
+  "com.ubirch.user" %% "config" % "0.3.2"
 )
 ```
 
@@ -133,7 +133,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.3.2-SNAPSHOT"
+  "com.ubirch.user" %% "core" % "0.3.2"
 )
 ```
 
@@ -144,7 +144,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.3.2-SNAPSHOT"
+  "com.ubirch.user" %% "model-db" % "0.3.2"
 )
 ```
 
@@ -155,7 +155,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.3.2-SNAPSHOT"
+  "com.ubirch.user" %% "model-rest" % "0.3.2"
 )
 ```
 
@@ -167,7 +167,7 @@ resolvers ++= Seq(
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.3.2-SNAPSHOT"
+  "com.ubirch.user" %% "server" % "0.3.2"
 )
 ```
 
@@ -178,7 +178,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.3.2-SNAPSHOT"
+  "com.ubirch.user" %% "util" % "0.3.2"
 )
 ```
 
