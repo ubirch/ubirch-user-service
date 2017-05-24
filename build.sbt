@@ -159,6 +159,7 @@ lazy val depServer = Seq(
   ubirchRestAkkaHttp,
   ubirchRestAkkaHttpTest % "test",
 
+  ubirchFutures,
   ubirchJsonAutoConvert,
   ubirchResponse
 
@@ -236,6 +237,7 @@ lazy val excludedLoggers = Seq(
 
 lazy val ubirchConfig = ubirchUtilG %% "config" % "0.1" excludeAll(excludedLoggers: _*)
 lazy val ubirchDate = ubirchUtilG %% "date" % "0.1" excludeAll(excludedLoggers: _*)
+lazy val ubirchFutures = ubirchUtilG %% "futures" % "0.1.1" excludeAll(excludedLoggers: _*)
 lazy val ubirchJson = ubirchUtilG %% "json" % "0.3.4" excludeAll(excludedLoggers: _*)
 lazy val ubirchJsonAutoConvert = ubirchUtilG %% "json-auto-convert" % "0.3.4" excludeAll(excludedLoggers: _*)
 lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.2.2" excludeAll(excludedLoggers: _*)
