@@ -62,6 +62,7 @@ class DataHelpers(implicit mongo: MongoUtil) extends StrictLogging {
 
   def createGroup(contextOpt: Option[Context],
                   ownerOpt: Option[User],
+                 adminGroup: Option[Boolean],
                   allowedUsersOpt: Option[User]*
                  ): Future[Option[Group]] = {
 
@@ -83,6 +84,7 @@ class DataHelpers(implicit mongo: MongoUtil) extends StrictLogging {
     createGroup(
       contextId = contextOpt.get.id,
       ownerOpt = ownerOpt,
+      adminGroup = adminGroup,
       allowedUsersOpt = allowedUsersOpt: _*
     )
 
@@ -90,6 +92,7 @@ class DataHelpers(implicit mongo: MongoUtil) extends StrictLogging {
 
   def createGroup(contextId: String,
                   ownerOpt: Option[User],
+                  adminGroup: Option[Boolean],
                   allowedUsersOpt: Option[User]*
                  ): Future[Option[Group]] = {
 
@@ -109,7 +112,8 @@ class DataHelpers(implicit mongo: MongoUtil) extends StrictLogging {
     val group = DefaultModels.group(
       ownerId = ownerOpt.get.id,
       contextId = contextId,
-      allowedUsers = allowedUsers.toSet
+      allowedUsers = allowedUsers.toSet,
+      adminGroup = adminGroup
     )
 
     GroupManager.create(group) map {

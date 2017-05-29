@@ -28,9 +28,9 @@ object InitUsers extends App
     user1Opt <- dataHelpers.createUser(displayName = "test-user-1", externalId = "1234")
     user2Opt <- dataHelpers.createUser(displayName = "test-user-2", externalId = "1235")
     user3Opt <- dataHelpers.createUser(displayName = "test-user-3", externalId = "1236")
-    group1Opt <- dataHelpers.createGroup(contextOpt, user1Opt, user2Opt)
-    group2Opt <- dataHelpers.createGroup(contextOpt, user2Opt)
-    group3Opt <- dataHelpers.createGroup(contextOpt, user3Opt)
+    group1Opt <- dataHelpers.createGroup(contextOpt, user1Opt, adminGroup = None, user2Opt)
+    group2Opt <- dataHelpers.createGroup(contextOpt, user2Opt, adminGroup = None)
+    group3Opt <- dataHelpers.createGroup(contextOpt, user3Opt, adminGroup = None)
 
   } yield {
 
