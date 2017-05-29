@@ -15,7 +15,7 @@ class GroupManagerSpec extends MongoSpec {
 
   feature("create()") {
 
-    scenario("group does NOT exist --> success") {
+    scenario("non-admin group does NOT exist --> success") {
 
       // prepare
       val group = DefaultModels.group()
@@ -32,10 +32,49 @@ class GroupManagerSpec extends MongoSpec {
 
     }
 
-    scenario("group already exists --> fail") {
+    scenario("admin group does NOT exist --> success") {
+
+      // prepare
+      val group = DefaultModels.group(adminGroup = Some(true))
+
+      // test
+      GroupManager.create(group) flatMap { created =>
+
+        // verify
+        created shouldBe Some(group)
+        Thread.sleep(200)
+        mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+      }
+
+    }
+
+    scenario("non-admin group already exists --> fail") {
 
       // prepare
       GroupManager.create(DefaultModels.group()) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(existingGroup) =>
+
+          // test
+          GroupManager.create(existingGroup) flatMap { created =>
+
+            // verify
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+            created shouldBe None
+
+          }
+
+      }
+
+    }
+
+    scenario("admin group already exists --> fail") {
+
+      // prepare
+      GroupManager.create(DefaultModels.group(adminGroup = Some(true))) flatMap {
 
         case None => fail("failed during preparation")
 
@@ -98,6 +137,30 @@ class GroupManagerSpec extends MongoSpec {
 
     }
 
+    scenario("group.id exists and promote to admin --> success") {
+
+      // prepare
+      GroupManager.create(DefaultModels.group()) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(group) =>
+
+          val update = group.copy(adminGroup = Some(true))
+
+          // test
+          GroupManager.update(update) flatMap { result =>
+
+            // verify
+            result shouldBe Some(update)
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
   }
 
   feature("findById()") {
@@ -115,10 +178,32 @@ class GroupManagerSpec extends MongoSpec {
 
     }
 
-    scenario("group.id exists --> success") {
+    scenario("non-admin group.id exists --> success") {
 
       // prepare
       GroupManager.create(DefaultModels.group()) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(group) =>
+
+          // test
+          GroupManager.findById(group.id) flatMap { result =>
+
+            // verify
+            result shouldBe Some(group)
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+    scenario("admin group.id exists --> success") {
+
+      // prepare
+      GroupManager.create(DefaultModels.group(adminGroup = Some(true))) flatMap {
 
         case None => fail("failed during preparation")
 

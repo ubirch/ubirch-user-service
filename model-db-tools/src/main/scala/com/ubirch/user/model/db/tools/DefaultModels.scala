@@ -35,14 +35,16 @@ object DefaultModels {
   def group(displayName: String = s"group-${UUIDUtil.uuid}",
             ownerId: String = UUIDUtil.uuidStr,
             contextId: String = UUIDUtil.uuidStr,
-            allowedUsers: Set[String] = Set.empty
+            allowedUsers: Set[String] = Set.empty,
+            adminGroup: Option[Boolean] = None
            ): Group = {
 
     Group(
       displayName = displayName,
       ownerId = ownerId,
       contextId = contextId,
-      allowedUsers = allowedUsers
+      allowedUsers = allowedUsers,
+      adminGroup = adminGroup
     )
 
   }
