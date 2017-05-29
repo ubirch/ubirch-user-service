@@ -5,6 +5,7 @@ import com.typesafe.scalalogging.slf4j.StrictLogging
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.manager.{ContextManager, GroupManager, UserManager}
 import com.ubirch.user.model.db.{Context, Group, User}
+import com.ubirch.user.util.defaults.Defaults
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.futures.FutureUtil
 import com.ubirch.util.http.response.ResponseUtil
@@ -156,7 +157,7 @@ class InitDataRoute (implicit mongo: MongoUtil) extends MyJsonProtocol
       case None =>
 
         val user = User(
-          displayName = "Admin",
+          displayName = Defaults.ADMIN_USER_NAME,
           providerId = providerId,
           externalId = externalUserId,
           locale = "en"
@@ -175,16 +176,16 @@ class InitDataRoute (implicit mongo: MongoUtil) extends MyJsonProtocol
 
   private def createGroup(user: User, context: Context): Future[Option[Group]] = {
 
-    val name = "Admin Group"
     GroupManager.findByContextAndOwner(contextId = context.id, ownerId = user.id) flatMap {
 
       case None =>
 
         val group = Group(
-          displayName = name,
+          displayName = Defaults.ADMIN_GROUP_NAME,
           ownerId = user.id,
           contextId = context.id,
-          allowedUsers = Set.empty
+          allowedUsers = Set.empty,
+          adminGroup = Some(true)
         )
 
         GroupManager.create(group)

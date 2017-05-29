@@ -13,6 +13,7 @@ case class Group(id: String = UUIDUtil.uuidStr,
                  ownerId: String,
                  contextId: String,
                  allowedUsers: Set[String],
+                 adminGroup: Option[Boolean] = None,
                  created: DateTime = DateTime.now,
                  updated: DateTime = DateTime.now
                 )
