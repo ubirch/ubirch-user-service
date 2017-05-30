@@ -123,7 +123,7 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
           case Some(g: db.Group) => complete(Json4sUtil.any2any[rest.Group](g))
 
-          case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create restGroup"))
+          case _ => complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to create group"))
 
         }
 
@@ -134,7 +134,6 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
   private def updateGroup(restGroup: Group): Route = {
 
     val dbGroup = Json4sUtil.any2any[db.Group](restGroup)
-    // TODO find by name first and ignore id
     onComplete(groupActor ? UpdateGroup(dbGroup)) {
 
       case Failure(t) =>
@@ -150,7 +149,7 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
           case Some(g: db.Group) => complete(Json4sUtil.any2any[rest.Group](g))
 
-          case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update restGroup"))
+          case _ => complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to update group"))
 
         }
 
@@ -175,7 +174,7 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
           case Some(g: db.Group) => complete(Json4sUtil.any2any[rest.Group](g))
 
-          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query restGroup"))
+          case _ => complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to query group"))
 
         }
 
@@ -200,7 +199,7 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
           case Some(g: db.Group) => complete(Json4sUtil.any2any[rest.Group](g))
 
-          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query restGroup"))
+          case _ => complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to query group"))
 
         }
 
@@ -213,13 +212,20 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
     onComplete(groupActor ? DeleteGroup(groupId)) {
 
       case Failure(t) =>
-        logger.error("deleteGroup call responded with an unhandled message (check GroupRoute for bugs!!!)")
+        logger.error("deleteGroup call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
+
           case deleted: Boolean if deleted => complete(StatusCodes.OK)
-          case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete restGroup"))
+
+          case deleted: Boolean if !deleted =>
+            val jsonError = JsonErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete group")
+            complete(requestErrorResponse(jsonError))
+
+          case _ => complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to delete group"))
+
         }
 
     }
@@ -231,13 +237,19 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
     onComplete(groupActor ? DeleteGroupByName(name)) {
 
       case Failure(t) =>
-        logger.error("deleteGroup call responded with an unhandled message (check GroupRoute for bugs!!!)")
+        logger.error("deleteGroup call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
+
           case deleted: Boolean if deleted => complete(StatusCodes.OK)
-          case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete restGroup"))
+
+          case deleted: Boolean if !deleted => val jsonError = JsonErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete group")
+            complete(requestErrorResponse(jsonError))
+
+          case _ => complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to delete group"))
+
         }
 
     }
@@ -249,13 +261,20 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
     onComplete(groupActor ? AddAllowedUsers(groupId = allowedUsers.groupId, allowedUsers = allowedUsers.allowedUsers)) {
 
       case Failure(t) =>
-        logger.error("adding allowed users call responded with an unhandled message (check GroupRoute for bugs!!!)")
+        logger.error("adding allowed users call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
+
           case b: Boolean if b => complete(StatusCodes.OK)
-          case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to add allowed users"))
+
+          case b: Boolean if !b =>
+            val jsonError = JsonErrorResponse(errorType = "UpdateError", errorMessage = "failed to add allowed users")
+            complete(requestErrorResponse(jsonError))
+
+          case _ => complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to add allowed users"))
+
         }
 
     }
@@ -267,13 +286,20 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
     onComplete(groupActor ? DeleteAllowedUsers(groupId = allowedUsers.groupId, allowedUsers = allowedUsers.allowedUsers)) {
 
       case Failure(t) =>
-        logger.error("adding allowed users call responded with an unhandled message (check GroupRoute for bugs!!!)")
+        logger.error("adding allowed users call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
         resp match {
+
           case b: Boolean if b => complete(StatusCodes.OK)
-          case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to add allowed users"))
+
+          case b: Boolean if !b =>
+            val jsonError = JsonErrorResponse(errorType = "UpdateError", errorMessage = "failed to delete allowed users")
+            complete(requestErrorResponse(jsonError))
+
+          case _ => complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to add allowed users"))
+
         }
 
     }
@@ -303,7 +329,7 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
             val restGroups = found.groups map Json4sUtil.any2any[rest.Group]
             complete(restGroups)
 
-          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query groups"))
+          case _ => complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to query groups"))
 
         }
 

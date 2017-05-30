@@ -5,14 +5,13 @@
 
 ubirch user management service
 
-TODO
-
 
 ## Release History
 
-### Version 0.4.2 (tbd)
+### Version 0.4.2 (2017-05-30)
 
-* tbd
+* fixed http response codes and error messages in `GroupRoute`
+* updated documentation in README
 
 ### Version 0.4.1 (2017-05-29)
 
@@ -64,11 +63,11 @@ TODO
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots"),
+  Resolver.sonatypeRepo("releases"),
   "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "client-rest" % "0.4.2-SNAPSHOT"
+  "com.ubirch.user" %% "client-rest" % "0.4.2"
 )
 ```
 
@@ -120,10 +119,10 @@ See `com.ubirch.user.client.rest.UserServiceClientRestDebug` for an example usag
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.4.2-SNAPSHOT"
+  "com.ubirch.user" %% "cmdtools" % "0.4.2"
 )
 ```
 
@@ -131,10 +130,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.4.2-SNAPSHOT"
+  "com.ubirch.user" %% "config" % "0.4.2"
 )
 ```
 
@@ -142,10 +141,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.4.2-SNAPSHOT"
+  "com.ubirch.user" %% "core" % "0.4.2"
 )
 ```
 
@@ -153,10 +152,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.4.2-SNAPSHOT"
+  "com.ubirch.user" %% "model-db" % "0.4.2"
 )
 ```
 
@@ -164,10 +163,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.4.2-SNAPSHOT"
+  "com.ubirch.user" %% "model-rest" % "0.4.2"
 )
 ```
 
@@ -175,11 +174,11 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots"),
+  Resolver.sonatypeRepo("releases"),
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.4.2-SNAPSHOT"
+  "com.ubirch.user" %% "server" % "0.4.2"
 )
 ```
 
@@ -187,10 +186,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("snapshots")
+  Resolver.sonatypeRepo("releases")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.4.2-SNAPSHOT"
+  "com.ubirch.user" %% "util" % "0.4.2"
 )
 ```
 
@@ -295,7 +294,8 @@ Responds with "OK" if user was deleted.
       "ownerId": "$OWNER", // UUID: userId allowed to modify it
       "displayName": "$DISPLAY_NAME", // string
       "contextId": "$CONTEXT_ID", // UUID
-      "allowedUsers": ["$USER_ID_1", "$USER_ID_2"] // ownerId always has access no matter if it's listed here
+      "allowedUsers": ["$USER_ID_1", "$USER_ID_2"], // (optional) UUID: ownerId always has access no matter if it's listed here
+      "adminGroup": true // (optional) only an admin group if set to true, otherwise not
     }'
 
 Responds with the created group (including it's id which is a UUID).
@@ -307,7 +307,8 @@ Responds with the created group (including it's id which is a UUID).
       "ownerId": "$OWNER", // UUID: userId allowed to modify it
       "displayName": "$DISPLAY_NAME", // string
       "contextId": "$CONTEXT_ID", // UUID
-      "allowedUsers": ["$USER_ID_1", "$USER_ID_2"] // ownerId always has access no matter if it's listed here
+      "allowedUsers": ["$USER_ID_1", "$USER_ID_2"], // UUID: ownerId always has access no matter if it's listed here
+      "adminGroup": true // (optional) only an admin group if set to true, otherwise not
     }'
 
 Responds with the updated group (including it's id which is a UUID).
