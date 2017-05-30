@@ -258,7 +258,8 @@ Responds with the deleted context (including it's id which is a UUID).
     curl -XPOST localhost:8092/api/userService/v1/user -H "Content-Type: application/json" -d '{
       "externalId": "$EXTERNAL_USER_ID", // string
       "providerId": "$PROVIDER_ID", // string
-      "displayName": "$DISPLAY_NAME" // string
+      "displayName": "$DISPLAY_NAME", // string
+      "locale": "$LOCALE" // language specifier (e.g. en)
     }'
 
 Responds with the created user (including it's id which is a UUID).
@@ -268,7 +269,8 @@ Responds with the created user (including it's id which is a UUID).
     curl -XPUT localhost:8092/api/userService/v1/user/$PROVIDER/$EXTERNAL_USER_ID -H "Content-Type: application/json" -d '{
       "externalId": "$EXTERNAL_USER_ID", // string
       "providerId": "$PROVIDER_ID", // string
-      "displayName": "$DISPLAY_NAME" // string
+      "displayName": "$DISPLAY_NAME", // string
+      "locale": "$LOCALE" // language specifier (e.g. en)
     }'
 
 Responds with the updated user (including it's id which is a UUID).
@@ -283,7 +285,7 @@ Responds with the user if it exists (including it's id which is a UUID).
 
     curl -XDELETE localhost:8092/api/userService/v1/user/$PROVIDER/$EXTERNAL_USER_ID
 
-Responds with the deleted user (including it's id which is a UUID).
+Responds with "OK" if user was deleted.
 
 ### Group Related
 
