@@ -12,6 +12,7 @@ ubirch user management service
 
 * improve documentation
 * fixed bug that broke `InitUsers`
+* added activeUser flag to user 
 
 ### Version 0.4.3 (2017-05-31)
 
