@@ -13,6 +13,7 @@ case class User(id: String = UUIDUtil.uuidStr,
                 providerId: String,
                 externalId: String,
                 locale: String,
+                activeUser: Option[Boolean] = Some(false),
                 created: DateTime = DateTime.now,
                 updated: DateTime = DateTime.now
                )

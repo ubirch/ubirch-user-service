@@ -8,6 +8,10 @@ ubirch user management service
 
 ## Release History
 
+### Version 0.4.5 (tbd)
+
+* added activeUser flag to user 
+
 ### Version 0.4.4 (tbd)
 
 * improve documentation
