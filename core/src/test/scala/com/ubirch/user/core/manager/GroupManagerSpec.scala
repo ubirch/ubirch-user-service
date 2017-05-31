@@ -224,45 +224,6 @@ class GroupManagerSpec extends MongoSpec {
 
   }
 
-  feature("findByName()") {
-
-    scenario("group.name does not exist --> fail") {
-
-      // test
-      GroupManager.findByName("foo") flatMap { created =>
-
-        // verify
-        created shouldBe None
-        mongoTestUtils.countAll(collection) map (_ shouldBe 0)
-
-      }
-
-    }
-
-    scenario("group.name exists --> success") {
-
-      // prepare
-      GroupManager.create(DefaultModels.group()) flatMap {
-
-        case None => fail("failed during preparation")
-
-        case Some(group) =>
-
-          // test
-          GroupManager.findByName(group.displayName) flatMap { result =>
-
-            // verify
-            result shouldBe Some(group)
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
-
-          }
-
-      }
-
-    }
-
-  }
-
   feature("delete()") {
 
     scenario("group.id does not exist --> fail") {

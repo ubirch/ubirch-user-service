@@ -87,16 +87,6 @@ object GroupManager extends StrictLogging
 
   }
 
-  def findByName(name: String)(implicit mongo: MongoUtil): Future[Option[Group]] = {
-
-    val selector = document("displayName" -> name)
-
-    mongo.collection(collectionName) flatMap {
-      _.find(selector).one[Group]
-    }
-
-  }
-
   def findByContextAndOwner(contextId: String, ownerId: String)(implicit mongo: MongoUtil): Future[Option[Group]] = {
 
     // TODO automated tests

@@ -5,7 +5,7 @@ import java.util.UUID
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.Config
-import com.ubirch.user.core.actor.{ActorNames, AddAllowedUsers, CreateGroup, DeleteAllowedUsers, DeleteGroup, DeleteGroupByName, FindGroup, FindGroupByName, FindMemberOf, FoundMemberOf, GroupActor, UpdateGroup}
+import com.ubirch.user.core.actor.{ActorNames, AddAllowedUsers, CreateGroup, DeleteAllowedUsers, DeleteGroup, FindGroup, FindMemberOf, FoundMemberOf, GroupActor, UpdateGroup}
 import com.ubirch.user.model._
 import com.ubirch.user.model.rest.{AllowedUsers, Group}
 import com.ubirch.user.util.server.RouteConstants
@@ -68,14 +68,6 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
             deleteById(groupId)
           }
 
-        } ~ path(RouteConstants.byName / Segment) { groupName =>
-
-          get {
-            findByName(groupName)
-          } ~ delete {
-            deleteByName(groupName)
-          }
-
         } ~ path(RouteConstants.allowedUsers) {
 
           put {
@@ -90,13 +82,13 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
         } ~ path(RouteConstants.memberOf / Segment / Segment / Segment) { (contextName, providerId, externalUserId) =>
 
-            get {
-              findByContextNameAndExternalUserId(
-                contextName = contextName,
-                providerId = providerId,
-                externalUserId = externalUserId
-              )
-            }
+          get {
+            findByContextNameAndExternalUserId(
+              contextName = contextName,
+              providerId = providerId,
+              externalUserId = externalUserId
+            )
+          }
 
         }
 
@@ -182,31 +174,6 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
   }
 
-  private def findByName(groupName: String): Route = {
-
-    onComplete(groupActor ? FindGroupByName(groupName)) {
-
-      case Failure(t) =>
-        logger.error("findGroupByName call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
-        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
-
-      case Success(resp) =>
-        resp match {
-
-          case None =>
-            val jsonError = JsonErrorResponse(errorType = "QueryError", errorMessage = "failed to find group")
-            complete(requestErrorResponse(jsonError))
-
-          case Some(g: db.Group) => complete(Json4sUtil.any2any[rest.Group](g))
-
-          case _ => complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to query group"))
-
-        }
-
-    }
-
-  }
-
   private def deleteById(groupId: UUID): Route = {
 
     onComplete(groupActor ? DeleteGroup(groupId)) {
@@ -222,30 +189,6 @@ class GroupRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
           case deleted: Boolean if !deleted =>
             val jsonError = JsonErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete group")
-            complete(requestErrorResponse(jsonError))
-
-          case _ => complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to delete group"))
-
-        }
-
-    }
-
-  }
-
-  private def deleteByName(name: String): Route = {
-
-    onComplete(groupActor ? DeleteGroupByName(name)) {
-
-      case Failure(t) =>
-        logger.error("deleteGroup call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
-        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
-
-      case Success(resp) =>
-        resp match {
-
-          case deleted: Boolean if deleted => complete(StatusCodes.OK)
-
-          case deleted: Boolean if !deleted => val jsonError = JsonErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete group")
             complete(requestErrorResponse(jsonError))
 
           case _ => complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to delete group"))
