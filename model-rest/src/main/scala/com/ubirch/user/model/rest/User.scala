@@ -10,5 +10,6 @@ case class User(id: Option[UUID] = None,
                 displayName: String,
                 providerId: String,
                 externalId: String,
+                activeUser: Boolean,
                 locale: String
                )
