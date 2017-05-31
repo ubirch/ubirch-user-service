@@ -10,7 +10,7 @@ ubirch user management service
 
 ### Version 0.4.4 (tbd)
 
-* tbd
+* improve documentation
 
 ### Version 0.4.3 (2017-05-31)
 
@@ -367,6 +367,13 @@ Creates all contexts (unless they already exist) for the given environment name 
 context.
 
     curl localhost:8092/api/userService/v1/initData/$ENVIRONMENT_NAME
+
+`$ENVIRONMENT_NAME`s can be:
+
+* local
+* dev
+* demo
+* ...
 
 ## Configuration
 
