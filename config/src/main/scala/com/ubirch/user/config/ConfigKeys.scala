@@ -46,7 +46,7 @@ object ConfigKeys {
   final val ADMIN_EXTERNAL_ID = s"$adminPrefix.externalId"
 
   private val testUserPrefix = s"$CONFIG_PREFIX.testUser"
-  final val TEST_USER_CONTEXT = s"$testUserPrefix.Context"
+  final val TEST_USER_CONTEXT = s"$testUserPrefix.context"
 
   final val CONTEXT_PREFIX_LIST = s"$CONFIG_PREFIX.contextPrefixList"
 

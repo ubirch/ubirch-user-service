@@ -10,11 +10,13 @@ ubirch user management service
 
 ### Version 0.4.5 (tbd)
 
-* added activeUser flag to user 
+* tbd
 
-### Version 0.4.4 (tbd)
+### Version 0.4.4 (2017-05-31)
 
 * improve documentation
+* fixed bug that broke `InitUsers`
+* added activeUser flag to user 
 
 ### Version 0.4.3 (2017-05-31)
 
@@ -79,7 +81,7 @@ resolvers ++= Seq(
   "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "client-rest" % "0.4.4-SNAPSHOT"
+  "com.ubirch.user" %% "client-rest" % "0.4.5-SNAPSHOT"
 )
 ```
 
@@ -134,7 +136,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.4.4-SNAPSHOT"
+  "com.ubirch.user" %% "cmdtools" % "0.4.5-SNAPSHOT"
 )
 ```
 
@@ -145,7 +147,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.4.4-SNAPSHOT"
+  "com.ubirch.user" %% "config" % "0.4.5-SNAPSHOT"
 )
 ```
 
@@ -156,7 +158,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.4.4-SNAPSHOT"
+  "com.ubirch.user" %% "core" % "0.4.5-SNAPSHOT"
 )
 ```
 
@@ -167,7 +169,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.4.4-SNAPSHOT"
+  "com.ubirch.user" %% "model-db" % "0.4.5-SNAPSHOT"
 )
 ```
 
@@ -178,7 +180,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.4.4-SNAPSHOT"
+  "com.ubirch.user" %% "model-rest" % "0.4.5-SNAPSHOT"
 )
 ```
 
@@ -190,7 +192,7 @@ resolvers ++= Seq(
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.4.4-SNAPSHOT"
+  "com.ubirch.user" %% "server" % "0.4.5-SNAPSHOT"
 )
 ```
 
@@ -201,7 +203,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.4.4-SNAPSHOT"
+  "com.ubirch.user" %% "util" % "0.4.5-SNAPSHOT"
 )
 ```
 
@@ -417,7 +419,7 @@ You can get the providerId and externalId by logging in through the auth-service
     export ADMIN_PROVIDER_ID=google
     export ADMIN_EXTERNAL_ID=1234
     ./sbt server/run
-    curl localhost:8092/api/userService/v1/initData/$ENVIRONMENT_NAME
+    curl localhost:8092/api/userService/v1/initData/local
 
 1. Create Test Users
 
