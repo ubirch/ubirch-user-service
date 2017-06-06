@@ -26,6 +26,8 @@ class MainRoute(implicit mongo: MongoUtil) {
 
           pathEndOrSingleSlash {
             welcome.route
+          } ~ path(RouteConstants.check) {
+            welcome.route
           } ~
             context.route ~
             user.route ~
