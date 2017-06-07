@@ -12,6 +12,9 @@ object RouteConstants {
   final val serviceName = "userService"
   final val currentVersion = "v1"
 
+  final val check = "check"
+  final val deepCheck = "deepCheck"
+
   final val context = "context"
   final val byName = "byName"
   final val user = "user"
@@ -21,6 +24,9 @@ object RouteConstants {
   final val initData = "initData"
 
   val pathPrefix = s"/$apiPrefix/$serviceName/$currentVersion"
+
+  val pathCheck = s"$pathPrefix/$check"
+  val pathDeepCheck = s"$pathPrefix/$deepCheck"
 
   val pathContext = s"$pathPrefix/$context"
   def pathContextWithId(id: UUID) = s"$pathContext/$id"

@@ -8,9 +8,16 @@ ubirch user management service
 
 ## Release History
 
-### Version 0.4.5 (tbd)
+### Version 0.4.6 (tbd)
 
-* tbd
+* introduce endpoint `/api/authService/v1/check`
+* update to sbt 0.13.15
+* update to _com.ubirch.util:json:0.4.0_
+* update to _com.ubirch.util:response-util:0.1.6_
+
+### Version 0.4.5 (2017-05-31)
+
+* added field `User.activeUser` to REST model
 
 ### Version 0.4.4 (2017-05-31)
 
@@ -210,14 +217,15 @@ libraryDependencies ++= Seq(
 
 ## REST Methods
 
-### Welcome / Health
+### Welcome / Health / Check
 
     curl localhost:8092/
     curl localhost:8092/api/userService/v1
+    curl localhost:8092/api/userService/v1/check
 
 If healthy the server response is:
 
-    200 {"version":"1.0","status":"OK","message":"Welcome to the ubirchUserService"}
+    200 {"version":"1.0","status":"OK","message":"Welcome to the ubirchUserService ( $GO_PIPELINE_NAME / $GO_PIPELINE_LABEL / $GO_PIPELINE_REVISION )"}
 
 If not healthy the server response is:
 

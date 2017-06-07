@@ -10,7 +10,7 @@ import com.ubirch.user.model._
 import com.ubirch.user.model.rest.Context
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
-import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
+import com.ubirch.util.json.Json4sUtil
 import com.ubirch.util.model.JsonErrorResponse
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.rest.akka.directives.CORSDirective
@@ -32,8 +32,7 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-03-29
   */
-class ContextRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
-  with CORSDirective
+class ContextRoute(implicit mongo: MongoUtil) extends CORSDirective
   with ResponseUtil
   with StrictLogging {
 
@@ -148,7 +147,7 @@ class ContextRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
           case None =>
             val jsonError = JsonErrorResponse(errorType = "QueryError", errorMessage = "not found")
-            complete(serverErrorResponse(response = jsonError, status = StatusCodes.NotFound))
+            complete(serverErrorResponse(responseObject = jsonError, status = StatusCodes.NotFound))
 
           case Some(c: db.Context) => complete(Json4sUtil.any2any[rest.Context](c))
 
@@ -193,7 +192,7 @@ class ContextRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
           case None =>
             val jsonError = JsonErrorResponse(errorType = "QueryError", errorMessage = "context not found")
-            complete(requestErrorResponse(response = jsonError))
+            complete(requestErrorResponse(responseObject = jsonError))
 
           case Some(c: db.Context) => complete(Json4sUtil.any2any[rest.Context](c))
 
