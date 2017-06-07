@@ -10,5 +10,6 @@ object ActorNames {
   final val USER = "user-actor"
   final val GROUP = "group-actor"
   final val GROUPS = "groups-actor"
+  final val DEEP_CHECK = "deep-check-actor"
 
 }
