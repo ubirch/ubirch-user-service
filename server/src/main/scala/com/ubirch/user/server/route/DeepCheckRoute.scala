@@ -42,7 +42,7 @@ class DeepCheckRoute(implicit mongo: MongoUtil) extends CORSDirective
       respondWithCORS {
         get {
 
-          onComplete(deepCheckActor ? DeepCheckRequest) {
+          onComplete(deepCheckActor ? DeepCheckRequest()) {
 
             case Failure(t) =>
               logger.error("failed to run deepCheck (check DeepCheckRoute for bugs!!!)", t)

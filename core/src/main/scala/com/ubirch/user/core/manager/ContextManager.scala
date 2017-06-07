@@ -4,6 +4,7 @@ import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.Config
 import com.ubirch.user.model.db.Context
+import com.ubirch.util.model.DeepCheckResponse
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
 
@@ -69,6 +70,22 @@ object ContextManager extends StrictLogging
 
     mongo.collection(collectionName) flatMap {
       _.find(selector).one[Context]
+    }
+
+  }
+
+  def connectivityCheck()(implicit mongo: MongoUtil): Future[DeepCheckResponse] = {
+
+    mongo.collection(collectionName) flatMap {
+      _.find(document()).one[Context] map (_ => DeepCheckResponse())
+    } recover {
+
+      case t: Throwable =>
+        DeepCheckResponse(
+          status = "NOK",
+          messages = Seq(t.getMessage)
+        )
+
     }
 
   }

@@ -14,7 +14,7 @@ ubirch user management service
 * update to sbt 0.13.15
 * update to _com.ubirch.util:json:0.4.0_
 * update to _com.ubirch.util:response-util:0.1.6_
-* introduce endpoint `/api/userService/v1/deepCheck` (not yet implemented)
+* introduce endpoint `/api/userService/v1/deepCheck`
 
 ### Version 0.4.5 (2017-05-31)
 
