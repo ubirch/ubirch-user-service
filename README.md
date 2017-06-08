@@ -8,9 +8,11 @@ ubirch user management service
 
 ## Release History
 
-### Version 0.4.7 (tbd)
+### Version 0.4.7 (2017-06-08)
 
-* tbd
+* update _com.ubirch.util:mongo-test-utils_ to 0.2.3
+* update _com.ubirch.util:mongo-utils_ to 0.2.3
+* introduce `DeepCheckManager`
 
 ### Version 0.4.6 (2017-06-07)
 

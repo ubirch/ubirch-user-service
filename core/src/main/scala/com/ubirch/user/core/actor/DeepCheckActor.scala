@@ -1,6 +1,6 @@
 package com.ubirch.user.core.actor
 
-import com.ubirch.user.core.manager.ContextManager
+import com.ubirch.user.core.manager.DeepCheckManager
 import com.ubirch.util.model.DeepCheckResponse
 import com.ubirch.util.mongo.connection.MongoUtil
 
@@ -27,7 +27,7 @@ class DeepCheckActor(implicit mongo: MongoUtil)
 
   }
 
-  private def deepCheck(): Future[DeepCheckResponse] = ContextManager.connectivityCheck()
+  private def deepCheck(): Future[DeepCheckResponse] = DeepCheckManager.connectivityCheck()
 
 }
 
