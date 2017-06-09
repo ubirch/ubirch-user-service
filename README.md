@@ -240,7 +240,7 @@ If healthy the server response is:
 
 If not healthy the server response is:
 
-    400 {"version":"1.0","status":"NOK","message":"$ERROR_MESSAGE"}
+    500 {"version":"1.0","status":"NOK","message":"$ERROR_MESSAGE"}
 
 ### Deep Check / Server Health
 
