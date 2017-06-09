@@ -2,7 +2,7 @@ package com.ubirch.user.core.manager
 
 import com.ubirch.user.config.Config
 import com.ubirch.user.model.db.Context
-import com.ubirch.util.model.DeepCheckResponse
+import com.ubirch.util.deepCheck.model.DeepCheckResponse
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
 

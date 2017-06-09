@@ -8,9 +8,9 @@ ubirch user management service
 
 ## Release History
 
-### Version 0.4.8 (tbd)
+### Version 0.4.8 (2016-06-??)
 
-* tbd
+* migrate to _com.ubirch.util:deep-check-model:0.1.0_
 
 ### Version 0.4.7 (2017-06-08)
 

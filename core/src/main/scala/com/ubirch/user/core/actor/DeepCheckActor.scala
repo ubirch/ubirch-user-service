@@ -1,7 +1,7 @@
 package com.ubirch.user.core.actor
 
 import com.ubirch.user.core.manager.DeepCheckManager
-import com.ubirch.util.model.DeepCheckResponse
+import com.ubirch.util.deepCheck.model.{DeepCheckRequest, DeepCheckResponse}
 import com.ubirch.util.mongo.connection.MongoUtil
 
 import akka.actor.{Actor, ActorLogging}
@@ -30,5 +30,3 @@ class DeepCheckActor(implicit mongo: MongoUtil)
   private def deepCheck(): Future[DeepCheckResponse] = DeepCheckManager.connectivityCheck()
 
 }
-
-case class DeepCheckRequest()
