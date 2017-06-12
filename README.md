@@ -10,7 +10,7 @@ ubirch user management service
 
 ### Version 0.4.9 (tbd)
 
-* tbd
+* endpoint `/api/userService/v1/deepCheck` responds with http status 503 if deep check finds problems
 
 ### Version 0.4.8 (2016-06-09)
 
