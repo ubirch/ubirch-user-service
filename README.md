@@ -10,7 +10,12 @@ ubirch user management service
 
 ### Version 0.4.10 (tbd)
 
-* tbd
+* update json4s to 3.5.2
+* update to _com.ubirch.util:json:0.4.1_
+* update to _com.ubirch.util:deep-check-model:0.1.1_
+* update to _com.ubirch.util:mongo-test-utils:0.3.1_
+* update to _com.ubirch.util:mongo-utils:0.3.1_
+* update to _com.ubirch.util:response-util:0.2.1_
 
 ### Version 0.4.9 (2017-06-12)
 

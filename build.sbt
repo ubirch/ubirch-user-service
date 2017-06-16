@@ -196,7 +196,7 @@ lazy val depUtils = Seq(
 // VERSIONS
 val akkaV = "2.4.18"
 val akkaHttpV = "10.0.6"
-val json4sV = "3.5.1"
+val json4sV = "3.5.2"
 val playV = "1.0.0-M10"
 val scalaTestV = "3.0.1"
 
@@ -236,14 +236,14 @@ lazy val excludedLoggers = Seq(
 
 lazy val ubirchConfig = ubirchUtilG %% "config" % "0.1" excludeAll(excludedLoggers: _*)
 lazy val ubirchDate = ubirchUtilG %% "date" % "0.1" excludeAll(excludedLoggers: _*)
-lazy val ubirchDeepCheckModel = ubirchUtilG %% "deep-check-model" % "0.1.0" excludeAll(excludedLoggers: _*)
+lazy val ubirchDeepCheckModel = ubirchUtilG %% "deep-check-model" % "0.1.1-SNAPSHOT" excludeAll(excludedLoggers: _*)
 lazy val ubirchFutures = ubirchUtilG %% "futures" % "0.1.1" excludeAll(excludedLoggers: _*)
-lazy val ubirchJson = ubirchUtilG %% "json" % "0.4.0" excludeAll(excludedLoggers: _*)
-lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.3.0" excludeAll(excludedLoggers: _*)
-lazy val ubirchMongo = ubirchUtilG %% "mongo-utils" % "0.3.0" excludeAll(excludedLoggers: _*)
+lazy val ubirchJson = ubirchUtilG %% "json" % "0.4.1-SNAPSHOT" excludeAll(excludedLoggers: _*)
+lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.3.1-SNAPSHOT" excludeAll(excludedLoggers: _*)
+lazy val ubirchMongo = ubirchUtilG %% "mongo-utils" % "0.3.1-SNAPSHOT" excludeAll(excludedLoggers: _*)
 lazy val ubirchRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.3.7" excludeAll(excludedLoggers: _*)
 lazy val ubirchRestAkkaHttpTest = ubirchUtilG %% "rest-akka-http-test" % "0.3.7" excludeAll(excludedLoggers: _*)
-lazy val ubirchResponse = ubirchUtilG %% "response-util" % "0.2.0" excludeAll(excludedLoggers: _*)
+lazy val ubirchResponse = ubirchUtilG %% "response-util" % "0.2.1-SNAPSHOT" excludeAll(excludedLoggers: _*)
 lazy val ubirchUuid = ubirchUtilG %% "uuid" % "0.1.1" excludeAll(excludedLoggers: _*)
 
 /*
