@@ -1,7 +1,8 @@
 package com.ubirch.user.server.route
 
+import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.server.Route
 import com.typesafe.scalalogging.slf4j.StrictLogging
-
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.manager.{ContextManager, GroupManager, UserManager}
 import com.ubirch.user.model.db.{Context, Group, User}
@@ -13,9 +14,6 @@ import com.ubirch.util.json.MyJsonProtocol
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.rest.akka.directives.CORSDirective
 
-import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.server.Route
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.language.postfixOps
@@ -25,7 +23,7 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-05-24
   */
-class InitDataRoute (implicit mongo: MongoUtil) extends MyJsonProtocol
+class InitDataRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
   with CORSDirective
   with ResponseUtil
   with StrictLogging {
@@ -73,7 +71,8 @@ class InitDataRoute (implicit mongo: MongoUtil) extends MyJsonProtocol
 
     val futureResults: List[Future[Option[Context]]] = Config.contextPrefixList map { contextPrefix =>
 
-      val contextName = s"$contextPrefix-$envName"
+      //      val contextName = s"$contextPrefix-$envName"
+      val contextName = s"$envName"
       ContextManager.findByName(contextName) flatMap {
 
         case None =>
@@ -110,40 +109,40 @@ class InitDataRoute (implicit mongo: MongoUtil) extends MyJsonProtocol
 
   private def createAdminUsers(contextSeq: Seq[Context]): Future[Option[Seq[Group]]] = {
 
-      createUser() flatMap {
+    createUser() flatMap {
 
-        case None =>
-          logger.error("failed to create admin user")
-          Future(None)
+      case None =>
+        logger.error("failed to create admin user")
+        Future(None)
 
-        case Some(user: User) =>
+      case Some(user: User) =>
 
-          val futureGroups = contextSeq map { ctx =>
+        val futureGroups = contextSeq map { ctx =>
 
-            for {
+          for {
 
-              groupOpt <- createGroup(user, ctx)
+            groupOpt <- createGroup(user, ctx)
 
-            } yield {
-              if (groupOpt.isEmpty) {
-                logger.error(s"failed to create admin group: context=${ctx.displayName}")
-              }
-              groupOpt
+          } yield {
+            if (groupOpt.isEmpty) {
+              logger.error(s"failed to create admin group: context=${ctx.displayName}")
             }
-
+            groupOpt
           }
 
-          FutureUtil.unfoldInnerFutures(futureGroups) map { results =>
+        }
 
-            if (results.contains(None)) {
-              None
-            } else {
-              Some(results.filter(_.isDefined).map(_.get))
-            }
+        FutureUtil.unfoldInnerFutures(futureGroups) map { results =>
 
+          if (results.contains(None)) {
+            None
+          } else {
+            Some(results.filter(_.isDefined).map(_.get))
           }
 
-      }
+        }
+
+    }
 
   }
 
