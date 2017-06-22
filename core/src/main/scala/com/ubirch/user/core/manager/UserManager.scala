@@ -58,20 +58,31 @@ object UserManager extends StrictLogging
 
   def update(user: User)(implicit mongo: MongoUtil): Future[Option[User]] = {
 
-    val selector = document("id" -> user.id)
-    mongo.collection(collectionName) flatMap {
+    val userId = user.id
+    findById(userId) flatMap {
 
-      _.update(selector, user) map { writeResult =>
+      case None =>
+        logger.error(s"unable to update if no User exists: userId=$userId")
+        Future(None)
 
-        if (writeResult.ok && writeResult.n == 1) {
-          logger.info(s"updated user: id=${user.id}")
-          Some(user)
-        } else {
-          logger.error(s"failed to update user: user=$user")
-          None
+      case Some(_: User) =>
+
+        val selector = document("id" -> user.id)
+        mongo.collection(collectionName) flatMap {
+
+          _.update(selector, user) map { writeResult =>
+
+            if (writeResult.ok) {
+              logger.info(s"updated user: id=${user.id}")
+              Some(user)
+            } else {
+              logger.error(s"failed to update user: user=$user, writeResult=$writeResult")
+              None
+            }
+
+          }
+
         }
-
-      }
 
     }
 

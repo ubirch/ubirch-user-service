@@ -90,6 +90,7 @@ class UserManagerSpec extends MongoSpec {
 
             // verify
             result shouldBe Some(update)
+            UserManager.findById(update.id) map(_ should be(Some(update)))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
@@ -119,6 +120,7 @@ class UserManagerSpec extends MongoSpec {
 
             // verify
             result shouldBe Some(update)
+            UserManager.findById(update.id) map(_ should be(Some(update)))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }

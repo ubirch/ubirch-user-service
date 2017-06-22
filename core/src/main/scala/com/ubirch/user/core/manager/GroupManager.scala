@@ -58,20 +58,31 @@ object GroupManager extends StrictLogging
 
   def update(group: Group)(implicit mongo: MongoUtil): Future[Option[Group]] = {
 
-    val selector = document("id" -> group.id)
-    mongo.collection(collectionName) flatMap {
+    val groupId = group.id
+    findById(groupId) flatMap {
 
-      _.update(selector, group) map { writeResult =>
+      case None =>
+        logger.error(s"unable to update if no Group exists: groupId=$groupId")
+        Future(None)
 
-        if (writeResult.ok && writeResult.n == 1) {
-          logger.info(s"updated group: id=${group.id}")
-          Some(group)
-        } else {
-          logger.error(s"failed to update group: group=$group")
-          None
+      case Some(_: Group) =>
+
+        val selector = document("id" -> groupId)
+        mongo.collection(collectionName) flatMap {
+
+          _.update(selector, group) map { writeResult =>
+
+            if (writeResult.ok) {
+              logger.info(s"updated group: id=$groupId")
+              Some(group)
+            } else {
+              logger.error(s"failed to update group: group=$group, writeResult=$writeResult")
+              None
+            }
+
+          }
+
         }
-
-      }
 
     }
 

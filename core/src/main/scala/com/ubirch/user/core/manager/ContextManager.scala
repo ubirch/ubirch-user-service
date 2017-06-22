@@ -42,22 +42,33 @@ object ContextManager extends StrictLogging
 
   def update(context: Context)(implicit mongo: MongoUtil): Future[Option[Context]] = {
 
-    val selector = document("id" -> context.id)
-    val update = contextWriter.write(context)
+    val contextId = context.id
+    findById(contextId) flatMap {
 
-    mongo.collection(collectionName) flatMap {
+      case None =>
+        logger.error(s"unable to update if no Context exists: contextId=$contextId")
+        Future(None)
 
-      _.update(selector, update) map { writeResult =>
+      case Some(_: Context) =>
 
-        if (writeResult.ok && writeResult.n == 1) {
-          logger.info(s"updated context: id=${context.id}")
-          Some(context)
-        } else {
-          logger.error(s"failed to update context: context=$context")
-          None
+        val selector = document("id" -> contextId)
+        val update = contextWriter.write(context)
+
+        mongo.collection(collectionName) flatMap {
+
+          _.update(selector, update) map { writeResult =>
+
+            if (writeResult.ok) {
+              logger.info(s"updated context: id=$contextId")
+              Some(context)
+            } else {
+              logger.error(s"failed to update context: context=$context, writeResult=$writeResult")
+              None
+            }
+
+          }
+
         }
-
-      }
 
     }
 

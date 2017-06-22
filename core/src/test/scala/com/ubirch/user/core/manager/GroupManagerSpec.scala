@@ -26,6 +26,7 @@ class GroupManagerSpec extends MongoSpec {
         // verify
         created shouldBe Some(group)
         Thread.sleep(200)
+        ContextManager.findById(created.get.id) map(_ should be(created))
         mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
       }
@@ -43,6 +44,7 @@ class GroupManagerSpec extends MongoSpec {
         // verify
         created shouldBe Some(group)
         Thread.sleep(200)
+        ContextManager.findById(created.get.id) map(_ should be(created))
         mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
       }
@@ -62,8 +64,9 @@ class GroupManagerSpec extends MongoSpec {
           GroupManager.create(existingGroup) flatMap { created =>
 
             // verify
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
             created shouldBe None
+            ContextManager.findById(existingGroup.id) map(_ should be(Some(created)))
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -84,8 +87,9 @@ class GroupManagerSpec extends MongoSpec {
           GroupManager.create(existingGroup) flatMap { created =>
 
             // verify
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
             created shouldBe None
+            ContextManager.findById(existingGroup.id) map(_ should be(Some(existingGroup)))
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -129,6 +133,7 @@ class GroupManagerSpec extends MongoSpec {
 
             // verify
             result shouldBe Some(update)
+            ContextManager.findById(result.get.id) map(_ should be(Some(update)))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
@@ -153,6 +158,7 @@ class GroupManagerSpec extends MongoSpec {
 
             // verify
             result shouldBe Some(update)
+            ContextManager.findById(group.id) map(_ should be(result))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
@@ -192,6 +198,7 @@ class GroupManagerSpec extends MongoSpec {
 
             // verify
             result shouldBe Some(group)
+            ContextManager.findById(group.id) map(_ should be(Some(group)))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
@@ -214,6 +221,7 @@ class GroupManagerSpec extends MongoSpec {
 
             // verify
             result shouldBe Some(group)
+            ContextManager.findById(group.id) map(_ should be(Some(group)))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }

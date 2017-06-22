@@ -8,9 +8,9 @@ ubirch user management service
 
 ## Release History
 
-### Version 0.4.11 (tbd)
+### Version 0.4.11 (2017-06-22)
 
-* tbd
+* bugfix (UBI-264): updates on Azure's CosmosDB show the behavior of an upsert()
 
 ### Version 0.4.10 (2017-06-19)
 
