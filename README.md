@@ -10,7 +10,7 @@ ubirch user management service
 
 ### Version 0.4.12 (tbd)
 
-* add script `resetDatabase.sh`
+* add script `dev-scripts/resetDatabase.sh`
 
 ### Version 0.4.11 (2017-06-22)
 
@@ -463,7 +463,7 @@ more details here: https://github.com/scoverage/sbt-scoverage
 
 1. Delete Existing Data
 
-*Running `resetDatabase.sh` does everything in this step.*
+*Running `dev-scripts/resetDatabase.sh` does everything in this step.*
 
     ./sbt "cmdtools/runMain com.ubirch.user.cmd.MongoDelete"
 
