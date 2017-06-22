@@ -10,7 +10,7 @@ ubirch user management service
 
 ### Version 0.4.12 (tbd)
 
-* tbd
+* add script `resetDatabase.sh`
 
 ### Version 0.4.11 (2017-06-22)
 
@@ -462,6 +462,8 @@ more details here: https://github.com/scoverage/sbt-scoverage
 1. Start [MongoDB 3.4](https://www.mongodb.com/download-center?jmp=nav)
 
 1. Delete Existing Data
+
+*Running `resetDatabase.sh` does everything in this step.*
 
     ./sbt "cmdtools/runMain com.ubirch.user.cmd.MongoDelete"
 
