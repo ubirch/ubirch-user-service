@@ -11,6 +11,7 @@ ubirch user management service
 ### Version 0.4.12 (tbd)
 
 * add script `dev-scripts/resetDatabase.sh`
+* refactored actors by adding a `props()` method
 
 ### Version 0.4.11 (2017-06-22)
 

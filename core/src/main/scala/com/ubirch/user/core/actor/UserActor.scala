@@ -1,11 +1,13 @@
 package com.ubirch.user.core.actor
 
+import com.ubirch.user.config.Config
 import com.ubirch.user.core.manager.UserManager
 import com.ubirch.user.model.db.User
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.uuid.UUIDUtil
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{Actor, ActorLogging, Props}
+import akka.routing.RoundRobinPool
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -67,6 +69,14 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
 
     case _ => log.error("unknown message")
 
+  }
+
+}
+
+object UserActor {
+
+  def props()(implicit mongo: MongoUtil): Props = {
+    new RoundRobinPool(Config.akkaNumberOfWorkers).props(Props(new UserActor))
   }
 
 }

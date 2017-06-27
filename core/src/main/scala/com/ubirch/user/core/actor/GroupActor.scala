@@ -2,12 +2,14 @@ package com.ubirch.user.core.actor
 
 import java.util.UUID
 
+import com.ubirch.user.config.Config
 import com.ubirch.user.core.manager.{GroupManager, GroupsManager}
 import com.ubirch.user.model.db.Group
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.uuid.UUIDUtil
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{Actor, ActorLogging, Props}
+import akka.routing.RoundRobinPool
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -62,6 +64,14 @@ class GroupActor(implicit mongo: MongoUtil) extends Actor
 
     case _ => log.error("unknown message")
 
+  }
+
+}
+
+object GroupActor {
+
+  def props()(implicit mongo: MongoUtil): Props = {
+    new RoundRobinPool(Config.akkaNumberOfWorkers).props(Props(new GroupActor))
   }
 
 }

@@ -15,11 +15,10 @@ import com.ubirch.util.model.JsonErrorResponse
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.rest.akka.directives.CORSDirective
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.ActorSystem
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
 import akka.pattern.ask
-import akka.routing.RoundRobinPool
 import akka.util.Timeout
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 
@@ -40,7 +39,7 @@ class ContextRoute(implicit mongo: MongoUtil) extends CORSDirective
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
   implicit val timeout = Timeout(Config.actorTimeout seconds)
 
-  private val contextActor = system.actorOf(new RoundRobinPool(Config.akkaNumberOfWorkers).props(Props(new ContextActor)), ActorNames.CONTEXT)
+  private val contextActor = system.actorOf(ContextActor.props(), ActorNames.CONTEXT)
 
   val route: Route = {
 
