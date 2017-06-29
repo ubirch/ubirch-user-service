@@ -46,7 +46,7 @@ lazy val userService = (project in file("."))
 
 lazy val clientRest = (project in file("client-rest"))
   .settings(commonSettings: _*)
-  .dependsOn(config, modelRest, util)
+  .dependsOn(config, modelRest, util, core % "test")
   .settings(
     name := "client-rest",
     description := "REST client of the user-service",
@@ -196,7 +196,7 @@ lazy val depUtils = Seq(
 val akkaV = "2.4.18"
 val akkaHttpV = "10.0.6"
 val json4sV = "3.5.2"
-val playV = "1.0.0-M10"
+val playV = "2.4.11"
 val scalaTestV = "3.0.1"
 
 // GROUP NAMES
@@ -223,7 +223,7 @@ lazy val akkaHttp = akkaG %% "akka-http" % akkaHttpV
 lazy val akkaSlf4j = akkaG %% "akka-slf4j" % akkaV
 
 lazy val playWS = Seq(
-  typesafePlayG %% "play-ahc-ws-standalone" % playV,
+  typesafePlayG %% "play-ws" % playV,
   akkaSlf4j
 )
 

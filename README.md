@@ -10,7 +10,8 @@ ubirch user management service
 
 ### Version 0.4.13 (tbd)
 
-* tbd
+* switch from dependency _play-ahc-ws-standalone:1.0.0-M10_ to _play-ws:2.4.11_ to fix a bug where we get runtime errors
+  using the REST clients from user-service and key-service in the same project
 
 ### Version 0.4.12 (2017-06-29)
 

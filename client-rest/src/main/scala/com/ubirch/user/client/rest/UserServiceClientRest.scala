@@ -6,7 +6,7 @@ import com.ubirch.user.client.rest.config.UserClientRestConfig
 import com.ubirch.user.model.rest.Group
 
 import play.api.libs.json._
-import play.api.libs.ws.StandaloneWSClient
+import play.api.libs.ws.WSClient
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -22,7 +22,7 @@ object UserServiceClientRest extends StrictLogging {
   def groups(contextName: String,
              providerId: String,
              externalUserId: String)
-            (implicit ws: StandaloneWSClient): Future[Option[Set[Group]]] = {
+            (implicit ws: WSClient): Future[Option[Set[Group]]] = {
 
     logger.debug("groups(): query groups through REST API")
     val url = UserClientRestConfig.groups(
