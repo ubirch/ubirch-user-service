@@ -6,7 +6,6 @@ concurrentRestrictions in Global := Seq(
 )
 
 lazy val commonSettings = Seq(
-
   scalaVersion := "2.11.8",
   scalacOptions ++= Seq("-feature"),
   organization := "com.ubirch.user",
@@ -16,7 +15,7 @@ lazy val commonSettings = Seq(
     url("https://github.com/ubirch/ubirch-user-service"),
     "scm:git:git@github.com:ubirch/ubirch-user-service.git"
   )),
-  version := "0.4.12",
+  version := "0.4.13-SNAPSHOT",
   test in assembly := {},
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
