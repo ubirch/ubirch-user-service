@@ -4,7 +4,7 @@ cd ..
 echo "======"
 echo "====== STEP 1/1: start to delete database"
 echo "======"
-../sbt "cmdtools/runMain com.ubirch.user.cmd.MongoDelete"
+./sbt "cmdtools/runMain com.ubirch.user.cmd.MongoDelete"
 echo "======"
 echo "====== STEP 1/1: finished deleting database"
 echo "======"
