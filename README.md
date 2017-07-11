@@ -11,6 +11,7 @@ ubirch user management service
 ### Version 0.4.14 (tbd)
 
 * fixed bug in dev script
+* update logging dependencies
 
 ### Version 0.4.13 (2017-06-29)
 
