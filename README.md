@@ -12,6 +12,7 @@ ubirch user management service
 
 * fixed bug in dev script
 * update logging dependencies
+* update logback configs
 
 ### Version 0.4.13 (2017-06-29)
 
