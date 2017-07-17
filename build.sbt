@@ -194,7 +194,7 @@ lazy val depUtils = Seq(
 
 // VERSIONS
 val akkaV = "2.4.18"
-val akkaHttpV = "10.0.6"
+val akkaHttpV = "10.0.9"
 val json4sV = "3.5.2"
 val playV = "2.4.11"
 
