@@ -10,7 +10,9 @@ ubirch user management service
 
 ### Version 0.4.15 (tbd)
 
-* tbd
+* update _com.ubirch.util:rest-akka-http(-test)_ to 0.3.8
+* update _com.ubirch.util:response-util_ to 0.2.3
+* update _com.ubirch.util:oidc-utils_ to 0.4.8
 
 ### Version 0.4.14 (2017-07-13)
 
