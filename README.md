@@ -10,7 +10,7 @@ ubirch user management service
 
 ### Version 0.4.16 (tbd)
 
-* tbd
+* change `com.ubirch.user.core.manager.GroupsManager.findByContextAndUser` to return only groups where the given user is the owner
 
 ### Version 0.4.15 (2017-07-17)
 

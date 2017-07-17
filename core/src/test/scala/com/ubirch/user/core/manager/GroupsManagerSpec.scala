@@ -75,7 +75,7 @@ class GroupsManagerSpec extends MongoSpec {
 
       } yield {
         // verify
-        result shouldBe Set(groupOpt.get)
+        result shouldBe Set.empty
       }
 
     }

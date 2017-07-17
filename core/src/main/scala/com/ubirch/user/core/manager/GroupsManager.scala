@@ -35,13 +35,21 @@ object GroupsManager extends StrictLogging
 
       userOpt <- UserManager.findByProviderIdAndExternalId(providerId = providerId, externalUserId = externalUserId)
       contextOpt <- ContextManager.findByName(contextName)
-      groups <- findGroupsFuture(userOpt, contextOpt)
+      groups <- findOwnGroupsFuture(userOpt, contextOpt)
 
     } yield groups
 
   }
 
-  private def findGroupsFuture(userOpt: Option[User], contextOpt: Option[Context])(implicit mongo: MongoUtil): Future[Set[Group]] = {
+  /**
+    * Finds all groups where the given user is the owner or is listed in allowedUsers_.
+    *
+    * @param userOpt user being the owner
+    * @param contextOpt context the groups exist in
+    * @param mongo database connection
+    * @return all groups found; empty if none
+    */
+  private def findAllGroupsFuture(userOpt: Option[User], contextOpt: Option[Context])(implicit mongo: MongoUtil): Future[Set[Group]] = {
 
     if (userOpt.isDefined && contextOpt.isDefined) {
 
@@ -56,6 +64,38 @@ object GroupsManager extends StrictLogging
               document("allowedUsers" -> document("$all" -> Set(userId)))
             )
           )
+        )
+        _.find(selector)
+          .cursor[Group]()
+          .collect[Set]()
+
+      }
+
+    } else {
+      logger.info(s"user or context does not exist: user.isDefined=${userOpt.isDefined}, context.isDefined=${contextOpt.isDefined}")
+      Future(Set.empty)
+    }
+
+  }
+
+  /**
+    * Finds only groups where the given user is the owner.
+    *
+    * @param userOpt user being the owner
+    * @param contextOpt context the groups exist in
+    * @param mongo database connection
+    * @return all groups found; empty if none
+    */
+  private def findOwnGroupsFuture(userOpt: Option[User], contextOpt: Option[Context])(implicit mongo: MongoUtil): Future[Set[Group]] = {
+
+    if (userOpt.isDefined && contextOpt.isDefined) {
+
+      mongo.collection(collectionName) flatMap {
+
+        val userId = userOpt.get.id
+        val selector = document(
+          document("contextId" -> contextOpt.get.id),
+          document("ownerId" -> userId)
         )
         _.find(selector)
           .cursor[Group]()
