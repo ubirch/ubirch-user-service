@@ -50,9 +50,6 @@ lazy val clientRest = (project in file("client-rest"))
   .settings(
     name := "client-rest",
     description := "REST client of the user-service",
-    resolvers ++= Seq(
-      resolverTypesafeReleases
-    ),
     libraryDependencies ++= depClientRest
   )
 
@@ -193,10 +190,10 @@ lazy val depUtils = Seq(
  ********************************************************/
 
 // VERSIONS
-val akkaV = "2.4.18"
+val akkaV = "2.4.19"
 val akkaHttpV = "10.0.9"
 val json4sV = "3.5.2"
-val playV = "2.4.11"
+val playV = "2.5.3"
 
 val scalaTestV = "3.0.1"
 
@@ -243,8 +240,8 @@ lazy val ubirchDate = ubirchUtilG %% "date" % "0.1" excludeAll(excludedLoggers: 
 lazy val ubirchDeepCheckModel = ubirchUtilG %% "deep-check-model" % "0.1.2" excludeAll(excludedLoggers: _*)
 lazy val ubirchFutures = ubirchUtilG %% "futures" % "0.1.1" excludeAll(excludedLoggers: _*)
 lazy val ubirchJson = ubirchUtilG %% "json" % "0.4.2" excludeAll(excludedLoggers: _*)
-lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.3.3" excludeAll(excludedLoggers: _*)
-lazy val ubirchMongo = ubirchUtilG %% "mongo-utils" % "0.3.3" excludeAll(excludedLoggers: _*)
+lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.3.4" excludeAll(excludedLoggers: _*)
+lazy val ubirchMongo = ubirchUtilG %% "mongo-utils" % "0.3.4" excludeAll(excludedLoggers: _*)
 lazy val ubirchRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.3.8" excludeAll(excludedLoggers: _*)
 lazy val ubirchRestAkkaHttpTest = ubirchUtilG %% "rest-akka-http-test" % "0.3.8" excludeAll(excludedLoggers: _*)
 lazy val ubirchResponse = ubirchUtilG %% "response-util" % "0.2.3" excludeAll(excludedLoggers: _*)
@@ -255,8 +252,6 @@ lazy val ubirchUuid = ubirchUtilG %% "uuid" % "0.1.1" excludeAll(excludedLoggers
  ********************************************************/
 
 lazy val resolverSeebergerJson = Resolver.bintrayRepo("hseeberger", "maven")
-// TODO this resolver should not be needed anymore: play-ws standalone is deployed to maven nexus and sonatype (test by emptying all .ivy2 caches)
-lazy val resolverTypesafeReleases = "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 
 /*
  * MISC

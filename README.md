@@ -10,7 +10,9 @@ ubirch user management service
 
 ### Version 0.4.17 (tbd)
 
-* tbd
+* update to Akka 2.4.19
+* update to Play 2.5.3
+* update _com.ubirch.util:mongo(-test)-utils_ to 0.3.4
 
 ### Version 0.4.16 (2017-07-17)
 
