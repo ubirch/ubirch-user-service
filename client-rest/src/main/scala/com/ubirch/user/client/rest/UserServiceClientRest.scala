@@ -4,9 +4,14 @@ import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.client.rest.config.UserClientRestConfig
 import com.ubirch.user.model.rest.Group
+import com.ubirch.util.json.MyJsonProtocol
 
-import play.api.libs.json._
-import play.api.libs.ws.WSClient
+import org.json4s.native.Serialization.read
+
+import akka.http.scaladsl.HttpExt
+import akka.http.scaladsl.model.{HttpRequest, HttpResponse, StatusCodes}
+import akka.stream.Materializer
+import akka.util.ByteString
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -15,14 +20,13 @@ import scala.concurrent.Future
   * author: cvandrei
   * since: 2017-05-15
   */
-object UserServiceClientRest extends StrictLogging {
-
-  implicit protected val groupRead: Reads[Group] = Json.reads[Group]
+object UserServiceClientRest extends MyJsonProtocol
+  with StrictLogging {
 
   def groups(contextName: String,
              providerId: String,
              externalUserId: String)
-            (implicit ws: WSClient): Future[Option[Set[Group]]] = {
+            (implicit httpClient: HttpExt, materializer: Materializer): Future[Option[Set[Group]]] = {
 
     logger.debug("groups(): query groups through REST API")
     val url = UserClientRestConfig.groups(
@@ -31,29 +35,34 @@ object UserServiceClientRest extends StrictLogging {
       externalUserId = externalUserId
     )
 
-    // TODO how about connection pooling? is it built in?
-    try {
+    httpClient.singleRequest(HttpRequest(uri = url)) flatMap {
 
-      ws.url(url).get() map { res =>
+      case HttpResponse(StatusCodes.OK, _, entity, _) =>
 
-        if (200 == res.status) {
-          logger.debug(s"groups(): got groups: ${res.body}")
-          res.json.asOpt[Set[Group]]
-        } else {
-          logger.error(s"call to user-service REST API failed: status=${res.status}, body=${res.body}")
-          None
+        entity.dataBytes.runFold(ByteString(""))(_ ++ _) map { body =>
+          Some(read[Set[Group]](body.utf8String))
         }
 
-      }
+      case res@HttpResponse(code, _, _, _) =>
 
-    } catch {
-      case e: Exception =>
-        logger.error("groups() failed with an Exception", e)
-        Future(None)
-      case re: RuntimeException =>
-        logger.error("groups() failed with a RuntimeException", re)
-        Future(None)
+        res.discardEntityBytes()
+        Future(
+          logErrorAndReturnNone(s"groups() call to user-service REST API failed: url=$url, code=$code")
+        )
+
     }
+
+  }
+
+  private def logErrorAndReturnNone[T](errorMsg: String,
+                                       t: Option[Throwable] = None
+                                      ): Option[T] = {
+    t match {
+      case None => logger.error(errorMsg)
+      case Some(someThrowable: Throwable) => logger.error(errorMsg, someThrowable)
+    }
+
+    None
 
   }
 

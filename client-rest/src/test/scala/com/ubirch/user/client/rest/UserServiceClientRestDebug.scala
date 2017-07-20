@@ -5,10 +5,8 @@ import com.typesafe.scalalogging.slf4j.StrictLogging
 import com.ubirch.user.model.rest.Group
 
 import akka.actor.ActorSystem
+import akka.http.scaladsl.{Http, HttpExt}
 import akka.stream.ActorMaterializer
-
-import play.api.libs.ws.WSClient
-import play.api.libs.ws.ahc.AhcWSClient
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -27,7 +25,7 @@ object UserServiceClientRestDebug extends App
   }
   implicit val materializer = ActorMaterializer()
 
-  implicit val ws: WSClient = AhcWSClient()
+  implicit val httpClient: HttpExt = Http()
 
   // contextName, providerId and externalUserId have been created by InitData
   val contextName = "ubirch-dev"
@@ -56,7 +54,6 @@ object UserServiceClientRestDebug extends App
     }
 
   } finally {
-    ws.close()
     system.terminate()
   }
 
