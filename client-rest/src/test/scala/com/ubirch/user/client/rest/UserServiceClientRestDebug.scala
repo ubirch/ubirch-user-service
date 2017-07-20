@@ -6,8 +6,9 @@ import com.ubirch.user.model.rest.Group
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
+
 import play.api.libs.ws.WSClient
-import play.api.libs.ws.ning.NingWSClient
+import play.api.libs.ws.ahc.AhcWSClient
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -26,7 +27,7 @@ object UserServiceClientRestDebug extends App
   }
   implicit val materializer = ActorMaterializer()
 
-  implicit val ws: WSClient = NingWSClient()
+  implicit val ws: WSClient = AhcWSClient()
 
   // contextName, providerId and externalUserId have been created by InitData
   val contextName = "ubirch-dev"

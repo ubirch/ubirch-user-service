@@ -10,7 +10,7 @@ ubirch user management service
 
 ### Version 0.4.18 (tbd)
 
-* tbd
+* update Play WS to `com.typesafe.play:play-ahc-ws:2.6.1`
 
 ### Version 0.4.17 (2017-07-18)
 

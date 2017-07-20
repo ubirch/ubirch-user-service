@@ -190,10 +190,10 @@ lazy val depUtils = Seq(
  ********************************************************/
 
 // VERSIONS
-val akkaV = "2.4.19"
+val akkaV = "2.5.3"
 val akkaHttpV = "10.0.9"
 val json4sV = "3.5.2"
-val playV = "2.5.3"
+val playWSV = "2.6.1"
 
 val scalaTestV = "3.0.1"
 
@@ -225,8 +225,7 @@ lazy val akkaHttp = akkaG %% "akka-http" % akkaHttpV
 lazy val akkaSlf4j = akkaG %% "akka-slf4j" % akkaV
 
 lazy val playWS = Seq(
-  typesafePlayG %% "play-ws" % playV,
-  akkaSlf4j
+  typesafePlayG %% "play-ahc-ws" % playWSV
 )
 
 lazy val excludedLoggers = Seq(
