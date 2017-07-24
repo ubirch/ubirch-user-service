@@ -10,7 +10,8 @@ ubirch user management service
 
 ### Version 0.4.18 (tbd)
 
-* tbd
+* revert to Akka 2.4.19
+* refactor `UserServiceClientRest` to use Akka Http for the connection
 
 ### Version 0.4.17 (2017-07-18)
 

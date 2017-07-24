@@ -146,7 +146,12 @@ lazy val util = project
  * MODULE DEPENDENCIES
  ********************************************************/
 
-lazy val depClientRest = playWS ++ scalaLogging
+lazy val depClientRest = Seq(
+  akkaHttp,
+  json4sNative,
+  ubirchResponse,
+  ubirchDeepCheckModel
+) ++ scalaLogging
 
 lazy val depServer = Seq(
 
@@ -193,7 +198,6 @@ lazy val depUtils = Seq(
 val akkaV = "2.4.19"
 val akkaHttpV = "10.0.9"
 val json4sV = "3.5.2"
-val playV = "2.5.3"
 
 val scalaTestV = "3.0.1"
 
@@ -205,18 +209,21 @@ val ubirchUtilG = "com.ubirch.util"
 val json4sG = "org.json4s"
 val akkaG = "com.typesafe.akka"
 val typesafePlayG = "com.typesafe.play"
+val slf4jG = "org.slf4j"
+val typesafeLoggingG = "com.typesafe.scala-logging"
+val logbackG = "ch.qos.logback"
 
 lazy val scalatest = "org.scalatest" %% "scalatest" % scalaTestV
 
 lazy val json4sNative = json4sG %% "json4s-native" % json4sV
 
 lazy val scalaLogging = Seq(
-  "org.slf4j" % "slf4j-api" % slf4jV,
-  "org.slf4j" % "log4j-over-slf4j" % slf4jV,
-  "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2" exclude("org.slf4j", "slf4j-api"),
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0" exclude("org.slf4j", "slf4j-api"),
-  "ch.qos.logback" % "logback-core" % logbackV exclude("org.slf4j", "slf4j-api"),
-  "ch.qos.logback" % "logback-classic" % logbackV exclude("org.slf4j", "slf4j-api"),
+  slf4jG % "slf4j-api" % slf4jV,
+  slf4jG % "log4j-over-slf4j" % slf4jV,
+  typesafeLoggingG %% "scala-logging-slf4j" % "2.1.2" exclude("org.slf4j", "slf4j-api"),
+  typesafeLoggingG %% "scala-logging" % "3.5.0" exclude("org.slf4j", "slf4j-api"),
+  logbackG % "logback-core" % logbackV exclude("org.slf4j", "slf4j-api"),
+  logbackG % "logback-classic" % logbackV exclude("org.slf4j", "slf4j-api"),
   "com.internetitem" % "logback-elasticsearch-appender" % "1.5" exclude("org.slf4j", "slf4j-api")
 )
 
@@ -224,15 +231,10 @@ lazy val akkaActor = akkaG %% "akka-actor" % akkaV
 lazy val akkaHttp = akkaG %% "akka-http" % akkaHttpV
 lazy val akkaSlf4j = akkaG %% "akka-slf4j" % akkaV
 
-lazy val playWS = Seq(
-  typesafePlayG %% "play-ws" % playV,
-  akkaSlf4j
-)
-
 lazy val excludedLoggers = Seq(
-  ExclusionRule(organization = "com.typesafe.scala-logging"),
-  ExclusionRule(organization = "org.slf4j"),
-  ExclusionRule(organization = "ch.qos.logback")
+  ExclusionRule(organization = typesafeLoggingG),
+  ExclusionRule(organization = slf4jG),
+  ExclusionRule(organization = logbackG)
 )
 
 lazy val ubirchConfig = ubirchUtilG %% "config" % "0.1" excludeAll(excludedLoggers: _*)
