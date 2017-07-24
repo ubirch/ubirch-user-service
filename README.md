@@ -10,7 +10,7 @@ ubirch user management service
 
 ### Version 0.4.19 (tbd)
 
-* tbd
+* add `initUser.sh`
 
 ### Version 0.4.18 (2017-07-24)
 
