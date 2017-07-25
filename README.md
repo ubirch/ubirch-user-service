@@ -168,40 +168,6 @@ libraryDependencies ++= Seq(
 |:------------------------------------|:-----------|:------------------------------------------------------------------|
 | ubirchUserService.client.rest.host  | yes        | user-service host                                                 |
 
-#### Play Configs
-
-| Config Item                         | Mandatory  | Description                                                       |
-|:------------------------------------|:-----------|:------------------------------------------------------------------|
-| play.ws.compressionEnabled          | no         | use gzip/deflater encoding if true (default: false)               |
-| play.ws.useragent                   | no         | to configure the User-Agent header field                          |
-| play.ws.timeout.connection          | no         | connection timeout (default: 120 seconds)                         |
-| play.ws.timeout.idle                | no         | maximum idle time (connection established but waiting for more data) (default: 120 seconds) |
-| play.ws.timeout.request             | no         | request timeout (default: 120 seconds)                            |
-
-#### SSL Configuration
-
-See https://www.playframework.com/documentation/2.5.x/WSQuickStart for more details.
-
-For a single PEM file:
-
-    play.ws.ssl {
-      trustManager = {
-        stores = [
-          { type = "PEM", path = "/path/to/cert/globalsign.crt" }
-        ]
-      }
-    }
-
-For a Java key store file:
-
-    play.ws.ssl {
-      trustManager = {
-        stores = [
-          { type = "JKS", path = "exampletrust.jks" }
-        ]
-      }
-    }
-
 #### Usage
 
 See `com.ubirch.user.client.rest.UserServiceClientRestDebug` for an example usage.
