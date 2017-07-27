@@ -53,6 +53,12 @@ object UserServiceClientRestDebug extends App
 
     }
 
+    val checkResponse = Await.result(UserServiceClientRest.check(), 20 seconds)
+    logger.info(s"___ check(): $checkResponse")
+
+    val deepCheckResponse = Await.result(UserServiceClientRest.deepCheck(), 20 seconds)
+    logger.info(s"___ deepCheck(): $deepCheckResponse")
+
   } finally {
     system.terminate()
   }

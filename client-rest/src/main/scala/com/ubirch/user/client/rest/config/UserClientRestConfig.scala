@@ -16,6 +16,10 @@ object UserClientRestConfig extends ConfigBase {
     */
   private def host = config.getString(UserClientRestConfigKeys.HOST)
 
+  val urlCheck = s"$host${RouteConstants.pathCheck}"
+
+  val urlDeepCheck = s"$host${RouteConstants.pathDeepCheck}"
+
   def groups(contextName: String,
              providerId: String,
              externalUserId: String): String = {

@@ -10,7 +10,8 @@ ubirch user management service
 
 ### Version 0.4.20 (tbd)
 
-* tbd
+* add method `UserServiceClientRest#check`
+* add method `UserServiceClientRest#deepCheck`
 
 ### Version 0.4.19 (2017-07-27)
 
