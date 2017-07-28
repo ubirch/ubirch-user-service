@@ -68,9 +68,9 @@ object UserServiceClientRest extends MyJsonProtocol
         res.discardEntityBytes()
         val errorText = s"deepCheck() call to user-service failed: url=$url code=$code, status=${res.status}"
         logger.error(errorText)
-        val res = DeepCheckResponse(status = false, messages = Seq(errorText))
+        val deepCheckRes = DeepCheckResponse(status = false, messages = Seq(errorText))
         Future(
-          DeepCheckResponseUtil.addServicePrefix("user-service", res)
+          DeepCheckResponseUtil.addServicePrefix("user-service", deepCheckRes)
         )
 
     }
