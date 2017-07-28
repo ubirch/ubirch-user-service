@@ -10,7 +10,7 @@ ubirch user management service
 
 ### Version 0.4.21 (tbd)
 
-* tbd
+* change context name from _trackle-$env_ to _trackle-ui-$env_
 
 ### Version 0.4.20 (2017-07-27)
 

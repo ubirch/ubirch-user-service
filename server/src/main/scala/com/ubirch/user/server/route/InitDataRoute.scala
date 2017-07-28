@@ -72,7 +72,6 @@ class InitDataRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
     val futureResults: List[Future[Option[Context]]] = Config.contextPrefixList map { contextPrefix =>
 
       val contextName = s"$contextPrefix-$envName"
-      //      val contextName = s"$envName"
       ContextManager.findByName(contextName) flatMap {
 
         case None =>
