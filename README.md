@@ -10,7 +10,7 @@ ubirch user management service
 
 ### Version 0.5.1 (tbd)
 
-* tbd
+* fixed some scaladoc
 
 ### Version 0.5.0 (2017-07-28)
 
