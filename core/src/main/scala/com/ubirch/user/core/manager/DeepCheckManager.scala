@@ -26,7 +26,7 @@ object DeepCheckManager extends MongoFormats {
     * Check if we can run a simple query on the database.
     *
     * @param mongo mongo connection wrapper
-    * @return deep check response with _status:OK_ if ok; otherwise with _status:NOK_
+    * @return deep check response with _status:true if ok; otherwise with _status:false_
     */
   def connectivityCheck()(implicit mongo: MongoUtil): Future[DeepCheckResponse] = {
 
