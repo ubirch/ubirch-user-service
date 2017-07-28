@@ -5,6 +5,7 @@ import com.typesafe.scalalogging.slf4j.StrictLogging
 import com.ubirch.user.client.rest.config.UserClientRestConfig
 import com.ubirch.user.model.rest.Group
 import com.ubirch.util.deepCheck.model.DeepCheckResponse
+import com.ubirch.util.deepCheck.util.DeepCheckResponseUtil
 import com.ubirch.util.json.MyJsonProtocol
 import com.ubirch.util.model.JsonResponse
 
@@ -48,32 +49,31 @@ object UserServiceClientRest extends MyJsonProtocol
 
   }
 
-  def deepCheck()(implicit httpClient: HttpExt, materializer: Materializer): Future[Option[DeepCheckResponse]] = {
+  def deepCheck()(implicit httpClient: HttpExt, materializer: Materializer): Future[DeepCheckResponse] = {
 
     val statusCodes: Set[StatusCode] = Set(StatusCodes.OK, StatusCodes.ServiceUnavailable)
 
     val url = UserClientRestConfig.urlDeepCheck
 
-      httpClient.singleRequest(HttpRequest(uri = url)) flatMap {
+    httpClient.singleRequest(HttpRequest(uri = url)) flatMap {
 
-        case HttpResponse(status, _, entity, _) if statusCodes.contains(status) =>
+      case HttpResponse(status, _, entity, _) if statusCodes.contains(status) =>
 
-          entity.dataBytes.runFold(ByteString(""))(_ ++ _) map { body =>
-            Some(read[DeepCheckResponse](body.utf8String))
-          }
+        entity.dataBytes.runFold(ByteString(""))(_ ++ _) map { body =>
+          read[DeepCheckResponse](body.utf8String)
+        }
 
-        case res@HttpResponse(code, _, _, _) =>
+      case res@HttpResponse(code, _, _, _) =>
 
-          res.discardEntityBytes()
-          val errorText = s"deepCheck() call to user-service failed: url=$url code=$code, status=${res.status}"
-          logErrorAndReturnNone(errorText)
-          Future(
-            Some(
-              DeepCheckResponse(status = false, messages = Seq(errorText))
-            )
-          )
+        res.discardEntityBytes()
+        val errorText = s"deepCheck() call to user-service failed: url=$url code=$code, status=${res.status}"
+        logger.error(errorText)
+        val res = DeepCheckResponse(status = false, messages = Seq(errorText))
+        Future(
+          DeepCheckResponseUtil.addServicePrefix("user-service", res)
+        )
 
-      }
+    }
 
   }
 

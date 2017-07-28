@@ -3,11 +3,13 @@ package com.ubirch.user.core.manager
 import com.ubirch.user.config.Config
 import com.ubirch.user.model.db.Context
 import com.ubirch.util.deepCheck.model.DeepCheckResponse
+import com.ubirch.util.deepCheck.util.DeepCheckResponseUtil
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
 
 import reactivemongo.bson.{BSONDocumentReader, BSONDocumentWriter, Macros}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 /**
@@ -29,7 +31,9 @@ object DeepCheckManager extends MongoFormats {
   def connectivityCheck()(implicit mongo: MongoUtil): Future[DeepCheckResponse] = {
 
     val collectionName = Config.mongoCollectionContext
-    mongo.connectivityCheck[Context](collectionName)
+    mongo.connectivityCheck[Context](collectionName) map { deepCheckRes =>
+      DeepCheckResponseUtil.addServicePrefix("user-service", deepCheckRes)
+    }
 
   }
 

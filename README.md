@@ -8,6 +8,11 @@ ubirch user management service
 
 ## Release History
 
+### Version 0.5.0 (tbd)
+
+* refactor `UserServiceClientRest.deepCheck` to return `DeepCheckResponse` (without Option)
+* refactor `UserServiceClientRest.deepCheck` responses to include a `[user-service]` prefix in all it's messages
+
 ### Version 0.4.21 (2017-07-28)
 
 * change context name from _trackle-$env_ to _trackle-ui-$env_
@@ -172,7 +177,7 @@ resolvers ++= Seq(
   "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "client-rest" % "0.4.22-SNAPSHOT"
+  "com.ubirch.user" %% "client-rest" % "0.5.0-SNAPSHOT"
 )
 ```
 
@@ -193,7 +198,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.4.22-SNAPSHOT"
+  "com.ubirch.user" %% "cmdtools" % "0.5.0-SNAPSHOT"
 )
 ```
 
@@ -204,7 +209,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.4.22-SNAPSHOT"
+  "com.ubirch.user" %% "config" % "0.5.0-SNAPSHOT"
 )
 ```
 
@@ -215,7 +220,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.4.22-SNAPSHOT"
+  "com.ubirch.user" %% "core" % "0.5.0-SNAPSHOT"
 )
 ```
 
@@ -226,7 +231,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.4.22-SNAPSHOT"
+  "com.ubirch.user" %% "model-db" % "0.5.0-SNAPSHOT"
 )
 ```
 
@@ -237,7 +242,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.4.22-SNAPSHOT"
+  "com.ubirch.user" %% "model-rest" % "0.5.0-SNAPSHOT"
 )
 ```
 
@@ -249,7 +254,7 @@ resolvers ++= Seq(
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.4.22-SNAPSHOT"
+  "com.ubirch.user" %% "server" % "0.5.0-SNAPSHOT"
 )
 ```
 
@@ -260,7 +265,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.4.22-SNAPSHOT"
+  "com.ubirch.user" %% "util" % "0.5.0-SNAPSHOT"
 )
 ```
 
