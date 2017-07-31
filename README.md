@@ -11,6 +11,8 @@ ubirch user management service
 ### Version 0.5.1 (tbd)
 
 * fixed some scaladoc
+* update to `com.ubirch.util:mongo-utils:0.3.6`
+* update to `com.ubirch.util:mongo-test-utils:0.3.6`
 
 ### Version 0.5.0 (2017-07-28)
 
