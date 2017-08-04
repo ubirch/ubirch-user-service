@@ -10,7 +10,7 @@ ubirch user management service
 
 ### Version 0.5.2 (tbd)
 
-* tbd
+* add context _trackle_ to InitData
 
 ### Version 0.5.1 (2017-07-31)
 
