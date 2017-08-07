@@ -37,7 +37,7 @@ class DataHelpers(implicit mongo: MongoUtil) {
       userOpt.get.id
     }
     val group = DefaultModels.group(
-      ownerId = ownerOpt.get.id,
+      ownerIds = Set(ownerOpt.get.id),
       contextId = contextOpt.get.id,
       allowedUsers = allowedUsers.toSet
     )

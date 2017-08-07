@@ -180,7 +180,7 @@ class InitDataRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
         val group = Group(
           displayName = Defaults.ADMIN_GROUP_NAME,
-          ownerId = user.id,
+          ownerIds = Set(user.id),
           contextId = context.id,
           allowedUsers = Set.empty,
           adminGroup = Some(true)

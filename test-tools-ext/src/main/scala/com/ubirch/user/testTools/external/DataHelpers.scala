@@ -110,7 +110,7 @@ class DataHelpers(implicit mongo: MongoUtil) extends StrictLogging {
       userOpt.get.id
     }
     val group = DefaultModels.group(
-      ownerId = ownerOpt.get.id,
+      ownerIds = Set(ownerOpt.get.id),
       contextId = contextId,
       allowedUsers = allowedUsers.toSet,
       adminGroup = adminGroup

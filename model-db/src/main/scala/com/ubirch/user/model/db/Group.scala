@@ -10,7 +10,7 @@ import org.joda.time.DateTime
   */
 case class Group(id: String = UUIDUtil.uuidStr,
                  displayName: String,
-                 ownerId: String,
+                 ownerIds: Set[String],
                  contextId: String,
                  allowedUsers: Set[String],
                  adminGroup: Option[Boolean] = None,

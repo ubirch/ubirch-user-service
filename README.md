@@ -8,9 +8,10 @@ ubirch user management service
 
 ## Release History
 
-### Version 0.5.2 (tbd)
+### Version 0.6.0 (tbd)
 
 * add context _trackle_ to InitData
+* refactored field `Group.ownerId: String|UUID` to a set (in DB and REST models)
 
 ### Version 0.5.1 (2017-07-31)
 

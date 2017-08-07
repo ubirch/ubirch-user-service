@@ -8,7 +8,7 @@ import java.util.UUID
   */
 case class Group(id: Option[UUID] = None,
                  displayName: String,
-                 ownerId: UUID,
+                 ownerIds: Set[UUID],
                  contextId: UUID,
                  allowedUsers: Set[UUID] = Set.empty,
                  adminGroup: Option[Boolean] = None
