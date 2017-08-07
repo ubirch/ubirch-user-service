@@ -8,7 +8,7 @@ ubirch user management service
 
 ## Release History
 
-### Version 0.6.0 (tbd)
+### Version 0.6.0 (2017-08-07)
 
 * add context _trackle_ to InitData
 * refactored field `Group.ownerId: String|UUID` to a set (in DB and REST models)
@@ -188,7 +188,7 @@ resolvers ++= Seq(
   "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "client-rest" % "0.5.2-SNAPSHOT"
+  "com.ubirch.user" %% "client-rest" % "0.6.0"
 )
 ```
 
@@ -209,7 +209,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.5.2-SNAPSHOT"
+  "com.ubirch.user" %% "cmdtools" % "0.6.0"
 )
 ```
 
@@ -220,7 +220,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.5.2-SNAPSHOT"
+  "com.ubirch.user" %% "config" % "0.6.0"
 )
 ```
 
@@ -231,7 +231,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.5.2-SNAPSHOT"
+  "com.ubirch.user" %% "core" % "0.6.0"
 )
 ```
 
@@ -242,7 +242,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.5.2-SNAPSHOT"
+  "com.ubirch.user" %% "model-db" % "0.6.0"
 )
 ```
 
@@ -253,7 +253,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.5.2-SNAPSHOT"
+  "com.ubirch.user" %% "model-rest" % "0.6.0"
 )
 ```
 
@@ -265,7 +265,7 @@ resolvers ++= Seq(
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.5.2-SNAPSHOT"
+  "com.ubirch.user" %% "server" % "0.6.0"
 )
 ```
 
@@ -276,7 +276,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.5.2-SNAPSHOT"
+  "com.ubirch.user" %% "util" % "0.6.0"
 )
 ```
 
