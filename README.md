@@ -8,6 +8,10 @@ ubirch user management service
 
 ## Release History
 
+### Version 0.6.2 (tbd)
+
+* tbd
+
 ### Version 0.6.1 (2017-08-09)
 
 * bugfix: searching for groups based on an ownerId was broken since the queries had not been updated to the new field name (`ownerIds` instead of `ownerId`)
@@ -189,11 +193,11 @@ ubirch user management service
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases"),
+  Resolver.sonatypeRepo("snapshots"),
   "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "client-rest" % "0.6.1"
+  "com.ubirch.user" %% "client-rest" % "0.6.2-SNAPSHOT"
 )
 ```
 
@@ -211,10 +215,10 @@ See `com.ubirch.user.client.rest.UserServiceClientRestDebug` for an example usag
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.6.1"
+  "com.ubirch.user" %% "cmdtools" % "0.6.2-SNAPSHOT"
 )
 ```
 
@@ -222,10 +226,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.6.1"
+  "com.ubirch.user" %% "config" % "0.6.2-SNAPSHOT"
 )
 ```
 
@@ -233,10 +237,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.6.1"
+  "com.ubirch.user" %% "core" % "0.6.2-SNAPSHOT"
 )
 ```
 
@@ -244,10 +248,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.6.1"
+  "com.ubirch.user" %% "model-db" % "0.6.2-SNAPSHOT"
 )
 ```
 
@@ -255,10 +259,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.6.1"
+  "com.ubirch.user" %% "model-rest" % "0.6.2-SNAPSHOT"
 )
 ```
 
@@ -266,11 +270,11 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases"),
+  Resolver.sonatypeRepo("snapshots"),
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.6.1"
+  "com.ubirch.user" %% "server" % "0.6.2-SNAPSHOT"
 )
 ```
 
@@ -278,10 +282,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.6.1"
+  "com.ubirch.user" %% "util" % "0.6.2-SNAPSHOT"
 )
 ```
 
