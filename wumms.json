@@ -2,14 +2,14 @@
   {
     "id": "a287d445-54ee-4508-81c4-58971bb70f29",
     "displayName": "Michael Merz",
-    "ownerId": "10bf2632-605f-46d3-86d7-52ad4c239b65",
+    "ownerIds": ["10bf2632-605f-46d3-86d7-52ad4c239b65"],
     "contextId": "fdbcb8a0-661f-4871-928a-8495f5c3189c",
     "allowedUsers": []
   },
   {
     "id": "db1488ae-becc-40a3-a5c2-b6daadd6715b",
     "displayName": "ubirch",
-    "ownerId": "10bf2632-605f-46d3-86d7-52ad4c239b65",
+    "ownerIds": ["10bf2632-605f-46d3-86d7-52ad4c239b65"],
     "contextId": "fdbcb8a0-661f-4871-928a-8495f5c3189c",
     "allowedUsers": [
       "10bf2632-605f-46d3-86d7-52ad4c239b65"

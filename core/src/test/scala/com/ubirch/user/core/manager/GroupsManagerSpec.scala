@@ -48,7 +48,11 @@ class GroupsManagerSpec extends MongoSpec {
         groupOpt <- dataHelpers.createGroup(contextOpt, ownerOpt, user2Opt)
 
         // test
-        result <- dataHelpers.findGroup(contextOpt.get, ownerOpt.get)
+        result <- GroupsManager.findByContextAndUser(
+          contextName = contextOpt.get.displayName,
+          providerId = ownerModel.providerId,
+          externalUserId = ownerModel.externalId
+        )
 
       } yield {
         // verify
@@ -71,7 +75,11 @@ class GroupsManagerSpec extends MongoSpec {
         groupOpt <- dataHelpers.createGroup(contextOpt, ownerOpt, user2Opt)
 
         // test
-        result <- dataHelpers.findGroup(contextOpt.get, user2Opt.get)
+        result <- GroupsManager.findByContextAndUser(
+          contextName = contextOpt.get.displayName,
+          providerId = user2Model.providerId,
+          externalUserId = user2Model.externalId
+        )
 
       } yield {
         // verify
@@ -96,7 +104,11 @@ class GroupsManagerSpec extends MongoSpec {
         groupOpt <- dataHelpers.createGroup(contextOpt, ownerOpt, user2Opt)
 
         // test
-        result <- dataHelpers.findGroup(contextOpt.get, user3Opt.get)
+        result <- GroupsManager.findByContextAndUser(
+          contextName = contextOpt.get.displayName,
+          providerId = user3Model.providerId,
+          externalUserId = user3Model.externalId
+        )
 
       } yield {
         // verify

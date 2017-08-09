@@ -101,7 +101,7 @@ object GroupManager extends StrictLogging
   def findByContextAndOwner(contextId: String, ownerId: String)(implicit mongo: MongoUtil): Future[Option[Group]] = {
 
     // TODO automated tests
-    val selector = document("contextId" -> contextId, "ownerId" -> ownerId)
+    val selector = document("contextId" -> contextId, "ownerIds" -> ownerId)
 
     mongo.collection(collectionName) flatMap {
       _.find(selector).one[Group]

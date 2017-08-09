@@ -10,7 +10,8 @@ ubirch user management service
 
 ### Version 0.6.1 (tbd)
 
-* tbd
+* bugfix: searching for groups based on an ownerId was broken since the queries had not been updated to the new field name (`ownerIds` instead of `ownerId`)
+* fixed broken tests
 
 ### Version 0.6.0 (2017-08-07)
 
@@ -396,7 +397,7 @@ Responds with "OK" if user was deleted.
 #### Create
 
     curl -XPUT localhost:8092/api/userService/v1/group -H "Content-Type: application/json" -d '{
-      "ownerId": "$OWNER", // UUID: userId allowed to modify it
+      "ownerIds": ["$OWNER"], // UUID: userIds allowed to modify it
       "displayName": "$DISPLAY_NAME", // string
       "contextId": "$CONTEXT_ID", // UUID
       "allowedUsers": ["$USER_ID_1", "$USER_ID_2"], // (optional) UUID: ownerId always has access no matter if it's listed here
@@ -409,7 +410,7 @@ Responds with the created group (including it's id which is a UUID).
 
     curl -XPUT localhost:8092/api/userService/v1/group -H "Content-Type: application/json" -d '{
       "id": "$GROUP_ID", // UUID
-      "ownerId": "$OWNER", // UUID: userId allowed to modify it
+      "ownerIds": ["$OWNER"], // UUID: userIds allowed to modify it
       "displayName": "$DISPLAY_NAME", // string
       "contextId": "$CONTEXT_ID", // UUID
       "allowedUsers": ["$USER_ID_1", "$USER_ID_2"], // UUID: ownerId always has access no matter if it's listed here
