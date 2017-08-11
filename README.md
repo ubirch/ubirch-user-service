@@ -10,7 +10,7 @@ ubirch user management service
 
 ### Version 0.6.2 (tbd)
 
-* tbd
+* add `/user/$PROVIDER/$EXTERNAL_USER_ID` endpoing to REST client (see `UserServiceClientRest#userGET`)
 
 ### Version 0.6.1 (2017-08-09)
 
