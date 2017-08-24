@@ -10,7 +10,7 @@ ubirch user management service
 
 ### Version 0.6.3 (tbd)
 
-* tbd
+* removed legacy contexts from contextPrefixList (list of contexts to create through `/initData/$ENVIRONMENT_NAME` endpoint)
 
 ### Version 0.6.2 (2017-08-11)
 
@@ -527,7 +527,7 @@ You can get the providerId and externalId by logging in through the auth-service
 
 Creates test users for the configured environment (see config key: _ubirchUserService.testUserContext_)
 
-    export TEST_USER_CONTEXT=ubirch-admin-ui
+    export TEST_USER_CONTEXT=ubirch
     export ENV_NAME=local
     ./sbt "cmdtools/runMain com.ubirch.user.cmd.InitUsers"
 
