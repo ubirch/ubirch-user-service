@@ -10,7 +10,7 @@ ubirch user management service
 
 ### Version 0.6.3 (tbd)
 
-* tbd
+* removed legacy contexts from contextPrefixList (list of contexts to create through `/initData/$ENVIRONMENT_NAME` endpoint)
 
 ### Version 0.6.2 (2017-08-11)
 
