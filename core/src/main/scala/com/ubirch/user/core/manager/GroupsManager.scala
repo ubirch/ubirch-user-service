@@ -104,7 +104,7 @@ object GroupsManager extends StrictLogging
       }
 
     } else {
-      logger.info(s"user or context does not exist: user.isDefined=${userOpt.isDefined}, context.isDefined=${contextOpt.isDefined}")
+      logger.error(s"user or context does not exist: user.isDefined=${userOpt.isDefined}, context.isDefined=${contextOpt.isDefined}")
       Future(Set.empty)
     }
 
