@@ -61,14 +61,15 @@ object GroupsManager extends StrictLogging
           document("$or" ->
             Set(
               document("ownerIds" -> userId),
-              document("allowedUsers" -> document("$all" -> Set(userId)))
+              document("allowedUsers" ->
+                document("$in" -> Set(userId))
+              )
             )
           )
         )
         _.find(selector)
           .cursor[Group]()
           .collect[Set]()
-
       }
 
     } else {
@@ -95,7 +96,9 @@ object GroupsManager extends StrictLogging
         val userId = userOpt.get.id
         val selector = document(
           document("contextId" -> contextOpt.get.id),
-          document("ownerIds" -> userId)
+          document("ownerIds" ->
+            document("$in" -> Set(userId))
+          )
         )
         _.find(selector)
           .cursor[Group]()
