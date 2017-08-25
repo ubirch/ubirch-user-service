@@ -8,6 +8,10 @@ ubirch user management service
 
 ## Release History
 
+### Version 0.6.4 
+
+* fixed goup query bug
+
 ### Version 0.6.3 (tbd)
 
 * removed legacy contexts from contextPrefixList (list of contexts to create through `/initData/$ENVIRONMENT_NAME` endpoint)
