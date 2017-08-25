@@ -1,13 +1,11 @@
 package com.ubirch.user.core.manager
 
 import com.typesafe.scalalogging.slf4j.StrictLogging
-
 import com.ubirch.user.config.Config
 import com.ubirch.user.model.db.{Context, Group, User}
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
-
-import reactivemongo.bson.{BSONDocumentReader, BSONDocumentWriter, Macros, document}
+import reactivemongo.bson.{BSONArray, BSONDocumentReader, BSONDocumentWriter, Macros, document}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -35,7 +33,7 @@ object GroupsManager extends StrictLogging
 
       userOpt <- UserManager.findByProviderIdAndExternalId(providerId = providerId, externalUserId = externalUserId)
       contextOpt <- ContextManager.findByName(contextName)
-      groups <- findOwnGroupsFuture(userOpt, contextOpt)
+      groups <- findAllGroupsFuture(userOpt, contextOpt)
 
     } yield groups
 
@@ -44,9 +42,9 @@ object GroupsManager extends StrictLogging
   /**
     * Finds all groups where the given user is the owner or is listed in allowedUsers_.
     *
-    * @param userOpt user being the owner
+    * @param userOpt    user being the owner
     * @param contextOpt context the groups exist in
-    * @param mongo database connection
+    * @param mongo      database connection
     * @return all groups found; empty if none
     */
   private def findAllGroupsFuture(userOpt: Option[User], contextOpt: Option[Context])(implicit mongo: MongoUtil): Future[Set[Group]] = {
@@ -59,8 +57,10 @@ object GroupsManager extends StrictLogging
         val selector = document(
           document("contextId" -> contextOpt.get.id),
           document("$or" ->
-            Set(
-              document("ownerIds" -> userId),
+            BSONArray(
+              document("ownerIds" ->
+                document("$in" -> Set(userId))
+              ),
               document("allowedUsers" ->
                 document("$in" -> Set(userId))
               )
@@ -82,9 +82,9 @@ object GroupsManager extends StrictLogging
   /**
     * Finds only groups where the given user is the owner.
     *
-    * @param userOpt user being the owner
+    * @param userOpt    user being the owner
     * @param contextOpt context the groups exist in
-    * @param mongo database connection
+    * @param mongo      database connection
     * @return all groups found; empty if none
     */
   private def findOwnGroupsFuture(userOpt: Option[User], contextOpt: Option[Context])(implicit mongo: MongoUtil): Future[Set[Group]] = {
