@@ -1,9 +1,13 @@
 ## Release History
 
+### Version 0.6.4 
+
+* fixed goup query bug
+* moved some of README's documentation to separate files in newly created folder _docs_
+
 ### Version 0.6.3 (tbd)
 
 * removed legacy contexts from contextPrefixList (list of contexts to create through `/initData/$ENVIRONMENT_NAME` endpoint)
-* moved some of README's documentation to separate files in newly created folder _docs_
 
 ### Version 0.6.2 (2017-08-11)
 
