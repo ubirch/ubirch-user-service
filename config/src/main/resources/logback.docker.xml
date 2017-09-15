@@ -65,6 +65,7 @@
     <logger name="reactivemongo.core" level="DEBUG"/>
 
     <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
         <appender-ref ref="ELASTIC"/>
     </root>
 
