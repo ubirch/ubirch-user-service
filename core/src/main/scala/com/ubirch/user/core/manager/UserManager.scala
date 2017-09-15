@@ -38,11 +38,18 @@ object UserManager extends StrictLogging
 
         mongo.collection(collectionName) flatMap { collection =>
 
-          collection.insert[User](user) map { writeResult =>
+          // TODO update tests to include the Config.providersWithUsersActivated.contains() check
+          logger.debug(s"create(): user.providerId=${user.providerId}")
+          val userToCreate = Config.providersWithUsersActivated.contains(user.providerId) match {
+            case true => user.copy(activeUser = Some(true))
+            case false => user
+          }
+
+          collection.insert[User](userToCreate) map { writeResult =>
 
             if (writeResult.ok && writeResult.n == 1) {
-              logger.debug(s"created new user: $user")
-              Some(user)
+              logger.debug(s"created new user: $userToCreate")
+              Some(userToCreate)
             } else {
               logger.error("failed to create user")
               None

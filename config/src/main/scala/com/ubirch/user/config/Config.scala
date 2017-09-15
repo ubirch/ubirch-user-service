@@ -69,4 +69,6 @@ object Config extends ConfigBase {
 
   def contextPrefixList: List[String] = config.getStringList(ConfigKeys.CONTEXT_PREFIX_LIST).toList
 
+  def providersWithUsersActivated: List[String] = config.getStringList(ConfigKeys.PROVIDERS_WITH_USERS_ACTIVATED).toList
+
 }

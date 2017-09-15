@@ -1,17 +1,15 @@
 ## Release History
 
-### Version 0.6.4 
-
-* fixed goup query bug
-* moved some of README's documentation to separate files in newly created folder _docs_
-
 ### Version 0.6.3 (tbd)
 
 * removed legacy contexts from contextPrefixList (list of contexts to create through `/initData/$ENVIRONMENT_NAME` endpoint)
+* fixed goup query bug
+* moved some of README's documentation to separate files in newly created folder _docs_
+* introduce configurable list of OIDC providers for whom users are automatically activated after registration
 
 ### Version 0.6.2 (2017-08-11)
 
-* add `/user/$PROVIDER/$EXTERNAL_USER_ID` endpoing to REST client (see `UserServiceClientRest#userGET`)
+* add `/user/$PROVIDER/$EXTERNAL_USER_ID` endpoint to REST client (see `UserServiceClientRest#userGET`)
 
 ### Version 0.6.1 (2017-08-09)
 

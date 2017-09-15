@@ -53,5 +53,6 @@ object ConfigKeys {
   final val TEST_USER_CONTEXT = s"$testUserPrefix.context"
 
   final val CONTEXT_PREFIX_LIST = s"$CONFIG_PREFIX.contextPrefixList"
+  final val PROVIDERS_WITH_USERS_ACTIVATED = s"$CONFIG_PREFIX.providersWithUsersActivated"
 
 }
