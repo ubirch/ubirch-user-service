@@ -7,7 +7,7 @@
 ### Version 0.6.3 (2017-09-18)
 
 * removed legacy contexts from contextPrefixList (list of contexts to create through `/initData/$ENVIRONMENT_NAME` endpoint)
-* fixed goup query bug
+* fixed group query bug
 * moved some of README's documentation to separate files in newly created folder _docs_
 * introduce configurable list of OIDC providers for whom users are automatically activated after registration
 
