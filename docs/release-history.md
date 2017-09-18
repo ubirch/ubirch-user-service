@@ -1,6 +1,6 @@
 ## Release History
 
-### Version 0.6.3 (tbd)
+### Version 0.6.3 (2017-09-18)
 
 * removed legacy contexts from contextPrefixList (list of contexts to create through `/initData/$ENVIRONMENT_NAME` endpoint)
 * fixed goup query bug
