@@ -17,6 +17,7 @@ project/plugins/project/
 .worksheet
 
 .idea
+cache
 Dockerfile
 Dockerfile.input
 .ivy2
