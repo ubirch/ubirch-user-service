@@ -1,7 +1,6 @@
 package com.ubirch.user.model.db
 
 import com.ubirch.util.uuid.UUIDUtil
-
 import org.joda.time.DateTime
 
 /**
@@ -14,6 +13,7 @@ case class User(id: String = UUIDUtil.uuidStr,
                 externalId: String,
                 locale: String,
                 activeUser: Option[Boolean] = Some(false),
+                email: Option[String] = None,
                 created: DateTime = DateTime.now,
                 updated: DateTime = DateTime.now
                )

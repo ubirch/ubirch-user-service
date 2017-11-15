@@ -139,4 +139,8 @@ object UserManager extends StrictLogging
 
   }
 
+  private def checkMail(email: Option[String]): Boolean = {
+    true
+  }
+
 }
