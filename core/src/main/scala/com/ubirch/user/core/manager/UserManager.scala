@@ -119,6 +119,19 @@ object UserManager extends StrictLogging
 
   }
 
+  def findByEmail(email: String)
+                 (implicit mongo: MongoUtil): Future[Option[User]] = {
+
+    val selector = document(
+      "email" -> email
+    )
+
+    mongo.collection(collectionName) flatMap {
+      _.find(selector).one[User]
+    }
+
+  }
+
   def delete(id: String)(implicit mongo: MongoUtil): Future[Boolean] = {
 
     val selector = document("id" -> id)

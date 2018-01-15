@@ -2,7 +2,8 @@
 
 ### Version 0.6.4 (tbd)
 
-* tbd
+* add `/user/emailExists/$EMAIL_ADDRESS` endpoint
+* add `UserServiceClientRest.emailExistsGET()`
 
 ### Version 0.6.3 (2017-09-18)
 

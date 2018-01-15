@@ -3,7 +3,7 @@ package com.ubirch.user.server.route
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.config.Config
-import com.ubirch.user.core.actor.{ActorNames, CreateUser, DeleteUser, FindUser, UpdateUser, UserActor}
+import com.ubirch.user.core.actor.{ActorNames, CreateUser, DeleteUser, FindUser, SearchByEmail, UpdateUser, UserActor}
 import com.ubirch.user.model._
 import com.ubirch.user.model.rest.User
 import com.ubirch.user.util.server.RouteConstants
@@ -50,6 +50,12 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
             entity(as[User]) { user =>
               createUser(user)
             }
+          }
+
+        } ~ path(RouteConstants.emailExists / Segment) { emailAddress =>
+
+          get {
+            searchByEmailAddress(emailAddress)
           }
 
         } ~ path(Segment / Segment) { (provider, externalUserId) =>
@@ -169,6 +175,24 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
         resp match {
           case deleted: Boolean if deleted => complete(StatusCodes.OK)
           case _ => complete(serverErrorResponse(errorType = "DeleteError", errorMessage = "failed to delete user"))
+        }
+
+    }
+
+  }
+
+  private def searchByEmailAddress(emailAddress: String): Route = {
+
+    onComplete(userActor ? SearchByEmail(emailAddress)) {
+
+      case Failure(t) =>
+        logger.error("searchByEmail call responded with an unhandled message (check UserRoute for bugs!!!)", t)
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
+
+      case Success(resp) =>
+        resp match {
+          case true => complete(StatusCodes.OK)
+          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "no user with given email address exists"))
         }
 
     }
