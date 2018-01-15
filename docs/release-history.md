@@ -1,5 +1,9 @@
 ## Release History
 
+### Version 0.6.5 (tbd)
+
+* TODO
+
 ### Version 0.6.4 (2018-01-15)
 
 * add `/user/emailExists/$EMAIL_ADDRESS` endpoint

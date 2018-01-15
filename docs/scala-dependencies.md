@@ -8,7 +8,7 @@ resolvers ++= Seq(
   "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "client-rest" % "0.6.4"
+  "com.ubirch.user" %% "client-rest" % "0.6.5-SNAPSHOT"
 )
 ```
 
@@ -29,7 +29,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "0.6.4"
+  "com.ubirch.user" %% "cmdtools" % "0.6.5-SNAPSHOT"
 )
 ```
 
@@ -40,7 +40,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "0.6.4"
+  "com.ubirch.user" %% "config" % "0.6.5-SNAPSHOT"
 )
 ```
 
@@ -51,7 +51,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "0.6.4"
+  "com.ubirch.user" %% "core" % "0.6.5-SNAPSHOT"
 )
 ```
 
@@ -62,7 +62,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "0.6.4"
+  "com.ubirch.user" %% "model-db" % "0.6.5-SNAPSHOT"
 )
 ```
 
@@ -73,7 +73,7 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "0.6.4"
+  "com.ubirch.user" %% "model-rest" % "0.6.5-SNAPSHOT"
 )
 ```
 
@@ -85,7 +85,7 @@ resolvers ++= Seq(
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "0.6.4"
+  "com.ubirch.user" %% "server" % "0.6.5-SNAPSHOT"
 )
 ```
 
@@ -96,6 +96,6 @@ resolvers ++= Seq(
   Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "0.6.4"
+  "com.ubirch.user" %% "util" % "0.6.5-SNAPSHOT"
 )
 ```
