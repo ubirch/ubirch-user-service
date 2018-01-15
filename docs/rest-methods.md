@@ -104,6 +104,24 @@ Responds with the user if it exists (including it's id which is a UUID).
 
 Responds with "OK" if user was deleted.
 
+#### Check If Account With Given Email Exists
+
+    curl localhost:8092/api/userService/v1/user/emailExists/$EMAIL_ADDRESS
+
+If user with given email address exists the response is:
+
+    200
+
+Otherwise:
+
+    400
+    {
+      "version" : "1.0",
+      "status" : "NOK",
+      "errorType" : "QueryError",
+      "errorMessage": "no user with given email address exists"
+    }
+
 ### Group Related
 
 #### Create
