@@ -66,6 +66,10 @@ object UserServiceClientRestDebug extends App
     val deepCheckResponse = Await.result(UserServiceClientRest.deepCheck(), 20 seconds)
     logger.info(s"___ deepCheck(): $deepCheckResponse")
 
+    // GET /user/emailExists/$EMAIL_ADDRESS
+    emailExistsGET("test@ubirch.com")
+    emailExistsGET("testtest@ubirch.com")
+
   } finally {
     system.terminate()
   }
@@ -80,6 +84,13 @@ object UserServiceClientRestDebug extends App
       case None => logger.info(s"___ userGET($providerId, $externalUserId): None")
       case Some(user: User) => logger.info(s"___ userGET($providerId, $externalUserId): $user")
     }
+
+  }
+
+  private def emailExistsGET(email: String): Unit = {
+
+    val result = Await.result(UserServiceClientRest.emailExistsGET(email), 5 seconds)
+    logger.info(s"___ emailExistsGET($email): $result")
 
   }
 

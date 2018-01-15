@@ -90,7 +90,7 @@ class UserManagerSpec extends MongoSpec {
 
             // verify
             result shouldBe Some(update)
-            UserManager.findById(update.id) map(_ should be(Some(update)))
+            UserManager.findById(update.id) map (_ should be(Some(update)))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
@@ -120,7 +120,7 @@ class UserManagerSpec extends MongoSpec {
 
             // verify
             result shouldBe Some(update)
-            UserManager.findById(update.id) map(_ should be(Some(update)))
+            UserManager.findById(update.id) map (_ should be(Some(update)))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
@@ -264,6 +264,79 @@ class UserManagerSpec extends MongoSpec {
 
             // verify
             result shouldBe None
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+  }
+
+  feature("findByEmail()") {
+
+    scenario("email=None --> None") {
+
+      // prepare
+      UserManager.create(DefaultModels.user()) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(_) =>
+
+          // test
+          UserManager.findByEmail("test@ubirch.com") flatMap { result =>
+
+            // verify
+            result shouldBe 'empty
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+    scenario("email=Some; search with another email address --> None") {
+
+      // prepare
+      val email1 = "test1@ubirch.com"
+      val email2 = "test2@ubirch.com"
+      UserManager.create(DefaultModels.user(email = Some(email1))) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(_) =>
+
+          // test
+          UserManager.findByEmail(email2) flatMap { result =>
+
+            // verify
+            result shouldBe 'empty
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+    scenario("email=Some; search with same email address --> Some") {
+
+      // prepare
+      val email = "test@ubirch.com"
+      UserManager.create(DefaultModels.user(email = Some(email))) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(user) =>
+
+          // test
+          UserManager.findByEmail(email) flatMap { result =>
+
+            // verify
+            result shouldBe Some(user)
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }

@@ -23,21 +23,31 @@ object RouteConstants {
   final val memberOf = "memberOf"
   final val initData = "initData"
 
+  final val emailExists = "emailExists"
+
   val pathPrefix = s"/$apiPrefix/$serviceName/$currentVersion"
 
   val pathCheck = s"$pathPrefix/$check"
   val pathDeepCheck = s"$pathPrefix/$deepCheck"
 
   val pathContext = s"$pathPrefix/$context"
+
   def pathContextWithId(id: UUID) = s"$pathContext/$id"
+
   def pathContextFindByName(name: String) = s"$pathContext/$byName/$name"
 
   val pathUser = s"$pathPrefix/$user"
+
   def pathUserFind(providerId: String, externalUserId: String) = s"$pathUser/$providerId/$externalUserId"
+
   def pathUserDelete(id: UUID) = s"$pathUser/$id"
 
+  def pathEmailExists(email: String) = s"$pathUser/$emailExists/$email"
+
   val pathGroup = s"$pathPrefix/$group"
+
   def pathGroupWithId(id: UUID) = s"$pathGroup/$id"
+
   val pathGroupAllowedUsers = s"$pathGroup/$allowedUsers"
 
   def pathGroups(contextName: String,

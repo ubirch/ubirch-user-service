@@ -21,8 +21,8 @@ object UserClientRestConfig extends ConfigBase {
   val urlDeepCheck = s"$host${RouteConstants.pathDeepCheck}"
 
   def pathGroups(contextName: String,
-             providerId: String,
-             externalUserId: String): String = {
+                 providerId: String,
+                 externalUserId: String): String = {
 
     val path = RouteConstants.pathGroups(contextName = contextName,
       providerId = providerId,
@@ -42,6 +42,13 @@ object UserClientRestConfig extends ConfigBase {
       externalUserId = externalUserId
     )
 
+    s"$host$path"
+
+  }
+
+  def pathEmailExistsGET(email: String): String = {
+
+    val path = RouteConstants.pathEmailExists(email)
     s"$host$path"
 
   }

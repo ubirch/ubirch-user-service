@@ -20,14 +20,16 @@ object DefaultModels {
   def user(displayName: String = "automated-test-user",
            providerId: String = "google",
            externalId: String = UUIDUtil.uuidStr,
-           locale: String = "en"
+           locale: String = "en",
+           email: Option[String] = None
           ): User = {
 
     User(
       displayName = displayName,
       providerId = providerId,
       externalId = externalId,
-      locale = locale
+      locale = locale,
+      email = email
     )
 
   }
