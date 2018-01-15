@@ -2,7 +2,7 @@
 
 ### Version 0.6.5 (tbd)
 
-* TODO
+* update to `com.ubirch.util:date:0.5`
 
 ### Version 0.6.4 (2018-01-15)
 
