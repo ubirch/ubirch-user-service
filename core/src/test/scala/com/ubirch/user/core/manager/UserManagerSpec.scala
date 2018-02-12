@@ -1,5 +1,6 @@
 package com.ubirch.user.core.manager
 
+import com.ubirch.crypto.hash.HashUtil
 import com.ubirch.user.config.Config
 import com.ubirch.user.model.db.tools.DefaultModels
 import com.ubirch.user.testTools.db.mongo.MongoSpec
@@ -25,6 +26,33 @@ class UserManagerSpec extends MongoSpec {
 
         // verify
         created shouldBe Some(user)
+        Thread.sleep(200)
+        mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+      }
+
+    }
+
+    scenario("user with email does NOT exist --> success") {
+
+      val emailAdr = " A@a.de "
+      val cleanEmailAdr = emailAdr.toLowerCase.trim
+      // prepare
+      val user = DefaultModels.user(email = Some(emailAdr))
+
+      // test
+      UserManager.create(user) flatMap { created =>
+
+        // verify
+        created.isDefined shouldBe true
+        created.get.providerId shouldBe user.providerId
+        created.get.externalId shouldBe user.externalId
+        created.get.locale shouldBe user.locale
+        created.get.displayName shouldBe user.displayName
+        created.get.email.isDefined shouldBe true
+        created.get.email.get shouldBe cleanEmailAdr
+        created.get.hashedEmail.get shouldBe HashUtil.sha512HexString(cleanEmailAdr)
+
         Thread.sleep(200)
         mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
@@ -83,13 +111,85 @@ class UserManagerSpec extends MongoSpec {
 
         case Some(user) =>
 
-          val update = user.copy(displayName = s"${user.displayName}-test")
+          val update = user.copy(
+            displayName = s"${user.displayName}-test"
+          )
 
           // test
           UserManager.update(update) flatMap { result =>
 
             // verify
             result shouldBe Some(update)
+            UserManager.findById(update.id) map (_ should be(Some(update)))
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+    scenario("update email --> success") {
+
+      val email1 = "b@d.de"
+      val email2 = "c@e.de"
+      val hashedEmail2 = HashUtil.sha512HexString(email2)
+
+      // prepare
+      UserManager.create(DefaultModels.user(email = Some(email1))) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(user) =>
+
+          val update = user.copy(
+            email = Some(email2)
+          )
+
+          // test
+          UserManager.update(update) flatMap { result =>
+
+            // verify
+            result.isDefined shouldBe true
+            result.get.email.isDefined shouldBe true
+            result.get.email.get shouldBe email2
+            result.get.hashedEmail.isDefined shouldBe true
+            result.get.hashedEmail.get shouldBe hashedEmail2
+
+            UserManager.findById(update.id) map (_ should be(Some(update)))
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+    scenario("update email to None--> success") {
+
+      val email1 = "b@d.de"
+      val email2 = None
+      val hashedEmail2 = None
+
+      // prepare
+      UserManager.create(DefaultModels.user(email = Some(email1))) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(user) =>
+
+          val update = user.copy(
+            email = email2
+          )
+
+          // test
+          UserManager.update(update) flatMap { result =>
+
+            // verify
+            result.isDefined shouldBe true
+            result.get.email.isEmpty shouldBe true
+            result.get.hashedEmail.isEmpty shouldBe true
+
             UserManager.findById(update.id) map (_ should be(Some(update)))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 

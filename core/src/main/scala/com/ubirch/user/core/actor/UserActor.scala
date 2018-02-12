@@ -72,6 +72,12 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
       val sender = context.sender()
       UserManager.findByEmail(byEmail.emailAddress) map (sender ! _.isDefined)
 
+    case byHashedEmail: SearchByHashedEmail =>
+
+      val sender = context.sender()
+      UserManager.findByHashedEmail(byHashedEmail.hashedEmailAddress) map (sender ! _.isDefined)
+
+
     case _ => log.error("unknown message")
 
   }
@@ -102,3 +108,5 @@ case class DeleteUser(providerId: String,
                      )
 
 case class SearchByEmail(emailAddress: String)
+
+case class SearchByHashedEmail(hashedEmailAddress: String)

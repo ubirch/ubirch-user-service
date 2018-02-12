@@ -53,4 +53,11 @@ object UserClientRestConfig extends ConfigBase {
 
   }
 
+  def pathHashedEmailExistsGET(hashedEmail: String): String = {
+
+    val path = RouteConstants.pathHashedEmailExists(hashedEmail)
+    s"$host$path"
+
+  }
+
 }

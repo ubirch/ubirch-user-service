@@ -1,9 +1,13 @@
 package com.ubirch.user.server.route
 
+import akka.actor.ActorSystem
+import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.server.Route
+import akka.pattern.ask
+import akka.util.Timeout
 import com.typesafe.scalalogging.slf4j.StrictLogging
-
 import com.ubirch.user.config.Config
-import com.ubirch.user.core.actor.{ActorNames, CreateUser, DeleteUser, FindUser, SearchByEmail, UpdateUser, UserActor}
+import com.ubirch.user.core.actor._
 import com.ubirch.user.model._
 import com.ubirch.user.model.rest.User
 import com.ubirch.user.util.server.RouteConstants
@@ -12,12 +16,6 @@ import com.ubirch.util.json.Json4sUtil
 import com.ubirch.util.model.JsonErrorResponse
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.rest.akka.directives.CORSDirective
-
-import akka.actor.ActorSystem
-import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.server.Route
-import akka.pattern.ask
-import akka.util.Timeout
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 
 import scala.concurrent.ExecutionContextExecutor
@@ -56,6 +54,12 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
 
           get {
             searchByEmailAddress(emailAddress)
+          }
+
+        } ~ path(RouteConstants.hashedEmailExists / Segment) { hashedEmailAddress =>
+
+          get {
+            searchByHashedEmailAddress(hashedEmailAddress)
           }
 
         } ~ path(Segment / Segment) { (provider, externalUserId) =>
@@ -188,6 +192,24 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
       case Failure(t) =>
         logger.error("searchByEmail call responded with an unhandled message (check UserRoute for bugs!!!)", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
+
+      case Success(resp) =>
+        resp match {
+          case true => complete(StatusCodes.OK)
+          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "no user with given email address exists"))
+        }
+
+    }
+
+  }
+
+  private def searchByHashedEmailAddress(hasehEmailAddress: String): Route = {
+
+    onComplete(userActor ? SearchByHashedEmail(hasehEmailAddress)) {
+
+      case Failure(t) =>
+        logger.error("searchByHashedEmailAddress", t)
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = t.getMessage))
 
       case Success(resp) =>
         resp match {

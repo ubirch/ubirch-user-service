@@ -139,6 +139,19 @@ object UserManager extends StrictLogging
 
   }
 
+  def findByHashedEmail(hashedEmail: String)
+                       (implicit mongo: MongoUtil): Future[Option[User]] = {
+
+    val selector = document(
+      "hashedEmail" -> hashedEmail
+    )
+
+    mongo.collection(collectionName) flatMap {
+      _.find(selector).one[User]
+    }
+
+  }
+
   def delete(id: String)(implicit mongo: MongoUtil): Future[Boolean] = {
 
     val selector = document("id" -> id)
@@ -179,7 +192,10 @@ object UserManager extends StrictLogging
       )
     }
     else
-      user
+      user.copy(
+        email = None,
+        hashedEmail = None
+      )
   }
 
 }
