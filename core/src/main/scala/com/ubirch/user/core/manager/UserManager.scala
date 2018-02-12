@@ -1,12 +1,11 @@
 package com.ubirch.user.core.manager
 
 import com.typesafe.scalalogging.slf4j.StrictLogging
-
+import com.ubirch.crypto.hash.HashUtil
 import com.ubirch.user.config.Config
 import com.ubirch.user.model.db.User
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
-
 import reactivemongo.bson.{BSONDocumentReader, BSONDocumentWriter, Macros, document}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,9 +39,15 @@ object UserManager extends StrictLogging
 
           // TODO update tests to include the Config.providersWithUsersActivated.contains() check
           logger.debug(s"create(): user.providerId=${user.providerId}")
-          val userToCreate = Config.providersWithUsersActivated.contains(user.providerId) match {
+          val userToCreate = (Config.providersWithUsersActivated.contains(user.providerId) match {
             case true => user.copy(activeUser = Some(true))
             case false => user
+          }) match {
+            case pu if pu.email.isDefined =>
+              fixEmail(pu)
+            case pu => pu.copy(
+              hashedEmail = None
+            )
           }
 
           collection.insert[User](userToCreate) map { writeResult =>
@@ -74,16 +79,18 @@ object UserManager extends StrictLogging
 
       case Some(_: User) =>
 
+        val patchedUser = fixEmail(user)
+
         val selector = document("id" -> user.id)
         mongo.collection(collectionName) flatMap {
 
-          _.update(selector, user) map { writeResult =>
+          _.update(selector, patchedUser) map { writeResult =>
 
             if (writeResult.ok) {
               logger.info(s"updated user: id=${user.id}")
-              Some(user)
+              Some(patchedUser)
             } else {
-              logger.error(s"failed to update user: user=$user, writeResult=$writeResult")
+              logger.error(s"failed to update user: user=$patchedUser, writeResult=$writeResult")
               None
             }
 
@@ -123,7 +130,7 @@ object UserManager extends StrictLogging
                  (implicit mongo: MongoUtil): Future[Option[User]] = {
 
     val selector = document(
-      "email" -> email
+      "email" -> cleanEmail(email)
     )
 
     mongo.collection(collectionName) flatMap {
@@ -153,7 +160,26 @@ object UserManager extends StrictLogging
   }
 
   private def checkMail(email: Option[String]): Boolean = {
-    true
+    email.isDefined &&
+      email.get.contains("@") &&
+      email.get.contains(".")
+  }
+
+  private def cleanEmail(email: String): String = {
+    email.toLowerCase.trim
+  }
+
+  private def fixEmail(user: User): User = {
+    if (user.email.isDefined) {
+      val cleanedEmail: String = cleanEmail(user.email.get)
+      val hashedEmail = HashUtil.sha512HexString(cleanedEmail)
+      user.copy(
+        email = Some(cleanedEmail),
+        hashedEmail = Some(hashedEmail)
+      )
+    }
+    else
+      user
   }
 
 }

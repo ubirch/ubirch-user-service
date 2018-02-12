@@ -171,6 +171,7 @@ lazy val depCore = Seq(
   json4sNative,
   ubirchJson,
   ubirchMongo,
+  ubirchCrypto,
   scalatest % "test"
 ) ++ scalaLogging
 
@@ -248,6 +249,7 @@ lazy val ubirchRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.3.8" excludeA
 lazy val ubirchRestAkkaHttpTest = ubirchUtilG %% "rest-akka-http-test" % "0.3.8" excludeAll(excludedLoggers: _*)
 lazy val ubirchResponse = ubirchUtilG %% "response-util" % "0.2.4" excludeAll(excludedLoggers: _*)
 lazy val ubirchUuid = ubirchUtilG %% "uuid" % "0.1.1" excludeAll(excludedLoggers: _*)
+lazy val ubirchCrypto = ubirchUtilG %% "crypto" % "0.4.2" excludeAll (excludedLoggers: _*)
 
 /*
  * RESOLVER

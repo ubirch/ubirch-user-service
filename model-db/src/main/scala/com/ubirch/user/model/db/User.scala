@@ -4,8 +4,17 @@ import com.ubirch.util.uuid.UUIDUtil
 import org.joda.time.DateTime
 
 /**
-  * author: cvandrei
-  * since: 2017-03-29
+  *
+  * @param id          unique user identifier
+  * @param displayName
+  * @param providerId
+  * @param externalId
+  * @param locale
+  * @param activeUser
+  * @param email       email address
+  * @param hashedEmail sha256 hashed email
+  * @param created
+  * @param updated
   */
 case class User(id: String = UUIDUtil.uuidStr,
                 displayName: String,
@@ -14,6 +23,7 @@ case class User(id: String = UUIDUtil.uuidStr,
                 locale: String,
                 activeUser: Option[Boolean] = Some(false),
                 email: Option[String] = None,
+                hashedEmail: Option[String] = None,
                 created: DateTime = DateTime.now,
                 updated: DateTime = DateTime.now
                )

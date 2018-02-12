@@ -1,12 +1,12 @@
 package com.ubirch.user.core.manager
 
+import com.typesafe.scalalogging.slf4j.StrictLogging
 import com.ubirch.user.config.Config
 import com.ubirch.user.model.db.Context
 import com.ubirch.util.deepCheck.model.DeepCheckResponse
 import com.ubirch.util.deepCheck.util.DeepCheckResponseUtil
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
-
 import reactivemongo.bson.{BSONDocumentReader, BSONDocumentWriter, Macros}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -16,7 +16,9 @@ import scala.concurrent.Future
   * author: cvandrei
   * since: 2017-06-08
   */
-object DeepCheckManager extends MongoFormats {
+object DeepCheckManager
+  extends MongoFormats
+    with StrictLogging {
 
   implicit protected def contextWriter: BSONDocumentWriter[Context] = Macros.writer[Context]
 
@@ -31,10 +33,9 @@ object DeepCheckManager extends MongoFormats {
   def connectivityCheck()(implicit mongo: MongoUtil): Future[DeepCheckResponse] = {
 
     val collectionName = Config.mongoCollectionContext
-    mongo.connectivityCheck[Context](collectionName) map { deepCheckRes =>
+    mongo.connectivityCheck[Context](collectionName).map { deepCheckRes =>
       DeepCheckResponseUtil.addServicePrefix("user-service", deepCheckRes)
     }
-
   }
 
 }
