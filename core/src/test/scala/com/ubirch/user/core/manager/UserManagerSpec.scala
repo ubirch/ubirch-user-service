@@ -70,14 +70,10 @@ class UserManagerSpec extends MongoSpec {
         case Some(existingUser) =>
 
           // test
-          UserManager.create(existingUser) flatMap { created =>
-
-            // verify
-            created shouldBe None
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+          assertThrows[Exception] {
+            val f = UserManager.create(existingUser)
 
           }
-
       }
 
     }
@@ -92,12 +88,8 @@ class UserManagerSpec extends MongoSpec {
       val user = DefaultModels.user()
 
       // test
-      UserManager.update(user) flatMap { updated =>
-
-        // verify
-        updated shouldBe None
-        mongoTestUtils.countAll(collection) map (_ shouldBe 0)
-
+      assertThrows[Exception] {
+        UserManager.update(user)
       }
 
     }
@@ -112,16 +104,19 @@ class UserManagerSpec extends MongoSpec {
         case Some(user) =>
 
           val update = user.copy(
-            displayName = s"${user.displayName}-test"
+            displayName = s"${
+              user.displayName
+            }-test"
           )
 
           // test
-          UserManager.update(update) flatMap { result =>
+          UserManager.update(update) flatMap {
+            result =>
 
-            // verify
-            result shouldBe Some(update)
-            UserManager.findById(update.id) map (_ should be(Some(update)))
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+              // verify
+              result shouldBe Some(update)
+              UserManager.findById(update.id) map (_ should be(Some(update)))
+              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -147,17 +142,18 @@ class UserManagerSpec extends MongoSpec {
           )
 
           // test
-          UserManager.update(update) flatMap { result =>
+          UserManager.update(update) flatMap {
+            result =>
 
-            // verify
-            result.isDefined shouldBe true
-            result.get.email.isDefined shouldBe true
-            result.get.email.get shouldBe email2
-            result.get.hashedEmail.isDefined shouldBe true
-            result.get.hashedEmail.get shouldBe hashedEmail2
+              // verify
+              result.isDefined shouldBe true
+              result.get.email.isDefined shouldBe true
+              result.get.email.get shouldBe email2
+              result.get.hashedEmail.isDefined shouldBe true
+              result.get.hashedEmail.get shouldBe hashedEmail2
 
-            UserManager.findById(update.id) map (_ should be(Some(update)))
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+              UserManager.findById(update.id) map (_ should be(Some(update)))
+              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -183,15 +179,16 @@ class UserManagerSpec extends MongoSpec {
           )
 
           // test
-          UserManager.update(update) flatMap { result =>
+          UserManager.update(update) flatMap {
+            result =>
 
-            // verify
-            result.isDefined shouldBe true
-            result.get.email.isEmpty shouldBe true
-            result.get.hashedEmail.isEmpty shouldBe true
+              // verify
+              result.isDefined shouldBe true
+              result.get.email.isEmpty shouldBe true
+              result.get.hashedEmail.isEmpty shouldBe true
 
-            UserManager.findById(update.id) map (_ should be(Some(update)))
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+              UserManager.findById(update.id) map (_ should be(Some(update)))
+              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -216,12 +213,13 @@ class UserManagerSpec extends MongoSpec {
           val update = user.copy(locale = newLocale)
 
           // test
-          UserManager.update(update) flatMap { result =>
+          UserManager.update(update) flatMap {
+            result =>
 
-            // verify
-            result shouldBe Some(update)
-            UserManager.findById(update.id) map (_ should be(Some(update)))
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+              // verify
+              result shouldBe Some(update)
+              UserManager.findById(update.id) map (_ should be(Some(update)))
+              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -236,11 +234,12 @@ class UserManagerSpec extends MongoSpec {
     scenario("user.id does not exist --> fail") {
 
       // test
-      UserManager.findById(UUIDUtil.uuidStr) flatMap { created =>
+      UserManager.findById(UUIDUtil.uuidStr) flatMap {
+        created =>
 
-        // verify
-        created shouldBe None
-        mongoTestUtils.countAll(collection) map (_ shouldBe 0)
+          // verify
+          created shouldBe None
+          mongoTestUtils.countAll(collection) map (_ shouldBe 0)
 
       }
 
@@ -256,11 +255,12 @@ class UserManagerSpec extends MongoSpec {
         case Some(user) =>
 
           // test
-          UserManager.findById(user.id) flatMap { result =>
+          UserManager.findById(user.id) flatMap {
+            result =>
 
-            // verify
-            result shouldBe Some(user)
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+              // verify
+              result shouldBe Some(user)
+              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -285,11 +285,12 @@ class UserManagerSpec extends MongoSpec {
           UserManager.findByProviderIdAndExternalId(
             providerId = user.providerId,
             externalUserId = user.externalId
-          ) flatMap { result =>
+          ) flatMap {
+            result =>
 
-            // verify
-            result shouldBe Some(user)
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+              // verify
+              result shouldBe Some(user)
+              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -308,13 +309,16 @@ class UserManagerSpec extends MongoSpec {
 
           // test
           UserManager.findByProviderIdAndExternalId(
-            providerId = s"${user.providerId}-test",
+            providerId = s"${
+              user.providerId
+            }-test",
             externalUserId = user.externalId
-          ) flatMap { result =>
+          ) flatMap {
+            result =>
 
-            // verify
-            result shouldBe None
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+              // verify
+              result shouldBe None
+              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -334,12 +338,15 @@ class UserManagerSpec extends MongoSpec {
           // test
           UserManager.findByProviderIdAndExternalId(
             providerId = user.providerId,
-            externalUserId = s"${user.externalId}-test"
-          ) flatMap { result =>
+            externalUserId = s"${
+              user.externalId
+            }-test"
+          ) flatMap {
+            result =>
 
-            // verify
-            result shouldBe None
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+              // verify
+              result shouldBe None
+              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -358,13 +365,18 @@ class UserManagerSpec extends MongoSpec {
 
           // test
           UserManager.findByProviderIdAndExternalId(
-            providerId = s"${user.providerId}-test",
-            externalUserId = s"${user.externalId}-test"
-          ) flatMap { result =>
+            providerId = s"${
+              user.providerId
+            }-test",
+            externalUserId = s"${
+              user.externalId
+            }-test"
+          ) flatMap {
+            result =>
 
-            // verify
-            result shouldBe None
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+              // verify
+              result shouldBe None
+              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -386,11 +398,12 @@ class UserManagerSpec extends MongoSpec {
         case Some(_) =>
 
           // test
-          UserManager.findByEmail("test@ubirch.com") flatMap { result =>
+          UserManager.findByEmail("test@ubirch.com") flatMap {
+            result =>
 
-            // verify
-            result shouldBe 'empty
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+              // verify
+              result shouldBe 'empty
+              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -410,11 +423,12 @@ class UserManagerSpec extends MongoSpec {
         case Some(_) =>
 
           // test
-          UserManager.findByEmail(email2) flatMap { result =>
+          UserManager.findByEmail(email2) flatMap {
+            result =>
 
-            // verify
-            result shouldBe 'empty
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+              // verify
+              result shouldBe 'empty
+              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -433,11 +447,12 @@ class UserManagerSpec extends MongoSpec {
         case Some(user) =>
 
           // test
-          UserManager.findByEmail(email) flatMap { result =>
+          UserManager.findByEmail(email) flatMap {
+            result =>
 
-            // verify
-            result shouldBe Some(user)
-            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+              // verify
+              result shouldBe Some(user)
+              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -452,11 +467,12 @@ class UserManagerSpec extends MongoSpec {
     scenario("user.id does not exist --> fail") {
 
       // test
-      UserManager.delete(UUIDUtil.uuidStr) flatMap { result =>
+      UserManager.delete(UUIDUtil.uuidStr) flatMap {
+        result =>
 
-        // verify
-        result shouldBe false
-        mongoTestUtils.countAll(collection) map (_ shouldBe 0)
+          // verify
+          result shouldBe false
+          mongoTestUtils.countAll(collection) map (_ shouldBe 0)
 
       }
 
@@ -472,11 +488,12 @@ class UserManagerSpec extends MongoSpec {
         case Some(user) =>
 
           // test
-          UserManager.delete(user.id) flatMap { result =>
+          UserManager.delete(user.id) flatMap {
+            result =>
 
-            // verify
-            result shouldBe true
-            mongoTestUtils.countAll(collection) map (_ shouldBe 0)
+              // verify
+              result shouldBe true
+              mongoTestUtils.countAll(collection) map (_ shouldBe 0)
 
           }
 

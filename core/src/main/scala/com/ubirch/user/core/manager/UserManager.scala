@@ -28,10 +28,10 @@ object UserManager extends StrictLogging
 
     findByProviderIdAndExternalId(providerId = user.providerId, externalUserId = user.externalId) flatMap {
 
-      case Some(_: User) =>
-
-        logger.error(s"unable to create user as it's id already exist: user=$user")
-        Future(None)
+      case Some(u: User) =>
+        val errMsg = s"unable to create user as it's id already exist: user=$user"
+        logger.error(errMsg)
+        throw new Exception(errMsg)
 
       case None =>
 
@@ -49,21 +49,19 @@ object UserManager extends StrictLogging
               hashedEmail = None
             )
           }
-
+          validateUser(userToCreate)
           collection.insert[User](userToCreate) map { writeResult =>
 
             if (writeResult.ok && writeResult.n == 1) {
               logger.debug(s"created new user: $userToCreate")
               Some(userToCreate)
             } else {
-              logger.error("failed to create user")
-              None
+              throw new Exception("failed to create user")
             }
 
           }
 
         }
-
     }
 
   }
@@ -74,13 +72,14 @@ object UserManager extends StrictLogging
     findById(userId) flatMap {
 
       case None =>
-        logger.error(s"unable to update if no User exists: userId=$userId")
-        Future(None)
+        val errMsg = s"unable to update if no User exists: userId=$userId"
+        logger.error(errMsg)
+        throw new Exception(errMsg)
 
       case Some(_: User) =>
 
         val patchedUser = fixEmail(user)
-
+        validateUser(patchedUser)
         val selector = document("id" -> user.id)
         mongo.collection(collectionName) flatMap {
 
@@ -97,7 +96,6 @@ object UserManager extends StrictLogging
           }
 
         }
-
     }
 
   }
@@ -172,9 +170,17 @@ object UserManager extends StrictLogging
 
   }
 
+  private def validateUser(user: User): Unit = {
+    if (user.email.isDefined && !checkMail(user.email))
+      throw new Exception(s"invalid email: ${user.email.getOrElse("")}")
+  }
+
   private def checkMail(email: Option[String]): Boolean = {
     email.isDefined &&
+      email.get.length >= 6 &&
+      !email.get.startsWith("@") &&
       email.get.contains("@") &&
+      !email.get.endsWith(".") &&
       email.get.contains(".")
   }
 

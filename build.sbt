@@ -1,4 +1,4 @@
-packagedArtifacts in file(".") := Map.empty // disable publishing of root/default project
+
 
 // see http://www.scala-sbt.org/0.13/docs/Parallel-Execution.html for details
 concurrentRestrictions in Global := Seq(
@@ -172,6 +172,7 @@ lazy val depCore = Seq(
   ubirchJson,
   ubirchMongo,
   ubirchCrypto,
+  ubirchResponse,
   scalatest % "test"
 ) ++ scalaLogging
 

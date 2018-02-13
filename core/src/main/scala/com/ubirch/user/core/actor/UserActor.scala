@@ -1,16 +1,17 @@
 package com.ubirch.user.core.actor
 
+import akka.actor.{Actor, ActorLogging, Props}
+import akka.routing.RoundRobinPool
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.manager.UserManager
 import com.ubirch.user.model.db.User
+import com.ubirch.util.model.JsonErrorResponse
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.uuid.UUIDUtil
 
-import akka.actor.{Actor, ActorLogging, Props}
-import akka.routing.RoundRobinPool
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.{Failure, Success}
 
 /**
   * author: cvandrei
@@ -23,24 +24,37 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
 
     case create: CreateUser =>
       val sender = context.sender()
+
       val toCreate = create.user.copy(id = UUIDUtil.uuidStr)
-      UserManager.create(toCreate) map (sender ! _)
+
+      UserManager.create(toCreate).onComplete {
+        case Success(u) =>
+          sender ! u
+        case Failure(t) =>
+          sender ! JsonErrorResponse(errorType = "ValidationError", errorMessage = t.getMessage)
+      }
 
     case update: UpdateUser =>
 
       val sender = context.sender()
-      val updated = UserManager.findByProviderIdAndExternalId(update.providerId, externalUserId = update.externalUserId) flatMap {
+      UserManager.findByProviderIdAndExternalId(update.providerId, externalUserId = update.externalUserId) map {
 
         case None =>
-          log.error(s"unable to update user as it does not exist: provider=${update.providerId}, externalId=${update.externalUserId}")
-          Future(None)
+          val errMsg = s"unable to update user as it does not exist: provider=${update.providerId}, externalId=${update.externalUserId}"
+          log.error(errMsg)
+          sender ! JsonErrorResponse(errorType = "ValidationError", errorMessage = errMsg)
 
         case Some(u: User) =>
-          val toUpdate = update.user.copy(id = u.id)
-          UserManager.update(toUpdate)
 
+          val toUpdate = update.user.copy(id = u.id)
+
+          UserManager.update(toUpdate).onComplete {
+            case Success(u) =>
+              sender ! u
+            case Failure(t) =>
+              sender ! JsonErrorResponse(errorType = "ValidationError", errorMessage = t.getMessage)
+          }
       }
-      updated map (sender ! _)
 
     case find: FindUser =>
       val sender = context.sender()

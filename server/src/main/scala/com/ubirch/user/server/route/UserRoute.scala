@@ -86,24 +86,24 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
     val dbUser = Json4sUtil.any2any[db.User](restUser)
     onComplete(userActor ? CreateUser(dbUser)) {
 
-      case Failure(t) =>
-        logger.error("create user call responded with an unhandled message (check UserRoute for bugs!!!)", t)
-        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
-
       case Success(resp) =>
 
         resp match {
 
-          case None =>
-            val jsonError = JsonErrorResponse(errorType = "CreateError", errorMessage = "user already exists")
-            complete(requestErrorResponse(jsonError))
+          case Some(u: db.User) =>
+            complete(StatusCodes.Accepted -> Json4sUtil.any2any[rest.User](u))
 
-          case Some(u: db.User) => complete(Json4sUtil.any2any[rest.User](u))
+          case jer: JsonErrorResponse =>
+            complete(StatusCodes.BadRequest -> jer)
 
-          case _ => complete(serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create user"))
+          case _ =>
+            complete(StatusCodes.InternalServerError -> serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create user"))
 
         }
 
+      case Failure(t) =>
+        logger.error("create user failed", t)
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = t.getMessage))
     }
 
   }
@@ -121,22 +121,23 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
     )
     ) {
 
-      case Failure(t) =>
-        logger.error("update user call responded with an unhandled message (check UserRoute for bugs!!!)", t)
-        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
-
       case Success(resp) =>
         resp match {
 
-          case None =>
-            val jsonError = JsonErrorResponse(errorType = "UpdateError", errorMessage = "failed to update user")
-            complete(requestErrorResponse(jsonError))
+          case Some(u: db.User) =>
+            complete(StatusCodes.Accepted -> Json4sUtil.any2any[rest.User](u))
 
-          case Some(u: db.User) => complete(Json4sUtil.any2any[rest.User](u))
+          case jer: JsonErrorResponse =>
+            complete(StatusCodes.BadRequest -> jer)
 
-          case _ => complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update user"))
+          case _ =>
+            complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update user"))
 
         }
+
+      case Failure(t) =>
+        logger.error("update user call responded with an unhandled message (check UserRoute for bugs!!!)", t)
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
     }
 

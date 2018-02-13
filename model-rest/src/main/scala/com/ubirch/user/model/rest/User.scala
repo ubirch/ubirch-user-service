@@ -10,6 +10,7 @@ case class User(id: Option[UUID] = None,
                 displayName: String,
                 providerId: String,
                 externalId: String,
-                activeUser: Boolean,
+                email: Option[String] = None,
+                activeUser: Boolean = false,
                 locale: String
                )
