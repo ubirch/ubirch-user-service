@@ -6,11 +6,15 @@ import com.ubirch.user.model.db.tools.DefaultModels
 import com.ubirch.user.testTools.db.mongo.MongoSpec
 import com.ubirch.util.uuid.UUIDUtil
 
+import org.scalatest.concurrent.ScalaFutures
+
+import concurrent.ExecutionContext.Implicits._
+
 /**
   * author: cvandrei
   * since: 2017-04-06
   */
-class UserManagerSpec extends MongoSpec {
+class UserManagerSpec extends MongoSpec with ScalaFutures {
 
   private val collection = Config.mongoCollectionUser
 
@@ -74,7 +78,9 @@ class UserManagerSpec extends MongoSpec {
 
           val f = UserManager.create(existingUser)
 
-          1 shouldBe 1
+          ScalaFutures.whenReady(f.failed) { e =>
+            e shouldBe a[Exception]
+          }
       }
 
     }
@@ -89,8 +95,9 @@ class UserManagerSpec extends MongoSpec {
       val user = DefaultModels.user()
 
       // test
-      assertThrows[Exception] {
-        UserManager.update(user)
+      val f = UserManager.update(user)
+      ScalaFutures.whenReady(f.failed) { e =>
+        e shouldBe a[Exception]
       }
 
     }
