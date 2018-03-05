@@ -197,7 +197,9 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
       case Success(resp) =>
         resp match {
           case true =>
-            complete(StatusCodes.OK -> JsonResponse(message = s"hashed email address exist: $emailAddress"))
+            complete(StatusCodes.OK -> JsonResponse(message = s"email address exist: $emailAddress"))
+          case jre: JsonErrorResponse =>
+            complete(StatusCodes.BadRequest -> jre)
           case _ =>
             val errMsg = s"no user with given email address exists: $emailAddress"
             logger.error(errMsg)
@@ -218,8 +220,12 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
 
       case Success(resp) =>
         resp match {
-          case true => complete(StatusCodes.OK)
-          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "no user with given email address exists"))
+          case true =>
+            complete(StatusCodes.OK -> JsonResponse(message = s"hashed email address exist: $hasehEmailAddress"))
+          case jre: JsonErrorResponse =>
+            complete(StatusCodes.BadRequest -> jre)
+          case _ =>
+            complete(serverErrorResponse(errorType = "QueryError", errorMessage = "no user with given email address exists"))
         }
 
     }

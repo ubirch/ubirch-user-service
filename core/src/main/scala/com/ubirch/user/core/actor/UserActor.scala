@@ -84,15 +84,37 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
     case byEmail: SearchByEmail =>
 
       val sender = context.sender()
-      UserManager.findByEmail(byEmail.emailAddress) map (sender ! _.isDefined)
+      UserManager.findByEmail(byEmail.emailAddress).onComplete {
+        case Success(u) =>
+          sender ! u.isDefined
+        case Failure(t) =>
+          sender ! JsonErrorResponse(
+            errorType = "ValidationError",
+            errorMessage = t.getMessage
+          )
+
+      }
 
     case byHashedEmail: SearchByHashedEmail =>
 
       val sender = context.sender()
-      UserManager.findByHashedEmail(byHashedEmail.hashedEmailAddress) map (sender ! _.isDefined)
+      UserManager.findByHashedEmail(byHashedEmail.hashedEmailAddress).onComplete {
+        case Success(u) =>
+          sender ! u.isDefined
+        case Failure(t) =>
+          sender ! JsonErrorResponse(
+            errorType = "ValidationError",
+            errorMessage = t.getMessage
+          )
 
+      }
 
-    case _ => log.error("unknown message")
+    case _ =>
+      context.sender ! JsonErrorResponse(
+        errorType = "ValidationError",
+        errorMessage = "unknown message"
+      )
+      log.error("unknown message")
 
   }
 
