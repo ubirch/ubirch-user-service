@@ -198,6 +198,8 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
         resp match {
           case true =>
             complete(StatusCodes.OK -> JsonResponse(message = s"email address exist: $emailAddress"))
+          case false =>
+            complete(StatusCodes.BadRequest -> JsonResponse(message = s"email does not address exist: $emailAddress"))
           case jre: JsonErrorResponse =>
             complete(StatusCodes.BadRequest -> jre)
           case _ =>
@@ -222,6 +224,8 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
         resp match {
           case true =>
             complete(StatusCodes.OK -> JsonResponse(message = s"hashed email address exist: $hasehEmailAddress"))
+          case false =>
+            complete(StatusCodes.BadRequest -> JsonResponse(message = s"hashed email does not address exist: $hasehEmailAddress"))
           case jre: JsonErrorResponse =>
             complete(StatusCodes.BadRequest -> jre)
           case _ =>
