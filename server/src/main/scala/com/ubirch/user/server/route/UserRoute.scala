@@ -13,7 +13,7 @@ import com.ubirch.user.model.rest.User
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
 import com.ubirch.util.json.Json4sUtil
-import com.ubirch.util.model.JsonErrorResponse
+import com.ubirch.util.model.{JsonErrorResponse, JsonResponse}
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.rest.akka.directives.CORSDirective
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
@@ -196,8 +196,10 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
 
       case Success(resp) =>
         resp match {
-          case true => complete(StatusCodes.OK)
-          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "no user with given email address exists"))
+          case true =>
+            complete(StatusCodes.OK -> JsonResponse(message = s"hashed email address exist: $emailAddress"))
+          case _ =>
+            complete(serverErrorResponse(errorType = "QueryError", errorMessage = "no user with given email address exists"))
         }
 
     }
