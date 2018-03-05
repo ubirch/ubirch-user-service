@@ -191,15 +191,17 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
     onComplete(userActor ? SearchByEmail(emailAddress)) {
 
       case Failure(t) =>
-        logger.error("searchByEmail call responded with an unhandled message (check UserRoute for bugs!!!)", t)
-        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
+        logger.error("searchByEmail call responded with an unhandled message", t)
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = t.getMessage))
 
       case Success(resp) =>
         resp match {
           case true =>
             complete(StatusCodes.OK -> JsonResponse(message = s"hashed email address exist: $emailAddress"))
           case _ =>
-            complete(serverErrorResponse(errorType = "QueryError", errorMessage = "no user with given email address exists"))
+            val errMsg = s"no user with given email address exists: $emailAddress"
+            logger.error(errMsg)
+            complete(StatusCodes.BadRequest -> JsonErrorResponse(errorType = "QueryError", errorMessage = errMsg))
         }
 
     }
