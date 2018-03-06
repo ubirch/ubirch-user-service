@@ -46,6 +46,19 @@ object UserClientRestConfig extends ConfigBase {
 
   }
 
+  def pathUserDELETE(providerId: String,
+                     externalUserId: String
+                    ): String = {
+
+    val path = RouteConstants.pathUserDelete(
+      providerId = providerId,
+      externalUserId = externalUserId
+    )
+
+    s"$host$path"
+
+  }
+
   def pathEmailExistsGET(email: String): String = {
 
     val path = RouteConstants.pathEmailExists(email)

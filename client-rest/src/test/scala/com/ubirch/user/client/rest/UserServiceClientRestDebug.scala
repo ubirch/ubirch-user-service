@@ -70,6 +70,10 @@ object UserServiceClientRestDebug extends App
     emailExistsGET("test@ubirch.com")
     emailExistsGET("testtest@ubirch.com")
 
+    // DELETE /user/$PROVIDER/$EXTERNAL_USER_ID
+    userDELETE(providerId, externalUserId)
+    userDELETE(providerId, externalUserId)
+
   } finally {
     system.terminate()
   }
@@ -83,6 +87,19 @@ object UserServiceClientRestDebug extends App
     Await.result(futureUser, 5 seconds) match {
       case None => logger.info(s"___ userGET($providerId, $externalUserId): None")
       case Some(user: User) => logger.info(s"___ userGET($providerId, $externalUserId): $user")
+    }
+
+  }
+
+  private def userDELETE(providerId: String, externalUserId: String): Unit = {
+
+    val futureUser = UserServiceClientRest.userDELETE(
+      providerId = providerId,
+      externalUserId = externalUserId
+    )
+    Await.result(futureUser, 5 seconds) match {
+      case false => logger.info(s"___ userDELETE($providerId, $externalUserId): false")
+      case true => logger.info(s"___ userDELETE($providerId, $externalUserId) true")
     }
 
   }

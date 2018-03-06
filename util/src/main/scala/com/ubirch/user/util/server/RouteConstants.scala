@@ -41,7 +41,7 @@ object RouteConstants {
 
   def pathUserFind(providerId: String, externalUserId: String) = s"$pathUser/$providerId/$externalUserId"
 
-  def pathUserDelete(id: UUID) = s"$pathUser/$id"
+  def pathUserDelete(providerId: String, externalUserId: String) = s"$pathUser/$providerId/$externalUserId"
 
   def pathEmailExists(email: String) = s"$pathUser/$emailExists/$email"
 

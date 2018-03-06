@@ -12,7 +12,7 @@ import com.ubirch.util.model.JsonResponse
 import org.json4s.native.Serialization.read
 
 import akka.http.scaladsl.HttpExt
-import akka.http.scaladsl.model.{HttpRequest, HttpResponse, StatusCode, StatusCodes}
+import akka.http.scaladsl.model.{HttpMethods, HttpRequest, HttpResponse, StatusCode, StatusCodes}
 import akka.stream.Materializer
 import akka.util.ByteString
 
@@ -132,6 +132,33 @@ object UserServiceClientRest extends MyJsonProtocol
         Future(
           logErrorAndReturnNone(s"userGET() call to user-service REST API failed: url=$url, code=$code")
         )
+
+    }
+
+  }
+
+  def userDELETE(providerId: String,
+                 externalUserId: String
+                )(implicit httpClient: HttpExt, materializer: Materializer): Future[Boolean] = {
+
+    logger.debug("userDELETE(): delete user through REST API")
+    val url = UserClientRestConfig.pathUserDELETE(
+      providerId = providerId,
+      externalUserId = externalUserId
+    )
+
+    httpClient.singleRequest(HttpRequest(uri = url, method = HttpMethods.DELETE)) flatMap {
+
+      case res@HttpResponse(StatusCodes.OK, _, _, _) =>
+
+        res.discardEntityBytes()
+        Future(true)
+
+      case res@HttpResponse(code, _, _, _) =>
+
+        res.discardEntityBytes()
+        logErrorAndReturnNone(s"userGET() call to user-service REST API failed: url=$url, code=$code")
+        Future(false)
 
     }
 
