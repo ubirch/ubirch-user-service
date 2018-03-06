@@ -2,7 +2,7 @@
 
 ### Version 0.7.0 (tbd)
 
-* update to `com.ubirch.util:date:0.5`
+* update to `com.ubirch.util:date:0.5.1`
 * add `UserServiceClientRest.userDELETE()`
 * update to `com.ubirch.util:config:0.2.0-SNAPSHOT`
 * update to `com.ubirch.util:mongo-test-utils:0.3.7-SNAPSHOT`
