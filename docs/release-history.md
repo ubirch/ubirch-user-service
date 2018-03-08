@@ -1,5 +1,9 @@
 ## Release History
 
+### Version 0.7.1 (tbd)
+
+* tbd
+
 ### Version 0.7.0 (2018-03-08)
 
 * update to `com.ubirch.util:date:0.5.1`
