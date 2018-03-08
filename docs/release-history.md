@@ -1,6 +1,6 @@
 ## Release History
 
-### Version 0.7.0 (tbd)
+### Version 0.7.0 (2018-03-08)
 
 * update to `com.ubirch.util:date:0.5.1`
 * add `UserServiceClientRest.userDELETE()`
