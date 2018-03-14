@@ -2,7 +2,7 @@
 
 ### Version 0.7.1 (tbd)
 
-* tbd
+* add `UserServiceClientRest.userPOST()`
 
 ### Version 0.7.0 (2018-03-08)
 

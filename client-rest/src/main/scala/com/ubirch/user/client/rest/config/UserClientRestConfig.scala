@@ -46,6 +46,8 @@ object UserClientRestConfig extends ConfigBase {
 
   }
 
+  def pathUserPOST(): String = s"$host${RouteConstants.pathUser}"
+
   def pathUserDELETE(providerId: String,
                      externalUserId: String
                     ): String = {
