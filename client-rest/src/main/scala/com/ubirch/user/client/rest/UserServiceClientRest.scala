@@ -77,13 +77,14 @@ object UserServiceClientRest extends MyJsonProtocol
 
   }
 
-  def groups(contextName: String,
-             providerId: String,
-             externalUserId: String)
-            (implicit httpClient: HttpExt, materializer: Materializer): Future[Option[Set[Group]]] = {
+  def groupMemberOf(contextName: String,
+                    providerId: String,
+                    externalUserId: String
+                   )
+                   (implicit httpClient: HttpExt, materializer: Materializer): Future[Option[Set[Group]]] = {
 
     logger.debug("groups(): query groups through REST API")
-    val url = UserClientRestConfig.pathGroups(
+    val url = UserClientRestConfig.pathGroupMemberOf(
       contextName = contextName,
       providerId = providerId,
       externalUserId = externalUserId
@@ -211,7 +212,10 @@ object UserServiceClientRest extends MyJsonProtocol
 
     httpClient.singleRequest(HttpRequest(uri = url)) map {
 
-      case HttpResponse(StatusCodes.OK, _, entity, _) => true
+      case res@HttpResponse(StatusCodes.OK, _, entity, _) =>
+
+        res.discardEntityBytes()
+        true
 
       case res@HttpResponse(code, _, _, _) =>
 
@@ -230,7 +234,10 @@ object UserServiceClientRest extends MyJsonProtocol
 
     httpClient.singleRequest(HttpRequest(uri = url)) map {
 
-      case HttpResponse(StatusCodes.OK, _, entity, _) => true
+      case res@HttpResponse(StatusCodes.OK, _, entity, _) =>
+
+        res.discardEntityBytes()
+        true
 
       case res@HttpResponse(code, _, _, _) =>
 

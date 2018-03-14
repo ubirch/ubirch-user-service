@@ -1,8 +1,9 @@
 ## Release History
 
-### Version 0.7.1 (tbd)
+### Version 0.8.0 (tbd)
 
 * add `UserServiceClientRest.userPOST()`
+* renamed `UserServiceClientRest.groups()` to `UserServiceClientRest.groupMemberOfGET()`
 
 ### Version 0.7.0 (2018-03-08)
 

@@ -20,11 +20,13 @@ object UserClientRestConfig extends ConfigBase {
 
   val urlDeepCheck = s"$host${RouteConstants.pathDeepCheck}"
 
-  def pathGroups(contextName: String,
-                 providerId: String,
-                 externalUserId: String): String = {
+  def pathGroupMemberOf(contextName: String,
+                        providerId: String,
+                        externalUserId: String
+                       ): String = {
 
-    val path = RouteConstants.pathGroups(contextName = contextName,
+    val path = RouteConstants.pathGroupMemberOf(
+      contextName = contextName,
       providerId = providerId,
       externalUserId = externalUserId
     )
