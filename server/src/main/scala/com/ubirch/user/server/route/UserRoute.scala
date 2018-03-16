@@ -91,7 +91,7 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
         resp match {
 
           case Some(u: db.User) =>
-            complete(StatusCodes.Accepted -> Json4sUtil.any2any[rest.User](u))
+            complete(StatusCodes.OK -> Json4sUtil.any2any[rest.User](u))
 
           case jer: JsonErrorResponse =>
             complete(StatusCodes.BadRequest -> jer)
@@ -125,7 +125,7 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
         resp match {
 
           case Some(u: db.User) =>
-            complete(StatusCodes.Accepted -> Json4sUtil.any2any[rest.User](u))
+            complete(StatusCodes.OK -> Json4sUtil.any2any[rest.User](u))
 
           case jer: JsonErrorResponse =>
             complete(StatusCodes.BadRequest -> jer)
