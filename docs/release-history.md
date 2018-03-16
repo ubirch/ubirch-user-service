@@ -2,7 +2,7 @@
 
 ### Version 0.8.1 (tbd)
 
-* tbd
+* add `UserServiceClientRest.userPUT()`
 
 ### Version 0.8.0 (2018-03-14)
 

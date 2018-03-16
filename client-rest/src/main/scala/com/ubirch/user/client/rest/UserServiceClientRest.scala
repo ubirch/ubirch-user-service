@@ -177,6 +177,45 @@ object UserServiceClientRest extends MyJsonProtocol
 
   }
 
+  def userPUT(user: User)
+             (implicit httpClient: HttpExt, materializer: Materializer): Future[Option[User]] = {
+
+    Json4sUtil.any2String(user) match {
+
+      case Some(userJsonString: String) =>
+
+        logger.debug(s"user (object): $userJsonString")
+        val url = UserClientRestConfig.pathUserPOST()
+        val req = HttpRequest(
+          method = HttpMethods.PUT,
+          uri = url,
+          entity = HttpEntity.Strict(ContentTypes.`application/json`, data = ByteString(userJsonString))
+        )
+        httpClient.singleRequest(req) flatMap {
+
+          case HttpResponse(StatusCodes.OK, _, entity, _) =>
+
+            entity.dataBytes.runFold(ByteString(""))(_ ++ _) map { body =>
+              Some(read[User](body.utf8String))
+            }
+
+          case res@HttpResponse(code, _, _, _) =>
+
+            res.discardEntityBytes()
+            Future(
+              logErrorAndReturnNone(s"userPOST() call to user-service failed: url=$url code=$code, status=${res.status}")
+            )
+
+        }
+
+      case None =>
+        logger.error(s"failed to to convert input to JSON: user=$user")
+        Future(None)
+
+    }
+
+  }
+
   def userDELETE(providerId: String,
                  externalUserId: String
                 )(implicit httpClient: HttpExt, materializer: Materializer): Future[Boolean] = {
