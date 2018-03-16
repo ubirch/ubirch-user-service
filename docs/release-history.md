@@ -1,6 +1,6 @@
 ## Release History
 
-### Version 0.8.1 (tbd)
+### Version 0.8.1 (2018-03-16)
 
 * add `UserServiceClientRest.userPUT()`
 
