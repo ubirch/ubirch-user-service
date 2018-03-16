@@ -35,7 +35,7 @@ object UserServiceClientRestDebug extends App
   try {
 
     // GET /group/memberOf/$CONTEXT_NAME/$PROVIDER_ID/$EXTERNAL_USER_ID
-    val futureGroups = UserServiceClientRest.groups(
+    val futureGroups = UserServiceClientRest.groupMemberOf(
       contextName = contextName,
       providerId = providerId,
       externalUserId = externalUserId

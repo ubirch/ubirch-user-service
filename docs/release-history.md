@@ -2,7 +2,7 @@
 
 ### Version 0.8.2 (tbd)
 
-* tbd
+* bugfix: url in `UserServiceClientRest.userPUT()` was wrong
 
 ### Version 0.8.1 (2018-03-16)
 

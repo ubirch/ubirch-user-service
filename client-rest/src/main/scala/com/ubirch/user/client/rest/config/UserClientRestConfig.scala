@@ -48,7 +48,20 @@ object UserClientRestConfig extends ConfigBase {
 
   }
 
-  def pathUserPOST(): String = s"$host${RouteConstants.pathUser}"
+  val pathUserPOST: String = s"$host${RouteConstants.pathUser}"
+
+  def pathUserPUT(providerId: String,
+                  externalUserId: String
+                 ): String = {
+
+    val path = RouteConstants.pathUserUpdate(
+      providerId = providerId,
+      externalUserId = externalUserId
+    )
+
+    s"$host$path"
+
+  }
 
   def pathUserDELETE(providerId: String,
                      externalUserId: String

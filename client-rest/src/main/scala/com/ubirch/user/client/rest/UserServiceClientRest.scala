@@ -146,7 +146,7 @@ object UserServiceClientRest extends MyJsonProtocol
       case Some(userJsonString: String) =>
 
         logger.debug(s"user (object): $userJsonString")
-        val url = UserClientRestConfig.pathUserPOST()
+        val url = UserClientRestConfig.pathUserPOST
         val req = HttpRequest(
           method = HttpMethods.POST,
           uri = url,
@@ -185,7 +185,10 @@ object UserServiceClientRest extends MyJsonProtocol
       case Some(userJsonString: String) =>
 
         logger.debug(s"user (object): $userJsonString")
-        val url = UserClientRestConfig.pathUserPOST()
+        val url = UserClientRestConfig.pathUserPUT(
+          providerId = user.providerId,
+          externalUserId = user.externalId
+        )
         val req = HttpRequest(
           method = HttpMethods.PUT,
           uri = url,
