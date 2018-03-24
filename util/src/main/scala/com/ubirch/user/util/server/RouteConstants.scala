@@ -41,6 +41,8 @@ object RouteConstants {
 
   def pathUserFind(providerId: String, externalUserId: String) = s"$pathUser/$providerId/$externalUserId"
 
+  def pathUserUpdate(providerId: String, externalUserId: String) = s"$pathUser/$providerId/$externalUserId"
+
   def pathUserDelete(providerId: String, externalUserId: String) = s"$pathUser/$providerId/$externalUserId"
 
   def pathEmailExists(email: String) = s"$pathUser/$emailExists/$email"
@@ -53,9 +55,10 @@ object RouteConstants {
 
   val pathGroupAllowedUsers = s"$pathGroup/$allowedUsers"
 
-  def pathGroups(contextName: String,
-                 providerId: String,
-                 externalUserId: String): String = {
+  def pathGroupMemberOf(contextName: String,
+                        providerId: String,
+                        externalUserId: String
+                       ): String = {
     s"$pathPrefix/$group/$memberOf/$contextName/$providerId/$externalUserId"
   }
 

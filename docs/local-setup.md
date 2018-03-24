@@ -10,7 +10,7 @@
 
 1. Create Contexts
 
-You can get the providerId and externalId by logging in through the auth-service and then checking the Redis datbaase.
+You can get the providerId and externalId by logging in through the auth-service and then checking the Redis database.
 
     export ADMIN_PROVIDER_ID=google
     export ADMIN_EXTERNAL_ID=1234

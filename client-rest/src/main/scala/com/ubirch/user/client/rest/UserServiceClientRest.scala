@@ -6,13 +6,13 @@ import com.ubirch.user.client.rest.config.UserClientRestConfig
 import com.ubirch.user.model.rest.{Group, User}
 import com.ubirch.util.deepCheck.model.DeepCheckResponse
 import com.ubirch.util.deepCheck.util.DeepCheckResponseUtil
-import com.ubirch.util.json.MyJsonProtocol
+import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
 import com.ubirch.util.model.JsonResponse
 
 import org.json4s.native.Serialization.read
 
 import akka.http.scaladsl.HttpExt
-import akka.http.scaladsl.model.{HttpMethods, HttpRequest, HttpResponse, StatusCode, StatusCodes}
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpMethods, HttpRequest, HttpResponse, StatusCode, StatusCodes}
 import akka.stream.Materializer
 import akka.util.ByteString
 
@@ -77,13 +77,14 @@ object UserServiceClientRest extends MyJsonProtocol
 
   }
 
-  def groups(contextName: String,
-             providerId: String,
-             externalUserId: String)
-            (implicit httpClient: HttpExt, materializer: Materializer): Future[Option[Set[Group]]] = {
+  def groupMemberOf(contextName: String,
+                    providerId: String,
+                    externalUserId: String
+                   )
+                   (implicit httpClient: HttpExt, materializer: Materializer): Future[Option[Set[Group]]] = {
 
     logger.debug("groups(): query groups through REST API")
-    val url = UserClientRestConfig.pathGroups(
+    val url = UserClientRestConfig.pathGroupMemberOf(
       contextName = contextName,
       providerId = providerId,
       externalUserId = externalUserId
@@ -137,6 +138,87 @@ object UserServiceClientRest extends MyJsonProtocol
 
   }
 
+  def userPOST(user: User)
+              (implicit httpClient: HttpExt, materializer: Materializer): Future[Option[User]] = {
+
+    Json4sUtil.any2String(user) match {
+
+      case Some(userJsonString: String) =>
+
+        logger.debug(s"user (object): $userJsonString")
+        val url = UserClientRestConfig.pathUserPOST
+        val req = HttpRequest(
+          method = HttpMethods.POST,
+          uri = url,
+          entity = HttpEntity.Strict(ContentTypes.`application/json`, data = ByteString(userJsonString))
+        )
+        httpClient.singleRequest(req) flatMap {
+
+          case HttpResponse(StatusCodes.OK, _, entity, _) =>
+
+            entity.dataBytes.runFold(ByteString(""))(_ ++ _) map { body =>
+              Some(read[User](body.utf8String))
+            }
+
+          case res@HttpResponse(code, _, _, _) =>
+
+            res.discardEntityBytes()
+            Future(
+              logErrorAndReturnNone(s"userPOST() call to user-service failed: url=$url code=$code, status=${res.status}")
+            )
+
+        }
+
+      case None =>
+        logger.error(s"failed to to convert input to JSON: user=$user")
+        Future(None)
+
+    }
+
+  }
+
+  def userPUT(user: User)
+             (implicit httpClient: HttpExt, materializer: Materializer): Future[Option[User]] = {
+
+    Json4sUtil.any2String(user) match {
+
+      case Some(userJsonString: String) =>
+
+        logger.debug(s"user (object): $userJsonString")
+        val url = UserClientRestConfig.pathUserPUT(
+          providerId = user.providerId,
+          externalUserId = user.externalId
+        )
+        val req = HttpRequest(
+          method = HttpMethods.PUT,
+          uri = url,
+          entity = HttpEntity.Strict(ContentTypes.`application/json`, data = ByteString(userJsonString))
+        )
+        httpClient.singleRequest(req) flatMap {
+
+          case HttpResponse(StatusCodes.OK, _, entity, _) =>
+
+            entity.dataBytes.runFold(ByteString(""))(_ ++ _) map { body =>
+              Some(read[User](body.utf8String))
+            }
+
+          case res@HttpResponse(code, _, _, _) =>
+
+            res.discardEntityBytes()
+            Future(
+              logErrorAndReturnNone(s"userPOST() call to user-service failed: url=$url code=$code, status=${res.status}")
+            )
+
+        }
+
+      case None =>
+        logger.error(s"failed to to convert input to JSON: user=$user")
+        Future(None)
+
+    }
+
+  }
+
   def userDELETE(providerId: String,
                  externalUserId: String
                 )(implicit httpClient: HttpExt, materializer: Materializer): Future[Boolean] = {
@@ -172,7 +254,10 @@ object UserServiceClientRest extends MyJsonProtocol
 
     httpClient.singleRequest(HttpRequest(uri = url)) map {
 
-      case HttpResponse(StatusCodes.OK, _, entity, _) => true
+      case res@HttpResponse(StatusCodes.OK, _, entity, _) =>
+
+        res.discardEntityBytes()
+        true
 
       case res@HttpResponse(code, _, _, _) =>
 
@@ -191,7 +276,10 @@ object UserServiceClientRest extends MyJsonProtocol
 
     httpClient.singleRequest(HttpRequest(uri = url)) map {
 
-      case HttpResponse(StatusCodes.OK, _, entity, _) => true
+      case res@HttpResponse(StatusCodes.OK, _, entity, _) =>
+
+        res.discardEntityBytes()
+        true
 
       case res@HttpResponse(code, _, _, _) =>
 

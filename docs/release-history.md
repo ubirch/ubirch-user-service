@@ -1,5 +1,19 @@
 ## Release History
 
+### Version 0.8.2 (2018-03-16)
+
+* bugfix: url in `UserServiceClientRest.userPUT()` was wrong
+* bugfix: fixed response status from 202 (Accepted)to 200 (OK) for create user route and update user route
+
+### Version 0.8.1 (2018-03-16)
+
+* add `UserServiceClientRest.userPUT()`
+
+### Version 0.8.0 (2018-03-14)
+
+* add `UserServiceClientRest.userPOST()`
+* renamed `UserServiceClientRest.groups()` to `UserServiceClientRest.groupMemberOfGET()`
+
 ### Version 0.7.0 (2018-03-08)
 
 * update to `com.ubirch.util:date:0.5.1`

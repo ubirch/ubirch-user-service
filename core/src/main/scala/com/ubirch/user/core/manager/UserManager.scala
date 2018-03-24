@@ -28,7 +28,7 @@ object UserManager extends StrictLogging
 
     findByProviderIdAndExternalId(providerId = user.providerId, externalUserId = user.externalId) flatMap {
 
-      case Some(u: User) =>
+      case Some(_: User) =>
         val errMsg = s"unable to create user as it's id already exist: user=$user"
         logger.error(errMsg)
         throw new Exception(errMsg)
