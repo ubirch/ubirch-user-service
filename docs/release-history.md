@@ -1,5 +1,9 @@
 ## Release History
 
+### Version 0.8.3 (tbd)
+
+* add missing export statements in `initUsers.sh`
+
 ### Version 0.8.2 (2018-03-16)
 
 * bugfix: url in `UserServiceClientRest.userPUT()` was wrong

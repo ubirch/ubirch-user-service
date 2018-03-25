@@ -1,15 +1,16 @@
 package com.ubirch.user.core.actor
 
+import akka.actor.{Actor, ActorLogging, Props}
+import akka.routing.RoundRobinPool
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.manager.DeepCheckManager
 import com.ubirch.util.deepCheck.model.{DeepCheckRequest, DeepCheckResponse}
+import com.ubirch.util.model.JsonErrorResponse
 import com.ubirch.util.mongo.connection.MongoUtil
-
-import akka.actor.{Actor, ActorLogging, Props}
-import akka.routing.RoundRobinPool
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.{Failure, Success}
 
 /**
   * author: cvandrei
@@ -23,7 +24,15 @@ class DeepCheckActor(implicit mongo: MongoUtil)
 
     case _: DeepCheckRequest =>
       val sender = context.sender()
-      deepCheck() map (sender ! _)
+      deepCheck().onComplete {
+        case Success(res) =>
+          sender ! res
+        case Failure(t) =>
+          sender ! JsonErrorResponse(
+            errorType = "CheckError",
+            errorMessage = t.getMessage
+          )
+      }
 
     case _ => log.error("unknown message")
 

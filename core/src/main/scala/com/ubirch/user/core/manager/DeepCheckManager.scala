@@ -32,10 +32,19 @@ object DeepCheckManager
     */
   def connectivityCheck()(implicit mongo: MongoUtil): Future[DeepCheckResponse] = {
 
-    val collectionName = Config.mongoCollectionContext
-    mongo.connectivityCheck[Context](collectionName).map { deepCheckRes =>
-      DeepCheckResponseUtil.addServicePrefix("user-service", deepCheckRes)
+    if (mongo.checkConnection()) {
+      val collectionName = Config.mongoCollectionContext
+      mongo.connectivityCheck[Context](collectionName).map { deepCheckRes =>
+        DeepCheckResponseUtil.addServicePrefix("user-service", deepCheckRes)
+      }
     }
+    else
+      Future(DeepCheckResponse(
+        status = false,
+        messages = Seq("no db connection")
+      ))
+
+
   }
 
 }

@@ -2,6 +2,9 @@
 
 cd ..
 
+export TEST_USER_CONTEXT=ubirch
+export ENV_NAME=local
+
 echo "======"
 echo "====== STEP 1/1: init admin users"
 echo "======"
