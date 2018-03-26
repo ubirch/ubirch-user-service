@@ -1,5 +1,9 @@
 ## Release History
 
+### Version 0.8.4 (tbd)
+
+* tbd
+
 ### Version 0.8.3 (2018-03-26)
 
 * add missing export statements in `initUsers.sh`
