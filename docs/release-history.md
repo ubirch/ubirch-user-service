@@ -3,6 +3,8 @@
 ### Version 0.8.3 (2018-03-26)
 
 * add missing export statements in `initUsers.sh`
+* update to `com.ubirch.util:mongo-test-utils:0.4.1`
+* update to `com.ubirch.util:mongo-utils:0.4.1`
 * added handling of broken database connection to deep check
 
 ### Version 0.8.2 (2018-03-16)
