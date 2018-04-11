@@ -1,5 +1,9 @@
 ## Release History
 
+### Version 0.8.5 (tbd)
+
+* tbd
+
 ### Version 0.8.4 (2018-04-11)
 
 * update to `net.logstash.logback:logstash-logback-encoder:5.0`
