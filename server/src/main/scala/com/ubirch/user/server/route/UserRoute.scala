@@ -50,16 +50,10 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
             }
           }
 
-        } ~ path(RouteConstants.emailExists / Segment) { emailAddress =>
+        } ~ path(RouteConstants.externalIdExists / Segment) { externalId =>
 
           get {
-            searchByEmailAddress(emailAddress)
-          }
-
-        } ~ path(RouteConstants.hashedEmailExists / Segment) { hashedEmailAddress =>
-
-          get {
-            searchByHashedEmailAddress(hashedEmailAddress)
+            searchByExternalId(externalId)
           }
 
         } ~ path(Segment / Segment) { (provider, externalUserId) =>
@@ -186,24 +180,24 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
 
   }
 
-  private def searchByEmailAddress(emailAddress: String): Route = {
+  private def searchByExternalId(externalId: String): Route = {
 
-    onComplete(userActor ? SearchByEmail(emailAddress)) {
+    onComplete(userActor ? SearchByExternalId(externalId)) {
 
       case Failure(t) =>
-        logger.error("searchByEmail call responded with an unhandled message", t)
+        logger.error("searchByExternalId call responded with an unhandled message", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = t.getMessage))
 
       case Success(resp) =>
         resp match {
           case true =>
-            complete(StatusCodes.OK -> JsonResponse(message = s"email address exist: $emailAddress"))
+            complete(StatusCodes.OK -> JsonResponse(message = s"external ID exist: $externalId"))
           case false =>
-            complete(StatusCodes.BadRequest -> JsonResponse(message = s"email does not address exist: $emailAddress"))
+            complete(StatusCodes.BadRequest -> JsonResponse(message = s"external ID  does not exist: $externalId"))
           case jre: JsonErrorResponse =>
             complete(StatusCodes.BadRequest -> jre)
           case _ =>
-            val errMsg = s"no user with given email address exists: $emailAddress"
+            val errMsg = s"no user with given external ID exists: $externalId"
             logger.error(errMsg)
             complete(StatusCodes.BadRequest -> JsonErrorResponse(errorType = "QueryError", errorMessage = errMsg))
         }

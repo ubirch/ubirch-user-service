@@ -246,33 +246,11 @@ object UserServiceClientRest extends MyJsonProtocol
 
   }
 
-  def emailExistsGET(email: String)
+  def extIdExistsGET(externalId: String)
                     (implicit httpClient: HttpExt, materializer: Materializer): Future[Boolean] = {
 
-    logger.debug("emailExistsGET(): search email address through REST API")
-    val url = UserClientRestConfig.pathEmailExistsGET(email)
-
-    httpClient.singleRequest(HttpRequest(uri = url)) map {
-
-      case res@HttpResponse(StatusCodes.OK, _, entity, _) =>
-
-        res.discardEntityBytes()
-        true
-
-      case res@HttpResponse(code, _, _, _) =>
-
-        logErrorAndReturnNone(s"emailExistsGET() call to user-service REST API failed: url=$url, code=$code")
-        false
-
-    }
-
-  }
-
-  def hashedEmailExistsGET(hashedEmail: String)
-                          (implicit httpClient: HttpExt, materializer: Materializer): Future[Boolean] = {
-
-    logger.debug("emailExistsGET(): search email address through REST API")
-    val url = UserClientRestConfig.pathHashedEmailExistsGET(hashedEmail)
+    logger.debug("extIdExistsGET(): search external ID through REST API")
+    val url = UserClientRestConfig.pathExternalIdExistsGET(externalId)
 
     httpClient.singleRequest(HttpRequest(uri = url)) map {
 

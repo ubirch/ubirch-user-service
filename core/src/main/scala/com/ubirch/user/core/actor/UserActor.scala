@@ -81,24 +81,10 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
       }
       result map (sender ! _)
 
-    case byEmail: SearchByEmail =>
+    case byExternalId: SearchByExternalId =>
 
       val sender = context.sender()
-      UserManager.findByEmail(byEmail.emailAddress).onComplete {
-        case Success(u) =>
-          sender ! u.isDefined
-        case Failure(t) =>
-          sender ! JsonErrorResponse(
-            errorType = "ValidationError",
-            errorMessage = t.getMessage
-          )
-
-      }
-
-    case byHashedEmail: SearchByHashedEmail =>
-
-      val sender = context.sender()
-      UserManager.findByHashedEmail(byHashedEmail.hashedEmailAddress).onComplete {
+      UserManager.findByExternalId(byExternalId.emailAddress).onComplete {
         case Success(u) =>
           sender ! u.isDefined
         case Failure(t) =>
@@ -143,6 +129,6 @@ case class DeleteUser(providerId: String,
                       externalUserId: String
                      )
 
-case class SearchByEmail(emailAddress: String)
+case class SearchByExternalId(emailAddress: String)
 
 case class SearchByHashedEmail(hashedEmailAddress: String)

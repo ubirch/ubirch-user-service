@@ -23,8 +23,7 @@ object RouteConstants {
   final val memberOf = "memberOf"
   final val initData = "initData"
 
-  final val emailExists = "emailExists"
-  final val hashedEmailExists = "hashedEmailExists"
+  final val externalIdExists = "extIdExists"
 
   val pathPrefix = s"/$apiPrefix/$serviceName/$currentVersion"
 
@@ -45,9 +44,7 @@ object RouteConstants {
 
   def pathUserDelete(providerId: String, externalUserId: String) = s"$pathUser/$providerId/$externalUserId"
 
-  def pathEmailExists(email: String) = s"$pathUser/$emailExists/$email"
-
-  def pathHashedEmailExists(hashedEmail: String) = s"$pathUser/$hashedEmailExists/$hashedEmail"
+  def pathExternalIdExists(externalId: String) = s"$pathUser/$externalIdExists/$externalId"
 
   val pathGroup = s"$pathPrefix/$group"
 

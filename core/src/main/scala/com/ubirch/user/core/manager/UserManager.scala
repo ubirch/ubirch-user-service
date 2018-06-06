@@ -124,24 +124,11 @@ object UserManager extends StrictLogging
 
   }
 
-  def findByEmail(email: String)
-                 (implicit mongo: MongoUtil): Future[Option[User]] = {
+  def findByExternalId(externalId: String)
+                      (implicit mongo: MongoUtil): Future[Option[User]] = {
 
     val selector = document(
-      "email" -> cleanEmail(email)
-    )
-
-    mongo.collection(collectionName) flatMap {
-      _.find(selector).one[User]
-    }
-
-  }
-
-  def findByHashedEmail(hashedEmail: String)
-                       (implicit mongo: MongoUtil): Future[Option[User]] = {
-
-    val selector = document(
-      "hashedEmail" -> hashedEmail
+      "externalId" -> cleanExternalId(externalId)
     )
 
     mongo.collection(collectionName) flatMap {
@@ -184,13 +171,13 @@ object UserManager extends StrictLogging
       email.get.contains(".")
   }
 
-  private def cleanEmail(email: String): String = {
-    email.toLowerCase.trim
+  private def cleanExternalId(externalId: String): String = {
+    externalId.toLowerCase.trim
   }
 
   private def fixEmail(user: User): User = {
     if (user.email.isDefined) {
-      val cleanedEmail: String = cleanEmail(user.email.get)
+      val cleanedEmail: String = cleanExternalId(user.email.get)
       val hashedEmail = HashUtil.sha512HexString(cleanedEmail)
       user.copy(
         email = Some(cleanedEmail),

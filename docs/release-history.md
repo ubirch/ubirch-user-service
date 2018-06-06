@@ -1,8 +1,12 @@
 ## Release History
 
-### Version 0.8.5 (tbd)
+### Version 0.8.4 (tbd)
 
 * tbd
+
+### Version 0.8.5 (tbd)
+
+* register user without email/username    
 
 ### Version 0.8.4 (2018-04-11)
 

@@ -406,7 +406,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
         case Some(_) =>
 
           // test
-          UserManager.findByEmail("test@ubirch.com") flatMap {
+          UserManager.findByExternalId("test@ubirch.com") flatMap {
             result =>
 
               // verify
@@ -431,7 +431,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
         case Some(_) =>
 
           // test
-          UserManager.findByEmail(email2) flatMap {
+          UserManager.findByExternalId(email2) flatMap {
             result =>
 
               // verify
@@ -455,7 +455,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
         case Some(user) =>
 
           // test
-          UserManager.findByEmail(email) flatMap {
+          UserManager.findByExternalId(email) flatMap {
             result =>
 
               // verify

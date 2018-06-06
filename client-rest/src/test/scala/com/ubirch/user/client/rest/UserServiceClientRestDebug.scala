@@ -67,8 +67,8 @@ object UserServiceClientRestDebug extends App
     logger.info(s"___ deepCheck(): $deepCheckResponse")
 
     // GET /user/emailExists/$EMAIL_ADDRESS
-    emailExistsGET("test@ubirch.com")
-    emailExistsGET("testtest@ubirch.com")
+    externalIdExistsGET("test@ubirch.com")
+    externalIdExistsGET("testtest@ubirch.com")
 
     // DELETE /user/$PROVIDER/$EXTERNAL_USER_ID
     userDELETE(providerId, externalUserId)
@@ -104,10 +104,10 @@ object UserServiceClientRestDebug extends App
 
   }
 
-  private def emailExistsGET(email: String): Unit = {
+  private def externalIdExistsGET(externalId: String): Unit = {
 
-    val result = Await.result(UserServiceClientRest.emailExistsGET(email), 5 seconds)
-    logger.info(s"___ emailExistsGET($email): $result")
+    val result = Await.result(UserServiceClientRest.extIdExistsGET(externalId), 5 seconds)
+    logger.info(s"___ emailExistsGET($externalId): $result")
 
   }
 
