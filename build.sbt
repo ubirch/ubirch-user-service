@@ -13,7 +13,7 @@ lazy val commonSettings = Seq(
     url("https://github.com/ubirch/ubirch-user-service"),
     "scm:git:git@github.com:ubirch/ubirch-user-service.git"
   )),
-  version := "0.8.5",
+  version := "0.9.0",
   test in assembly := {},
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
@@ -27,7 +27,10 @@ lazy val commonSettings = Seq(
  ********************************************************/
 
 lazy val userService = (project in file("."))
-  .settings(commonSettings: _*)
+  .settings(
+    commonSettings,
+    skip in publish := true
+  )
   .aggregate(
     clientRest,
     cmdtools,
@@ -254,7 +257,7 @@ lazy val ubirchRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.3.9" excludeA
 lazy val ubirchRestAkkaHttpTest = ubirchUtilG %% "rest-akka-http-test" % "0.3.9" excludeAll (excludedLoggers: _*)
 lazy val ubirchResponse = ubirchUtilG %% "response-util" % "0.2.5" excludeAll (excludedLoggers: _*)
 lazy val ubirchUuid = ubirchUtilG %% "uuid" % "0.1.2" excludeAll (excludedLoggers: _*)
-lazy val ubirchCrypto = ubirchUtilG %% "crypto" % "0.4.7" excludeAll (excludedLoggers: _*)
+lazy val ubirchCrypto = ubirchUtilG %% "crypto" % "0.4.9" excludeAll (excludedLoggers: _*)
 
 /*
  * RESOLVER

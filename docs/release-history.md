@@ -1,8 +1,13 @@
 ## Release History
 
-### Version 0.8.4 (tbd)
+### Version 0.9.0 (2018-07-30)
 
-* tbd
+* update sbt from `0.13.17` to `1.1.6`
+* update to plugin `com.eed3si9n:sbt-assembly:0.14.7`
+* update to plugin `se.marcuslonnberg:sbt-docker:1.5.0`
+* update to plugin `org.scoverage:sbt-scoverage:1.5.1`
+* update to plugin `net.vonbuchholtz:sbt-dependency-check:0.2.7`
+* update to `com.ubirch.util:crypto:0.4.9`
 
 ### Version 0.8.5 (tbd)
 
