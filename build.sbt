@@ -13,7 +13,7 @@ lazy val commonSettings = Seq(
     url("https://github.com/ubirch/ubirch-user-service"),
     "scm:git:git@github.com:ubirch/ubirch-user-service.git"
   )),
-  version := "0.9.0",
+  version := "0.9.1-SNAPSHOT",
   test in assembly := {},
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
