@@ -4,7 +4,7 @@ concurrentRestrictions in Global := Seq(
 )
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.11.12",
   scalacOptions ++= Seq("-feature"),
   organization := "com.ubirch.user",
 
@@ -13,7 +13,7 @@ lazy val commonSettings = Seq(
     url("https://github.com/ubirch/ubirch-user-service"),
     "scm:git:git@github.com:ubirch/ubirch-user-service.git"
   )),
-  version := "0.9.1-SNAPSHOT",
+  version := "0.10.0-SNAPSHOT",
   test in assembly := {},
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
@@ -29,7 +29,7 @@ lazy val commonSettings = Seq(
 lazy val userService = (project in file("."))
   .settings(
     commonSettings,
-    skip in publish := true
+    publishArtifact := false
   )
   .aggregate(
     clientRest,
@@ -149,6 +149,7 @@ lazy val util = project
 
 lazy val depClientRest = Seq(
   akkaHttp,
+  akkaStream,
   json4sNative,
   ubirchResponse,
   ubirchDeepCheckModel
@@ -158,6 +159,7 @@ lazy val depServer = Seq(
 
   akkaSlf4j,
   akkaHttp,
+  akkaStream,
   ubirchRestAkkaHttp,
   ubirchRestAkkaHttpTest % "test",
 
@@ -198,8 +200,8 @@ lazy val depUtils = Seq(
  ********************************************************/
 
 // VERSIONS
-val akkaV = "2.4.20"
-val akkaHttpV = "10.0.11"
+val akkaV = "2.5.11"
+val akkaHttpV = "10.1.3"
 val json4sV = "3.5.2"
 
 val scalaTestV = "3.0.1"
@@ -226,19 +228,20 @@ lazy val scalatest = "org.scalatest" %% "scalatest" % scalaTestV
 lazy val json4sNative = json4sG %% "json4s-native" % json4sV
 
 lazy val scalaLogging = Seq(
-  "org.slf4j" % "slf4j-api" % slf4jV,
-  "org.slf4j" % "log4j-over-slf4j" % slf4jV,
-  "org.slf4j" % "jul-to-slf4j" % slf4jV,
-  "ch.qos.logback" % "logback-core" % logbackV,
-  "ch.qos.logback" % "logback-classic" % logbackV,
+  slf4jG % "slf4j-api" % slf4jV,
+  slf4jG % "log4j-over-slf4j" % slf4jV,
+  slf4jG % "jul-to-slf4j" % slf4jV,
+  logbackG % "logback-core" % logbackV,
+  logbackG % "logback-classic" % logbackV,
   "net.logstash.logback" % "logstash-logback-encoder" % "5.0",
-  "com.typesafe.scala-logging" %% "scala-logging-slf4j" % scalaLogSLF4JV,
-  "com.typesafe.scala-logging" %% "scala-logging" % scalaLogV
+  typesafeLoggingG %% "scala-logging-slf4j" % scalaLogSLF4JV,
+  typesafeLoggingG %% "scala-logging" % scalaLogV
 )
 
 lazy val akkaActor = akkaG %% "akka-actor" % akkaV
 lazy val akkaHttp = akkaG %% "akka-http" % akkaHttpV
 lazy val akkaSlf4j = akkaG %% "akka-slf4j" % akkaV
+lazy val akkaStream = akkaG %% "akka-stream" % akkaV
 
 lazy val excludedLoggers = Seq(
   ExclusionRule(organization = typesafeLoggingG),
@@ -246,18 +249,18 @@ lazy val excludedLoggers = Seq(
   ExclusionRule(organization = logbackG)
 )
 
-lazy val ubirchConfig = ubirchUtilG %% "config" % "0.2.0" excludeAll (excludedLoggers: _*)
-lazy val ubirchDate = ubirchUtilG %% "date" % "0.5.1" excludeAll (excludedLoggers: _*)
-lazy val ubirchDeepCheckModel = ubirchUtilG %% "deep-check-model" % "0.2.0" excludeAll (excludedLoggers: _*)
-lazy val ubirchFutures = ubirchUtilG %% "futures" % "0.1.1" excludeAll (excludedLoggers: _*)
-lazy val ubirchJson = ubirchUtilG %% "json" % "0.4.3" excludeAll (excludedLoggers: _*)
-lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.5.3" excludeAll (excludedLoggers: _*)
-lazy val ubirchMongo = ubirchUtilG %% "mongo-utils" % "0.5.3" excludeAll (excludedLoggers: _*)
-lazy val ubirchRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.3.9" excludeAll (excludedLoggers: _*)
-lazy val ubirchRestAkkaHttpTest = ubirchUtilG %% "rest-akka-http-test" % "0.3.9" excludeAll (excludedLoggers: _*)
-lazy val ubirchResponse = ubirchUtilG %% "response-util" % "0.2.5" excludeAll (excludedLoggers: _*)
-lazy val ubirchUuid = ubirchUtilG %% "uuid" % "0.1.2" excludeAll (excludedLoggers: _*)
+lazy val ubirchConfig = ubirchUtilG %% "config" % "0.2.1" excludeAll (excludedLoggers: _*)
 lazy val ubirchCrypto = ubirchUtilG %% "crypto" % "0.4.9" excludeAll (excludedLoggers: _*)
+lazy val ubirchDate = ubirchUtilG %% "date" % "0.5.2" excludeAll (excludedLoggers: _*)
+lazy val ubirchDeepCheckModel = ubirchUtilG %% "deep-check-model" % "0.2.1" excludeAll (excludedLoggers: _*)
+lazy val ubirchFutures = ubirchUtilG %% "futures" % "0.1.1" excludeAll (excludedLoggers: _*)
+lazy val ubirchJson = ubirchUtilG %% "json" % "0.4.4" excludeAll (excludedLoggers: _*)
+lazy val ubirchMongo = ubirchUtilG %% "mongo-utils" % "0.6.0" excludeAll (excludedLoggers: _*)
+lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.6.0" excludeAll (excludedLoggers: _*)
+lazy val ubirchResponse = ubirchUtilG %% "response-util" % "0.3.0" excludeAll (excludedLoggers: _*)
+lazy val ubirchRestAkkaHttp = ubirchUtilG %% "rest-akka-http" % "0.4.0" excludeAll (excludedLoggers: _*)
+lazy val ubirchRestAkkaHttpTest = ubirchUtilG %% "rest-akka-http-test" % "0.4.0" excludeAll (excludedLoggers: _*)
+lazy val ubirchUuid = ubirchUtilG %% "uuid" % "0.1.3" excludeAll (excludedLoggers: _*)
 
 /*
  * RESOLVER
