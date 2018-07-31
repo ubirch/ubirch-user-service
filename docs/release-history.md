@@ -1,6 +1,6 @@
 ## Release History
 
-### Version 0.10.0 (tbd)
+### Version 0.10.0 (2018-07-31)
 
 * update to Scala 2.11.12
 * update to `com.typesafe.akka:akka-(actor|slf4j):2.5.11`
