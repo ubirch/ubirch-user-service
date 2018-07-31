@@ -1,5 +1,9 @@
 ## Release History
 
+### Version 0.10.2 (tbd)
+
+* tbd
+
 ### Version 0.10.1 (2018-07-31)
 
 * update to `org.json4s:json4s-native:3.6.0`
