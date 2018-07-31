@@ -1,5 +1,9 @@
 ## Release History
 
+### Version 0.10.1 (tbd)
+
+* tbd
+
 ### Version 0.10.0 (2018-07-31)
 
 * update to Scala 2.11.12
