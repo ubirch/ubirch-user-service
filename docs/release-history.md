@@ -1,5 +1,21 @@
 ## Release History
 
+### Version 0.10.0 (2018-07-31)
+
+* update to Scala 2.11.12
+* update to `com.typesafe.akka:akka-(actor|slf4j):2.5.11`
+* update to `com.typesafe.akka:akka-http(-testkit):10.1.3`
+* update to `com.ubirch.util:config:0.2.1`
+* update to `com.ubirch.util:date:0.5.2`
+* update to `com.ubirch.util:deep-check-model:0.2.1`
+* update to `com.ubirch.util:json:0.4.4`
+* update to `com.ubirch.util:mongo-utils:0.6.0`
+* update to `com.ubirch.util:mongo-test-utils:0.6.0`
+* update to `com.ubirch.util:response-util:0.3.0`
+* update to `com.ubirch.util:rest-akka-http:0.4.0`
+* update to `com.ubirch.util:rest-akka-http-test:0.4.0`
+* update to `com.ubirch.util:json:0.1.3`
+
 ### Version 0.9.0 (2018-07-30)
 
 * update sbt from `0.13.17` to `1.1.6`
