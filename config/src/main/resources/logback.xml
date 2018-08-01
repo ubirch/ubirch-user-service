@@ -9,7 +9,7 @@
     <logger name="com.ubirch" level="DEBUG"/>
     <logger name="akka.actor" level="WARN"/>
     <logger name="reactivemongo-akka.actor" level="WARN"/>
-    <logger name="reactivemongo.core" level="INFO"/>
+  <logger name="reactivemongo.core" level="WARN"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
