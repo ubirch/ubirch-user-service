@@ -1,6 +1,6 @@
 ## Release History
 
-### Version 0.11.0 (tbd)
+### Version 0.11.0 (2018-08-01)
 
 * update to `com.ubirch.util:mongo-utils:0.7.0`
 * update to `com.ubirch.util:mongo-test-utils:0.7.0`
