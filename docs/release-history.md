@@ -1,8 +1,42 @@
 ## Release History
 
-### Version 0.8.4 (tbd)
+### Version 0.10.2 (tbd)
 
 * tbd
+
+### Version 0.10.1 (2018-07-31)
+
+* update to `org.json4s:json4s-native:3.6.0`
+* update to `com.ubirch.util:deep-check-model:0.3.0`
+* update to `com.ubirch.util:json:0.5.0`
+* update to `com.ubirch.util:mongo-utils:0.7.0`
+* update to `com.ubirch.util:mongo-test-utils:0.7.0`
+* update to `com.ubirch.util:response-util:0.4.0`
+
+### Version 0.10.0 (2018-07-31)
+
+* update to Scala 2.11.12
+* update to `com.typesafe.akka:akka-(actor|slf4j):2.5.11`
+* update to `com.typesafe.akka:akka-http(-testkit):10.1.3`
+* update to `com.ubirch.util:config:0.2.1`
+* update to `com.ubirch.util:date:0.5.2`
+* update to `com.ubirch.util:deep-check-model:0.2.1`
+* update to `com.ubirch.util:json:0.4.4`
+* update to `com.ubirch.util:mongo-utils:0.6.0`
+* update to `com.ubirch.util:mongo-test-utils:0.6.0`
+* update to `com.ubirch.util:response-util:0.3.0`
+* update to `com.ubirch.util:rest-akka-http:0.4.0`
+* update to `com.ubirch.util:rest-akka-http-test:0.4.0`
+* update to `com.ubirch.util:json:0.1.3`
+
+### Version 0.9.0 (2018-07-30)
+
+* update sbt from `0.13.17` to `1.1.6`
+* update to plugin `com.eed3si9n:sbt-assembly:0.14.7`
+* update to plugin `se.marcuslonnberg:sbt-docker:1.5.0`
+* update to plugin `org.scoverage:sbt-scoverage:1.5.1`
+* update to plugin `net.vonbuchholtz:sbt-dependency-check:0.2.7`
+* update to `com.ubirch.util:crypto:0.4.9`
 
 ### Version 0.8.5 (tbd)
 
