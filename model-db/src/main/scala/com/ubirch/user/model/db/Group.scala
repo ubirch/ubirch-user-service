@@ -1,5 +1,6 @@
 package com.ubirch.user.model.db
 
+import com.ubirch.util.date.DateUtil
 import com.ubirch.util.uuid.UUIDUtil
 
 import org.joda.time.DateTime
@@ -14,6 +15,6 @@ case class Group(id: String = UUIDUtil.uuidStr,
                  contextId: String,
                  allowedUsers: Set[String],
                  adminGroup: Option[Boolean] = None,
-                 created: DateTime = DateTime.now,
-                 updated: DateTime = DateTime.now
+                 created: DateTime = DateUtil.nowUTC,
+                 updated: DateTime = DateUtil.nowUTC
                 )
