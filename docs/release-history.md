@@ -2,8 +2,8 @@
 
 ### Version 0.11.0 (2018-08-01)
 
-* update to `com.ubirch.util:mongo-utils:0.7.0`
-* update to `com.ubirch.util:mongo-test-utils:0.7.0`
+* update to `com.ubirch.util:mongo-utils:0.8.0`
+* update to `com.ubirch.util:mongo-test-utils:0.8.0`
 * fixed some tests
 
 ### Version 0.10.1 (2018-07-31)
