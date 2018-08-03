@@ -1,6 +1,6 @@
 ## Release History
 
-### Version 0.12.0 (tbd)
+### Version 0.12.0 (2018-08-04)
 
 * added endpoint `POST /api/userService/v1/register`
 * added endpoint `PUT /api/userService/v1/user/info`
