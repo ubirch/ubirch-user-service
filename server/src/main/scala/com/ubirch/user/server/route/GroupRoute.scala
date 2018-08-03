@@ -31,13 +31,12 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-03-30
   */
-class GroupRoute(implicit mongo: MongoUtil) extends CORSDirective
+class GroupRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDirective
   with ResponseUtil
   with StrictLogging {
 
-  implicit val system = ActorSystem()
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
-  implicit val timeout = Timeout(Config.actorTimeout seconds)
+  implicit val timeout: Timeout = Timeout(Config.actorTimeout seconds)
 
   private val groupActor = system.actorOf(GroupActor.props(), ActorNames.GROUP)
 

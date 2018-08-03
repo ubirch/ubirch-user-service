@@ -1,10 +1,10 @@
 ## Release History
 
-### Version 0.11.1 (tbd)
+### Version 0.12.0 (tbd)
 
 * added endpoint `POST /api/userService/v1/register`
-* added endpoint `PUT /api/userService/v1/userInfo`
-* added endpoint `GET /api/userService/v1/userInfo/$CONTEXT/$PROVIDER_ID/$EXTERNAL_USER_ID`
+* added endpoint `PUT /api/userService/v1/user/info`
+* added endpoint `GET /api/userService/v1/user/info/$CONTEXT/$PROVIDER_ID/$EXTERNAL_USER_ID`
 
 ### Version 0.11.0 (2018-08-01)
 

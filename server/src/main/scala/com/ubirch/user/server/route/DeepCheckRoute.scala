@@ -25,13 +25,12 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-06-07
   */
-class DeepCheckRoute(implicit mongo: MongoUtil) extends CORSDirective
+class DeepCheckRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDirective
   with ResponseUtil
   with StrictLogging {
 
-  implicit val system = ActorSystem()
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
-  implicit val timeout = Timeout(Config.actorTimeout seconds)
+  implicit val timeout: Timeout = Timeout(Config.actorTimeout seconds)
 
   private val deepCheckActor = system.actorOf(DeepCheckActor.props(), ActorNames.DEEP_CHECK)
 

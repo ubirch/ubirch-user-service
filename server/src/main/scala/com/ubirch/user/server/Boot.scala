@@ -14,9 +14,7 @@ import akka.http.scaladsl.Http.ServerBinding
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
 
-import scala.concurrent.Future
-import scala.concurrent.duration._
-import scala.language.postfixOps
+import scala.concurrent.{ExecutionContextExecutor, Future}
 
 /**
   * author: cvandrei
@@ -24,11 +22,11 @@ import scala.language.postfixOps
   */
 object Boot extends App with StrictLogging {
 
-  implicit val system = ActorSystem()
-  implicit val materializer = ActorMaterializer()
-  implicit val executionContext = system.dispatcher
+  implicit val system: ActorSystem = ActorSystem()
+  implicit val materializer: ActorMaterializer = ActorMaterializer()
+  implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
-  implicit val timeout = Timeout(Config.timeout seconds)
+  implicit val timeout: Timeout = Timeout(Config.timeout, TimeUnit.SECONDS)
 
   implicit val mongo: MongoUtil = new MongoUtil(ConfigKeys.MONGO_PREFIX)
 
@@ -39,24 +37,23 @@ object Boot extends App with StrictLogging {
 
     val interface = Config.interface
     val port = Config.port
-    implicit val timeout = Timeout(5, TimeUnit.SECONDS)
 
     logger.info(s"start http server on $interface:$port")
     Http().bindAndHandle((new MainRoute).myRoute, interface, port)
 
   }
 
-  private def registerShutdownHooks() = {
+  private def registerShutdownHooks(): Unit = {
 
     Runtime.getRuntime.addShutdownHook(new Thread() {
 
       override def run(): Unit = {
 
+        mongo.close()
+
         bindingFuture
           .flatMap(_.unbind())
           .onComplete(_ => system.terminate())
-
-        mongo.close()
 
       }
 

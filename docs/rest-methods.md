@@ -236,7 +236,7 @@ If the registration fails the response is:
 
 #### Get
 
-    curl curl localhost:8092/api/userService/v1/userInfo/$CONTEXT/$PROVIDER_ID/$EXTERNAL_USER_ID
+    curl curl localhost:8092/api/userService/v1/user/info/$CONTEXT/$PROVIDER_ID/$EXTERNAL_USER_ID
 
 If the query is successful the response is (user exists but is not registered not in this context):
 
@@ -299,7 +299,7 @@ If the query fails the response is:
 
 #### Update
 
-    curl -XPUT curl localhost:8092/api/userService/v1/userInfo -H "Content-Type: application/json" -d '{
+    curl -XPUT curl localhost:8092/api/userService/v1/user/info -H "Content-Type: application/json" -d '{
       "simpleUserContext": {
         "context": "ubirch-local",
         "providerId": "google",

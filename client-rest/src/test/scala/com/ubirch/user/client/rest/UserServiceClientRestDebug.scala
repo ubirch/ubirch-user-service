@@ -75,30 +75,8 @@ object UserServiceClientRestDebug extends App
     userDELETE(providerId, externalUserId)
 
     // POST /register
-    //   followed by /userInfo calls
-    val userName = "some user name"
-    val locale = "en-US"
-    val email = Some("someUser@ubirch.com")
-    registerPOST(contextName, providerId, externalUserId, userName, locale, email) match {
-
-      case None => // no clean-up necessary since user hasn't been created
-
-      case Some(_) =>
-
-        userInfoGET(contextName, providerId, externalUserId) match {
-
-          case None =>
-
-          case Some(_) =>
-
-            val newDisplayName = userName + "--new"
-            userInfoPUT(contextName, providerId, externalUserId, newDisplayName)
-            userInfoGET(contextName, providerId, externalUserId)
-
-        }
-        userDELETE(providerId, externalUserId) // (clean-up) delete user again
-
-    }
+    //   followed by /user/info calls
+    registerAndSubsequentCalls(contextName, providerId, externalUserId)
 
   } finally {
     system.terminate()
@@ -199,6 +177,34 @@ object UserServiceClientRestDebug extends App
     logger.info(s"___ userInfoPUT($updateInfo): $result")
 
     result
+
+  }
+
+  private def registerAndSubsequentCalls(contextName: String, providerId: String, externalUserId: String) = {
+
+    val userName = "some user name"
+    val locale = "en-US"
+    val email = Some("someUser@ubirch.com")
+    registerPOST(contextName, providerId, externalUserId, userName, locale, email) match {
+
+      case None => // no clean-up necessary since user hasn't been created
+
+      case Some(_) =>
+
+        userInfoGET(contextName, providerId, externalUserId) match {
+
+          case None =>
+
+          case Some(_) =>
+
+            val newDisplayName = userName + "--new"
+            userInfoPUT(contextName, providerId, externalUserId, newDisplayName)
+            userInfoGET(contextName, providerId, externalUserId)
+
+        }
+        userDELETE(providerId, externalUserId) // (clean-up) delete user again
+
+    }
 
   }
 

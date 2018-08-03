@@ -26,12 +26,11 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-04-20
   */
-class RegisterRoute(implicit mongo: MongoUtil)
+class RegisterRoute(implicit mongo: MongoUtil, system: ActorSystem)
   extends ResponseUtil
     with CORSDirective
     with StrictLogging {
 
-  implicit val system: ActorSystem = ActorSystem()
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
   implicit val timeout: Timeout = Timeout(Config.actorTimeout seconds)
 

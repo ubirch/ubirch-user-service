@@ -6,16 +6,18 @@ import akka.http.scaladsl.server.Route
 import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.scalalogging.slf4j.StrictLogging
+
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.actor._
 import com.ubirch.user.model._
-import com.ubirch.user.model.rest.User
+import com.ubirch.user.model.rest.{SimpleUserContext, UpdateInfo, User, UserInfo}
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
 import com.ubirch.util.json.Json4sUtil
 import com.ubirch.util.model.{JsonErrorResponse, JsonResponse}
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.rest.akka.directives.CORSDirective
+
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 
 import scala.concurrent.ExecutionContextExecutor
@@ -27,15 +29,15 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-03-30
   */
-class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
+class UserRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDirective
   with ResponseUtil
   with StrictLogging {
 
-  implicit val system = ActorSystem()
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
-  implicit val timeout = Timeout(Config.actorTimeout seconds)
+  implicit val timeout: Timeout = Timeout(Config.actorTimeout seconds)
 
   private val userActor = system.actorOf(UserActor.props(), ActorNames.USER)
+  private val userInfoActor = system.actorOf(UserInfoActor.props(), ActorNames.USER_INFO)
 
   val route: Route = {
 
@@ -66,6 +68,33 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
             }
           } ~ delete {
             deleteById(provider, externalUserId)
+          }
+
+        } ~ pathPrefix(RouteConstants.info) {
+
+          path(Segment / Segment / Segment) { (context, providerId, userId) =>
+            respondWithCORS {
+
+              get {
+                val simpleUserContext = SimpleUserContext(
+                  context = context,
+                  providerId = providerId,
+                  userId = userId
+                )
+                getInfo(simpleUserContext)
+              }
+
+            }
+          } ~ pathEnd {
+            respondWithCORS {
+
+              entity(as[UpdateInfo]) { updateInfo =>
+                put {
+                  update(updateInfo)
+                }
+              }
+
+            }
           }
 
         }
@@ -200,6 +229,62 @@ class UserRoute(implicit mongo: MongoUtil) extends CORSDirective
             val errMsg = s"no user with given external ID exists: $externalId"
             logger.error(errMsg)
             complete(StatusCodes.BadRequest -> JsonErrorResponse(errorType = "QueryError", errorMessage = errMsg))
+        }
+
+    }
+
+  }
+
+  private def getInfo(simpleUserContext: SimpleUserContext): Route = {
+
+    onComplete(userInfoActor ? simpleUserContext) {
+
+      case Failure(t) =>
+        logger.error("get-user call responded with an unhandled message (check UserInfoRoute for bugs!!!)", t)
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
+
+      case Success(resp) =>
+
+        resp match {
+
+          case Some(userInfo: UserInfo) => complete(userInfo)
+
+          case None =>
+            logger.error("failed to get user info (None)")
+            complete(requestErrorResponse(errorType = "NoUserInfoFound", errorMessage = "failed to get user info"))
+
+          case _ =>
+            logger.error("failed to get user info (server error)")
+            complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to get user info"))
+
+        }
+
+    }
+
+  }
+
+  private def update(updateInfo: UpdateInfo): Route = {
+
+    onComplete(userInfoActor ? updateInfo) {
+
+      case Failure(t) =>
+        logger.error("update-user call responded with an unhandled message (check UserInfoRoute for bugs!!!)", t)
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
+
+      case Success(resp) =>
+
+        resp match {
+
+          case Some(userInfo: UserInfo) => complete(userInfo)
+
+          case None =>
+            logger.error("failed to update user info (None)")
+            complete(requestErrorResponse(errorType = "UpdateError", errorMessage = "failed to update user info"))
+
+          case _ =>
+            logger.error("failed to update user info (server error)")
+            complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to update user info"))
+
         }
 
     }
