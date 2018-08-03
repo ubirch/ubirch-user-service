@@ -25,6 +25,9 @@ object RouteConstants {
 
   final val externalIdExists = "extIdExists"
 
+  final val register = "register"
+  final val userInfo = "userInfo"
+
   val pathPrefix = s"/$apiPrefix/$serviceName/$currentVersion"
 
   val pathCheck = s"$pathPrefix/$check"
@@ -60,5 +63,9 @@ object RouteConstants {
   }
 
   final def pathInitData(env: String) = s"$pathPrefix/$initData/$env"
+
+  final val pathRegister = s"$pathPrefix/$register"
+  final def pathUserInfoGET(context: String, providerId: String, userId: String) = s"$pathPrefix/$userInfo/$context/$providerId/$userId"
+  final val pathUserInfoPUT = s"$pathPrefix/$userInfo"
 
 }

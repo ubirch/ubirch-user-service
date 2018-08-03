@@ -83,4 +83,18 @@ object UserClientRestConfig extends ConfigBase {
 
   }
 
+  val pathRegisterPOST = s"$host${RouteConstants.pathRegister}"
+
+  def pathUserInfoGET(context: String,
+                      providerId: String,
+                      externalUserId: String
+                     ): String = {
+
+    val path = RouteConstants.pathUserInfoGET(context, providerId, externalUserId)
+    s"$host$path"
+
+  }
+
+  val pathUserInfoPUT = s"$host${RouteConstants.pathUserInfoPUT}"
+
 }

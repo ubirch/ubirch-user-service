@@ -12,4 +12,7 @@ object ActorNames {
   final val GROUPS = "groups-actor"
   final val DEEP_CHECK = "deep-check-actor"
 
+  final val REGISTRATION = "registration-actor"
+  final val USER_INFO = "user-info-actor"
+
 }

@@ -62,7 +62,7 @@ class DataHelpers(implicit mongo: MongoUtil) extends StrictLogging {
 
   def createGroup(contextOpt: Option[Context],
                   ownerOpt: Option[User],
-                 adminGroup: Option[Boolean],
+                  adminGroup: Option[Boolean],
                   allowedUsersOpt: Option[User]*
                  ): Future[Option[Group]] = {
 

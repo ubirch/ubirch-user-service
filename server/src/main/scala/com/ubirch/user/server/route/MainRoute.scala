@@ -12,12 +12,14 @@ import akka.http.scaladsl.server.Route
   */
 class MainRoute(implicit mongo: MongoUtil) {
 
-  val welcome = new WelcomeRoute {}
-  val deepCheck = new DeepCheckRoute {}
-  val context = new ContextRoute {}
-  val user = new UserRoute {}
-  val group = new GroupRoute {}
-  val initData = new InitDataRoute {}
+  private val welcome = new WelcomeRoute {}
+  private val deepCheck = new DeepCheckRoute {}
+  private val context = new ContextRoute {}
+  private val user = new UserRoute {}
+  private val group = new GroupRoute {}
+  private val initData = new InitDataRoute {}
+  private val register = new RegisterRoute {}
+  private val userInfo = new UserInfoRoute {}
 
   val myRoute: Route = {
 
@@ -34,7 +36,9 @@ class MainRoute(implicit mongo: MongoUtil) {
             context.route ~
             user.route ~
             group.route ~
-            initData.route
+            initData.route ~
+            register.route ~
+            userInfo.route
 
         }
       }

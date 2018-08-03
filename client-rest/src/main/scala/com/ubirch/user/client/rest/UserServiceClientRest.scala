@@ -3,7 +3,7 @@ package com.ubirch.user.client.rest
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
 import com.ubirch.user.client.rest.config.UserClientRestConfig
-import com.ubirch.user.model.rest.{Group, User}
+import com.ubirch.user.model.rest.{Group, UpdateInfo, User, UserContext, UserInfo}
 import com.ubirch.util.deepCheck.model.DeepCheckResponse
 import com.ubirch.util.deepCheck.util.DeepCheckResponseUtil
 import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
@@ -263,6 +263,110 @@ object UserServiceClientRest extends MyJsonProtocol
 
         logErrorAndReturnNone(s"emailExistsGET() call to user-service REST API failed: url=$url, code=$code")
         false
+
+    }
+
+  }
+
+  def registerPOST(userContext: UserContext)
+                  (implicit httpClient: HttpExt, materializer: Materializer): Future[Option[UserInfo]] = {
+
+    Json4sUtil.any2String(userContext) match {
+
+      case Some(userContextJsonString: String) =>
+
+        logger.debug(s"userContext (object): $userContextJsonString")
+        val url = UserClientRestConfig.pathRegisterPOST
+        val req = HttpRequest(
+          method = HttpMethods.POST,
+          uri = url,
+          entity = HttpEntity.Strict(ContentTypes.`application/json`, data = ByteString(userContextJsonString))
+        )
+        httpClient.singleRequest(req) flatMap {
+
+          case HttpResponse(StatusCodes.OK, _, entity, _) =>
+
+            entity.dataBytes.runFold(ByteString(""))(_ ++ _) map { body =>
+              Some(read[UserInfo](body.utf8String))
+            }
+
+          case res@HttpResponse(code, _, _, _) =>
+
+            res.discardEntityBytes()
+            Future(
+              logErrorAndReturnNone(s"registerPOST() call to user-service failed: url=$url code=$code, status=${res.status}")
+            )
+
+        }
+
+      case None =>
+        logger.error(s"failed to to convert input to JSON: userContext=$userContext")
+        Future(None)
+
+    }
+
+  }
+
+  def userInfoGET(context: String,
+                  providerId: String,
+                  externalUserId: String
+                 )
+                 (implicit httpClient: HttpExt, materializer: Materializer): Future[Option[UserInfo]] = {
+
+    logger.debug(s"userInfoGET(): search userInfo ($context/$providerId/$externalUserId) through REST API")
+    val url = UserClientRestConfig.pathUserInfoGET(context = context, providerId = providerId, externalUserId = externalUserId)
+
+    httpClient.singleRequest(HttpRequest(uri = url)) flatMap {
+
+      case HttpResponse(StatusCodes.OK, _, entity, _) =>
+
+        entity.dataBytes.runFold(ByteString(""))(_ ++ _) map { body =>
+          Some(read[UserInfo](body.utf8String))
+        }
+
+      case res@HttpResponse(code, _, _, _) =>
+
+        logErrorAndReturnNone(s"userInfoGET() call to user-service REST API failed: url=$url, code=$code")
+        Future(None)
+
+    }
+
+  }
+
+  def userInfoPUT(updateInfo: UpdateInfo)
+                 (implicit httpClient: HttpExt, materializer: Materializer): Future[Option[UserInfo]] = {
+
+    Json4sUtil.any2String(updateInfo) match {
+
+      case Some(updateInfoJsonString: String) =>
+
+        logger.debug(s"updateInfo (object): $updateInfoJsonString")
+        val url = UserClientRestConfig.pathUserInfoPUT
+        val req = HttpRequest(
+          method = HttpMethods.PUT,
+          uri = url,
+          entity = HttpEntity.Strict(ContentTypes.`application/json`, data = ByteString(updateInfoJsonString))
+        )
+        httpClient.singleRequest(req) flatMap {
+
+          case HttpResponse(StatusCodes.OK, _, entity, _) =>
+
+            entity.dataBytes.runFold(ByteString(""))(_ ++ _) map { body =>
+              Some(read[UserInfo](body.utf8String))
+            }
+
+          case res@HttpResponse(code, _, _, _) =>
+
+            res.discardEntityBytes()
+            Future(
+              logErrorAndReturnNone(s"userInfoPUT() call to user-service failed: url=$url code=$code, status=${res.status}")
+            )
+
+        }
+
+      case None =>
+        logger.error(s"failed to to convert input to JSON: updateInfo=$updateInfo")
+        Future(None)
 
     }
 

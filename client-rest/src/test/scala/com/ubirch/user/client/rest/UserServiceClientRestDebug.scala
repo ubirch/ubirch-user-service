@@ -2,7 +2,7 @@ package com.ubirch.user.client.rest
 
 import com.typesafe.scalalogging.slf4j.StrictLogging
 
-import com.ubirch.user.model.rest.{Group, User}
+import com.ubirch.user.model.rest.{Group, SimpleUserContext, UpdateInfo, User, UserContext, UserInfo, UserUpdate}
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.{Http, HttpExt}
@@ -28,7 +28,7 @@ object UserServiceClientRestDebug extends App
   implicit private val httpClient: HttpExt = Http()
 
   // contextName, providerId and externalUserId have been created by InitData
-  val contextName = "ubirch-dev"
+  val contextName = "ubirch-local"
   val providerId = "google"
   val externalUserId = "1234"
 
@@ -74,6 +74,32 @@ object UserServiceClientRestDebug extends App
     userDELETE(providerId, externalUserId)
     userDELETE(providerId, externalUserId)
 
+    // POST /register
+    //   followed by /userInfo calls
+    val userName = "some user name"
+    val locale = "en-US"
+    val email = Some("someUser@ubirch.com")
+    registerPOST(contextName, providerId, externalUserId, userName, locale, email) match {
+
+      case None => // no clean-up necessary since user hasn't been created
+
+      case Some(_) =>
+
+        userInfoGET(contextName, providerId, externalUserId) match {
+
+          case None =>
+
+          case Some(_) =>
+
+            val newDisplayName = userName + "--new"
+            userInfoPUT(contextName, providerId, externalUserId, newDisplayName)
+            userInfoGET(contextName, providerId, externalUserId)
+
+        }
+        userDELETE(providerId, externalUserId) // (clean-up) delete user again
+
+    }
+
   } finally {
     system.terminate()
   }
@@ -108,6 +134,71 @@ object UserServiceClientRestDebug extends App
 
     val result = Await.result(UserServiceClientRest.extIdExistsGET(externalId), 5 seconds)
     logger.info(s"___ emailExistsGET($externalId): $result")
+
+  }
+
+  private def registerPOST(context: String,
+                           providerId: String,
+                           userId: String,
+                           userName: String,
+                           locale: String,
+                           email: Option[String]
+                          ): Option[UserInfo] = {
+
+
+    val userContext = UserContext(
+      context = context,
+      providerId = providerId,
+      userId = userId,
+      userName = userName,
+      locale = locale,
+      email = email
+    )
+
+    val result = Await.result(UserServiceClientRest.registerPOST(userContext), 1000 seconds)
+    logger.info(s"___ registerPOST($userContext): $result")
+
+    result
+
+  }
+
+  private def userInfoGET(context: String,
+                          providerId: String,
+                          userId: String
+                         ): Option[UserInfo] = {
+
+    val simpleUserContext = SimpleUserContext(
+      context = context,
+      providerId = providerId,
+      userId = userId
+    )
+
+    val result = Await.result(UserServiceClientRest.userInfoGET(context, providerId, userId), 1000 seconds)
+    logger.info(s"___ userInfoGET($simpleUserContext): $result")
+
+    result
+
+  }
+
+  private def userInfoPUT(context: String,
+                          providerId: String,
+                          userId: String,
+                          newDisplayName: String
+                         ): Option[UserInfo] = {
+
+    val updateInfo = UpdateInfo(
+      SimpleUserContext(
+        context = context,
+        providerId = providerId,
+        userId = userId
+      ),
+      UserUpdate(newDisplayName)
+    )
+
+    val result = Await.result(UserServiceClientRest.userInfoPUT(updateInfo), 1000 seconds)
+    logger.info(s"___ userInfoPUT($updateInfo): $result")
+
+    result
 
   }
 
