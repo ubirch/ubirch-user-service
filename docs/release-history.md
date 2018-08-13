@@ -1,5 +1,9 @@
 ## Release History
 
+### Version 0.12.2 (tbd)
+
+* tbd
+
 ### Version 0.12.1 (2018-08-13)
 
 * bugfix: URI generated in `RouteConstants` were missing uri encoding
