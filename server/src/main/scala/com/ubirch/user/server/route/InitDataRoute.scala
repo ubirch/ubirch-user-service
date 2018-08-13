@@ -1,18 +1,19 @@
 package com.ubirch.user.server.route
 
-import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.server.Route
 import com.typesafe.scalalogging.slf4j.StrictLogging
+
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.manager.{ContextManager, GroupManager, UserManager}
 import com.ubirch.user.model.db.{Context, Group, User}
 import com.ubirch.user.util.defaults.Defaults
 import com.ubirch.user.util.server.RouteConstants
-import com.ubirch.util.futures.FutureUtil
 import com.ubirch.util.http.response.ResponseUtil
 import com.ubirch.util.json.MyJsonProtocol
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.rest.akka.directives.CORSDirective
+
+import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.server.Route
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -96,7 +97,7 @@ class InitDataRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
     }
 
-    FutureUtil.unfoldInnerFutures(futureResults) map { results =>
+    Future.sequence(futureResults) map { results =>
       if (results.contains(None)) {
         None
       } else {
@@ -131,7 +132,7 @@ class InitDataRoute(implicit mongo: MongoUtil) extends MyJsonProtocol
 
         }
 
-        FutureUtil.unfoldInnerFutures(futureGroups) map { results =>
+        Future.sequence(futureGroups) map { results =>
 
           if (results.contains(None)) {
             None

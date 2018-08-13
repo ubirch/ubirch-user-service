@@ -294,7 +294,7 @@ object UserServiceClientRest extends MyJsonProtocol
 
             res.discardEntityBytes()
             Future(
-              logErrorAndReturnNone(s"registerPOST() call to user-service failed: url=$url code=$code, status=${res.status}")
+              logErrorAndReturnNone(s"registerPOST() call to user-service failed: url=$url code=$code, status=${res.status}, userContextJson=$userContextJsonString")
             )
 
         }

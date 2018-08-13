@@ -1,5 +1,6 @@
 package com.ubirch.user.util.server
 
+import java.net.URLEncoder
 import java.util.UUID
 
 /**
@@ -37,17 +38,49 @@ object RouteConstants {
 
   def pathContextWithId(id: UUID) = s"$pathContext/$id"
 
-  def pathContextFindByName(name: String) = s"$pathContext/$byName/$name"
+  def pathContextFindByName(name: String): String = {
+
+    val encodedName = URLEncoder.encode(name, "UTF-8")
+
+    s"$pathContext/$byName/$encodedName"
+
+  }
 
   val pathUser = s"$pathPrefix/$user"
 
-  def pathUserFind(providerId: String, externalUserId: String) = s"$pathUser/$providerId/$externalUserId"
+  def pathUserFind(providerId: String, externalUserId: String): String = {
 
-  def pathUserUpdate(providerId: String, externalUserId: String) = s"$pathUser/$providerId/$externalUserId"
+    val providerEncoded = URLEncoder.encode(providerId, "UTF-8")
+    val userEncoded = URLEncoder.encode(externalUserId, "UTF-8")
 
-  def pathUserDelete(providerId: String, externalUserId: String) = s"$pathUser/$providerId/$externalUserId"
+    s"$pathUser/$providerEncoded/$userEncoded"
+  }
 
-  def pathExternalIdExists(externalId: String) = s"$pathUser/$externalIdExists/$externalId"
+  def pathUserUpdate(providerId: String, externalUserId: String): String = {
+
+    val providerEncoded = URLEncoder.encode(providerId, "UTF-8")
+    val userEncoded = URLEncoder.encode(externalUserId, "UTF-8")
+
+    s"$pathUser/$providerEncoded/$userEncoded"
+
+  }
+
+  def pathUserDelete(providerId: String, externalUserId: String): String = {
+
+    val providerEncoded = URLEncoder.encode(providerId, "UTF-8")
+    val userEncoded = URLEncoder.encode(externalUserId, "UTF-8")
+
+    s"$pathUser/$providerEncoded/$userEncoded"
+
+  }
+
+  def pathExternalIdExists(externalId: String): String = {
+
+    val userEncoded = URLEncoder.encode(externalId, "UTF-8")
+
+    s"$pathUser/$externalIdExists/$userEncoded"
+
+  }
 
   val pathGroup = s"$pathPrefix/$group"
 
@@ -59,7 +92,13 @@ object RouteConstants {
                         providerId: String,
                         externalUserId: String
                        ): String = {
-    s"$pathPrefix/$group/$memberOf/$contextName/$providerId/$externalUserId"
+
+    val contextEncoded = URLEncoder.encode(contextName, "UTF-8")
+    val providerEncoded = URLEncoder.encode(providerId, "UTF-8")
+    val userEncoded = URLEncoder.encode(externalUserId, "UTF-8")
+
+    s"$pathPrefix/$group/$memberOf/$contextEncoded/$providerEncoded/$userEncoded"
+
   }
 
   final def pathInitData(env: String) = s"$pathPrefix/$initData/$env"
@@ -67,7 +106,15 @@ object RouteConstants {
   final val pathRegister = s"$pathPrefix/$register"
 
   private val pathUserInfo = s"$pathUser/$info"
-  final def pathUserInfoGET(context: String, providerId: String, userId: String) = s"$pathUserInfo/$context/$providerId/$userId"
+  final def pathUserInfoGET(context: String, providerId: String, userId: String): String = {
+
+    val contextEncoded = URLEncoder.encode(context, "UTF-8")
+    val providerEncoded = URLEncoder.encode(providerId, "UTF-8")
+    val userEncoded = URLEncoder.encode(userId, "UTF-8")
+
+    s"$pathUserInfo/$contextEncoded/$providerEncoded/$userEncoded"
+
+  }
   final val pathUserInfoPUT = pathUserInfo
 
 }

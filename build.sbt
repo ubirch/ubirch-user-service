@@ -161,10 +161,9 @@ lazy val depServer = Seq(
   akkaHttp,
   akkaStream,
   ubirchRestAkkaHttp,
-  ubirchRestAkkaHttpTest % "test",
+  ubirchResponse,
 
-  ubirchFutures,
-  ubirchResponse
+  ubirchRestAkkaHttpTest % "test"
 
 )
 
@@ -253,7 +252,6 @@ lazy val ubirchConfig = ubirchUtilG %% "config" % "0.2.1" excludeAll (excludedLo
 lazy val ubirchCrypto = ubirchUtilG %% "crypto" % "0.4.9" excludeAll (excludedLoggers: _*)
 lazy val ubirchDate = ubirchUtilG %% "date" % "0.5.2" excludeAll (excludedLoggers: _*)
 lazy val ubirchDeepCheckModel = ubirchUtilG %% "deep-check-model" % "0.3.0" excludeAll (excludedLoggers: _*)
-lazy val ubirchFutures = ubirchUtilG %% "futures" % "0.1.1" excludeAll (excludedLoggers: _*)
 lazy val ubirchJson = ubirchUtilG %% "json" % "0.5.0" excludeAll (excludedLoggers: _*)
 lazy val ubirchMongo = ubirchUtilG %% "mongo-utils" % "0.8.0" excludeAll (excludedLoggers: _*)
 lazy val ubirchMongoTest = ubirchUtilG %% "mongo-test-utils" % "0.8.0" excludeAll (excludedLoggers: _*)
