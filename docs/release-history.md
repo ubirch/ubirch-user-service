@@ -4,6 +4,12 @@
 
 * bugfix: URI generated in `RouteConstants` were missing uri encoding
 * removed dependency on `com.ubirch.util:futures`
+* update to `com.ubirch.util:config:0.2.3`
+* update to `com.ubirch.util:crypto:0.4.11`
+* update to `com.ubirch.util:date:0.5.3`
+* update to `com.ubirch.util:json:0.5.1`
+* update to `com.ubirch.util:mongo-utils:0.8.3`
+* update to `com.ubirch.util:mongo-test-utils:0.8.3`
 
 ### Version 0.12.0 (2018-08-04)
 
