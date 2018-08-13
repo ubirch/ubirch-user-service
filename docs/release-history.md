@@ -1,6 +1,6 @@
 ## Release History
 
-### Version 0.12.1 (tbd)
+### Version 0.12.1 (2018-08-13)
 
 * bugfix: URI generated in `RouteConstants` were missing uri encoding
 * removed dependency on `com.ubirch.util:futures`
