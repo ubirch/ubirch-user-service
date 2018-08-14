@@ -1,8 +1,9 @@
 ## Release History
 
-### Version 0.12.2 (tbd)
+### Version 0.12.2 (2018-08-14)
 
-* tbd
+* bugfix: in `UserManager` we had a problem with lower-/upper-cases. user.externalId is now always stored as lower-case and when searching with it we convert to lower-case as well
+* minor improvement: all actors now overwirte `unhandled()`
 
 ### Version 0.12.1 (2018-08-13)
 
@@ -14,8 +15,6 @@
 * update to `com.ubirch.util:json:0.5.1`
 * update to `com.ubirch.util:mongo-utils:0.8.3`
 * update to `com.ubirch.util:mongo-test-utils:0.8.3`
-* bugfix: in `UserManager` we had a problem with lower-/upper-cases. user.externalId is now always stored as lower-case and when searching with it we convert to lower-case as well
-* minor improvement: all actors now overwirte `unhandled()`
 
 ### Version 0.12.0 (2018-08-04)
 
