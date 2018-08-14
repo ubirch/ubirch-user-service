@@ -1,5 +1,9 @@
 ## Release History
 
+### Version 0.12.3 (tbd)
+
+* tbd
+
 ### Version 0.12.2 (2018-08-14)
 
 * bugfix: in `UserManager` we had a problem with lower-/upper-cases. user.externalId is now always stored as lower-case and when searching with it we convert to lower-case as well
