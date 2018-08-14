@@ -5,6 +5,7 @@ import java.util.UUID
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.manager.{GroupManager, GroupsManager}
 import com.ubirch.user.model.db.Group
+import com.ubirch.util.model.JsonErrorResponse
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.uuid.UUIDUtil
 
@@ -62,8 +63,11 @@ class GroupActor(implicit mongo: MongoUtil) extends Actor
         externalUserId = find.externalUserId
       ) map (sender ! FoundMemberOf(_))
 
-    case _ => log.error("unknown message")
+  }
 
+  override def unhandled(message: Any): Unit = {
+    log.error(s"received from ${context.sender().path} unknown message: ${message.toString} (${message.getClass})")
+    context.sender() ! JsonErrorResponse(errorType = "ServerError", errorMessage = "Berlin, we have a problem!")
   }
 
 }

@@ -29,6 +29,7 @@ object UserManager extends StrictLogging
     findByProviderIdAndExternalId(providerId = user.providerId, externalUserId = user.externalId) flatMap {
 
       case Some(_: User) =>
+
         val errMsg = s"unable to create user as it's id already exist: user=$user"
         logger.error(errMsg)
         throw new Exception(errMsg)
@@ -50,11 +51,12 @@ object UserManager extends StrictLogging
             )
           }
           validateUser(userToCreate)
-          collection.insert[User](userToCreate) map { writeResult =>
+          val withExternalIdLowerCase = userToCreate.copy(externalId = userToCreate.externalId.toLowerCase)
+          collection.insert[User](withExternalIdLowerCase) map { writeResult =>
 
             if (writeResult.ok && writeResult.n == 1) {
               logger.debug(s"created new user: $userToCreate")
-              Some(userToCreate)
+              Some(withExternalIdLowerCase)
             } else {
               throw new Exception("failed to create user")
             }
@@ -115,7 +117,7 @@ object UserManager extends StrictLogging
 
     val selector = document(
       "providerId" -> providerId,
-      "externalId" -> externalUserId
+      "externalId" -> externalUserId.toLowerCase
     )
 
     mongo.collection(collectionName) flatMap {

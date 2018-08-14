@@ -34,8 +34,11 @@ class DeepCheckActor(implicit mongo: MongoUtil)
           )
       }
 
-    case _ => log.error("unknown message")
+  }
 
+  override def unhandled(message: Any): Unit = {
+    log.error(s"received from ${context.sender().path} unknown message: ${message.toString} (${message.getClass})")
+    context.sender() ! JsonErrorResponse(errorType = "ServerError", errorMessage = "Berlin, we have a problem!")
   }
 
   private def deepCheck(): Future[DeepCheckResponse] = DeepCheckManager.connectivityCheck()

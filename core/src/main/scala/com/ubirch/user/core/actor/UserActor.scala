@@ -23,10 +23,9 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
   override def receive: Receive = {
 
     case create: CreateUser =>
+
       val sender = context.sender()
-
       val toCreate = create.user.copy(id = UUIDUtil.uuidStr)
-
       UserManager.create(toCreate).onComplete {
         case Success(u) =>
           sender ! u
@@ -40,6 +39,7 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
       UserManager.findByProviderIdAndExternalId(update.providerId, externalUserId = update.externalUserId) map {
 
         case None =>
+
           val errMsg = s"unable to update user as it does not exist: provider=${update.providerId}, externalId=${update.externalUserId}"
           log.error(errMsg)
           sender ! JsonErrorResponse(errorType = "ValidationError", errorMessage = errMsg)
@@ -47,16 +47,18 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
         case Some(u: User) =>
 
           val toUpdate = update.user.copy(id = u.id)
-
           UserManager.update(toUpdate).onComplete {
-            case Success(u) =>
-              sender ! u
+            case Success(updated) =>
+              sender ! updated
             case Failure(t) =>
               sender ! JsonErrorResponse(errorType = "ValidationError", errorMessage = t.getMessage)
           }
+
       }
 
     case find: FindUser =>
+
+      log.debug(s"UserActor.FindUser -- find=$find")
       val sender = context.sender()
       UserManager.findByProviderIdAndExternalId(
         providerId = find.providerId,
@@ -66,7 +68,6 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
     case delete: DeleteUser =>
 
       val sender = context.sender()
-
       val result = UserManager.findByProviderIdAndExternalId(
         providerId = delete.providerId,
         externalUserId = delete.externalUserId
@@ -95,13 +96,11 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
 
       }
 
-    case _ =>
-      context.sender ! JsonErrorResponse(
-        errorType = "ValidationError",
-        errorMessage = "unknown message"
-      )
-      log.error("unknown message")
+  }
 
+  override def unhandled(message: Any): Unit = {
+    log.error(s"received from ${context.sender().path} unknown message: ${message.toString} (${message.getClass})")
+    context.sender() ! JsonErrorResponse(errorType = "ServerError", errorMessage = "Berlin, we have a problem!")
   }
 
 }

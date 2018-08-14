@@ -171,19 +171,29 @@ class UserRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDire
     onComplete(userActor ? FindUser(providerId, externalUserId)) {
 
       case Failure(t) =>
-        logger.error("findUser call responded with an unhandled message (check UserRoute for bugs!!!)", t)
+
+        logger.error("UserRoute.findByProviderUserId() -- ended with Failure", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = "sorry, something went wrong on our end"))
 
       case Success(resp) =>
+
         resp match {
 
           case None =>
+
             val jsonError = JsonErrorResponse(errorType = "QueryError", errorMessage = "failed to find user")
+            logger.debug(s"UserRoute.findByProviderUserId() -- userFound=None (providerId=$providerId, externalUserId=$externalUserId)")
             complete(requestErrorResponse(jsonError))
 
-          case Some(u: db.User) => complete(Json4sUtil.any2any[rest.User](u))
+          case Some(u: db.User) =>
 
-          case _ => complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query user"))
+            logger.debug(s"UserRoute.findByProviderUserId() -- userFound=Some (providerId=$providerId, externalUserId=$externalUserId)")
+            complete(Json4sUtil.any2any[rest.User](u))
+
+          case _ =>
+
+            logger.error(s"UserRoute.findByProviderUserId() -- unhandled Success response (providerId=$providerId, externalUserId=$externalUserId)")
+            complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query user"))
 
         }
 

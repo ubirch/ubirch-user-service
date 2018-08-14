@@ -2,7 +2,7 @@ package com.ubirch.user.core.actor
 
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.manager.UserInfoManager
-import com.ubirch.user.model.rest.{SimpleUserContext, UpdateInfo, UserContext, UserUpdate}
+import com.ubirch.user.model.rest.{SimpleUserContext, UpdateInfo}
 import com.ubirch.util.model.JsonErrorResponse
 import com.ubirch.util.mongo.connection.MongoUtil
 

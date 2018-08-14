@@ -8,7 +8,7 @@ import com.ubirch.util.uuid.UUIDUtil
 
 import org.scalatest.concurrent.ScalaFutures
 
-import concurrent.ExecutionContext.Implicits._
+import scala.concurrent.ExecutionContext.Implicits._
 
 /**
   * author: cvandrei
@@ -293,12 +293,69 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
           UserManager.findByProviderIdAndExternalId(
             providerId = user.providerId,
             externalUserId = user.externalId
-          ) flatMap {
-            result =>
+          ) flatMap { result =>
 
-              // verify
-              result shouldBe Some(user)
-              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+            // verify
+            result shouldBe Some(user)
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+    scenario("user.providerId: exists (BASE64 encoded; all lower-case); user.externalId: exists --> success") {
+
+      // prepare
+      val userPrep = DefaultModels.user(
+        providerId = "ubirchToken",
+        externalId = "hcdapzt1mcab/62fexw+6+b0ierknvvmfqnnb0tc4wy+lwdx+ejphwjhvin3fgq5b8paltamehokvrw0usufxq=="
+      )
+      UserManager.create(userPrep) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(user) =>
+
+          // test
+          UserManager.findByProviderIdAndExternalId(
+            providerId = user.providerId,
+            externalUserId = user.externalId
+          ) flatMap { result =>
+
+            // verify
+            result shouldBe Some(user)
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+
+          }
+
+      }
+
+    }
+
+    scenario("user.providerId: exists (BASE64 encoded with some upper-cases; url encoded); user.externalId: exists --> success") {
+
+      // prepare
+      val userPrep = DefaultModels.user(
+        providerId = "ubirchToken",
+        externalId = "HcdAPzT1McaB/62feXw+6+B0iErKNvVMFQnnb0Tc4wy+lWdx+EJphwjHVin3fgq5b8paLtAmEHOkVrW0uSufXQ=="
+      )
+      UserManager.create(userPrep) flatMap {
+
+        case None => fail("failed during preparation")
+
+        case Some(user) =>
+
+          // test
+          UserManager.findByProviderIdAndExternalId(
+            providerId = user.providerId,
+            externalUserId = user.externalId
+          ) flatMap { result =>
+
+            // verify
+            result shouldBe Some(user)
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
@@ -317,16 +374,13 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
           // test
           UserManager.findByProviderIdAndExternalId(
-            providerId = s"${
-              user.providerId
-            }-test",
+            providerId = s"${user.providerId}-test",
             externalUserId = user.externalId
-          ) flatMap {
-            result =>
+          ) flatMap { result =>
 
-              // verify
-              result shouldBe None
-              mongoTestUtils.countAll(collection) map (_ shouldBe 1)
+            // verify
+            result shouldBe None
+            mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
 
