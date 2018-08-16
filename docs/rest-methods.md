@@ -126,7 +126,7 @@ Otherwise:
 
 #### Create
 
-    curl -XPUT localhost:8092/api/userService/v1/group -H "Content-Type: application/json" -d '{
+    curl -XPOST localhost:8092/api/userService/v1/group -H "Content-Type: application/json" -d '{
       "ownerIds": ["$OWNER"], // UUID: userIds allowed to modify it
       "displayName": "$DISPLAY_NAME", // string
       "contextId": "$CONTEXT_ID", // UUID
@@ -244,7 +244,12 @@ If the query is successful the response is (user exists but is not registered no
     {
       "displayName": "some string being displayed in frontend as my display name",
       "locale": "en",
-      "myGroups": [],
+      "myGroups": [
+          {
+            "id": "a4c08d88-7c43-4984-a568-0672b4431016", // UUID
+            "displayName": "my-ubirch-group"
+          }
+      ],
       "allowedGroups": []
     }
 

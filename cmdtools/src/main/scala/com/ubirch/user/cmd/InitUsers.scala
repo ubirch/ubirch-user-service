@@ -17,10 +17,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 object InitUsers extends App
   with StrictLogging {
 
-  private implicit val mongo = new MongoUtil(ConfigKeys.MONGO_PREFIX)
+  private implicit val mongo: MongoUtil = new MongoUtil(ConfigKeys.MONGO_PREFIX)
 
   private val dataHelpers = new DataHelpers
 
+  // TODO migrate to encapsulate all executable logic within a method `run(): Unit`
   val dataCreated = for {
 
     contextOpt <- ContextManager.findByName(Config.testUserContext)

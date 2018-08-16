@@ -17,8 +17,9 @@ import scala.language.postfixOps
 object MongoDelete extends App
   with StrictLogging {
 
-  private implicit val mongo = new MongoUtil(ConfigKeys.MONGO_PREFIX)
+  private implicit val mongo: MongoUtil = new MongoUtil(ConfigKeys.MONGO_PREFIX)
 
+  // TODO migrate to encapsulate all executable logic within a method `run(): Unit`
   Await.result(mongo.db map(_.drop), 60 seconds)
   mongo.close()
 
