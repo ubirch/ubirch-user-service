@@ -60,7 +60,7 @@ class RegistrationManagerSpec extends MongoSpec {
       dataHelpers.createUser(
         displayName = userContext.userName,
         providerId = userContext.providerId,
-        externalId = userContext.userId
+        externalId = userContext.externalUserId
       ) flatMap {
 
         case None => fail("failed to create user during preparation")
@@ -99,7 +99,7 @@ class RegistrationManagerSpec extends MongoSpec {
       dataHelpers.createUser(
         displayName = userContext.userName,
         providerId = userContext.providerId,
-        externalId = userContext.userId
+        externalId = userContext.externalUserId
       ) flatMap { userOpt =>
 
         dataHelpers.createGroup(
@@ -203,7 +203,7 @@ class RegistrationManagerSpec extends MongoSpec {
           dataHelpers.createUser(
             displayName = s"${userContext.userName}-actual",
             providerId = userContext.providerId,
-            externalId = userContext.userId,
+            externalId = userContext.externalUserId,
             locale = otherLocale
           ) flatMap {
 
@@ -255,7 +255,7 @@ class RegistrationManagerSpec extends MongoSpec {
         dataHelpers.createUser(
           displayName = userContext.userName,
           providerId = userContext.providerId,
-          externalId = userContext.userId
+          externalId = userContext.externalUserId
         ) flatMap { userOpt =>
 
           dataHelpers.createGroup(
@@ -295,7 +295,7 @@ class RegistrationManagerSpec extends MongoSpec {
     UserContext(
       context = "trackle-dev",
       providerId = "google",
-      userId = "asdf-1234",
+      externalUserId = "asdf-1234",
       userName = "user display name",
       locale = "en"
     )

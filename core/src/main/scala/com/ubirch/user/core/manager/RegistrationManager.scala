@@ -20,7 +20,7 @@ object RegistrationManager extends StrictLogging {
 
     val context = userContext.context
     val providerId = userContext.providerId
-    val externalUserId = userContext.userId
+    val externalUserId = userContext.externalUserId
 
     //@REVIEW What happens in case of errors with ext. systems (USerService, mongoDB, ...)?
     for {
@@ -103,7 +103,7 @@ object RegistrationManager extends StrictLogging {
         createUser(
           displayName = userContext.userName,
           providerId = userContext.providerId,
-          externalId = userContext.userId,
+          externalId = userContext.externalUserId,
           locale = userContext.locale,
           email = userContext.email // TODO update tests to account for email, too
         ) flatMap {

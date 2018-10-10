@@ -6,7 +6,7 @@ package com.ubirch.user.model.rest
   */
 case class UserContext(context: String,
                        providerId: String,
-                       userId: String, // this is always the external userId
+                       externalUserId: String, // this is always the external userId
                        userName: String,
                        locale: String,
                        email: Option[String] = None

@@ -127,7 +127,7 @@ object UserServiceClientRestDebug extends App
     val userContext = UserContext(
       context = context,
       providerId = providerId,
-      userId = userId,
+      externalUserId = userId,
       userName = userName,
       locale = locale,
       email = email
