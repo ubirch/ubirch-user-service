@@ -4,11 +4,11 @@
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases"),
+  Resolver.sonatypeRepo("snapshots"),
   "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "client-rest" % "1.0.0"
+  "com.ubirch.user" %% "client-rest" % "1.0.1-SNAPSHOT"
 )
 ```
 
@@ -26,10 +26,10 @@ See `com.ubirch.user.client.rest.UserServiceClientRestDebug` for an example usag
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "cmdtools" % "1.0.0"
+  "com.ubirch.user" %% "cmdtools" % "1.0.1-SNAPSHOT"
 )
 ```
 
@@ -37,10 +37,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "config" % "1.0.0"
+  "com.ubirch.user" %% "config" % "1.0.1-SNAPSHOT"
 )
 ```
 
@@ -48,10 +48,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "core" % "1.0.0"
+  "com.ubirch.user" %% "core" % "1.0.1-SNAPSHOT"
 )
 ```
 
@@ -59,10 +59,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-db" % "1.0.0"
+  "com.ubirch.user" %% "model-db" % "1.0.1-SNAPSHOT"
 )
 ```
 
@@ -70,10 +70,10 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "model-rest" % "1.0.0"
+  "com.ubirch.user" %% "model-rest" % "1.0.1-SNAPSHOT"
 )
 ```
 
@@ -81,11 +81,11 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases"),
+  Resolver.sonatypeRepo("snapshots"),
   Resolver.bintrayRepo("hseeberger", "maven")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "server" % "1.0.0"
+  "com.ubirch.user" %% "server" % "1.0.1-SNAPSHOT"
 )
 ```
 
@@ -93,9 +93,9 @@ libraryDependencies ++= Seq(
 
 ```scala
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("snapshots")
 )
 libraryDependencies ++= Seq(
-  "com.ubirch.user" %% "util" % "1.0.0"
+  "com.ubirch.user" %% "util" % "1.0.1-SNAPSHOT"
 )
 ```
