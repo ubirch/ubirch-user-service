@@ -1,8 +1,8 @@
 ## Release History
 
-### Version 0.12.3 (tbd)
+### Version 1.0.0 (2018-10-15)
 
-* tbd
+* renamed `UserContext.userId` to `externalUserId`
 
 ### Version 0.12.2 (2018-08-14)
 
