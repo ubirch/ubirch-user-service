@@ -2,7 +2,10 @@
 
 ### Version 1.0.1 (tbd)
 
-* tbd
+* update to `com.ubirch.util:deep-check-model:0.3.1`
+* update to `com.ubirch.util:mongo-utils:0.8.4`
+* update to `com.ubirch.util:mongo-test-utils:0.8.4`
+* update to `com.ubirch.util:response-util:0.4.1`
 
 ### Version 1.0.0 (2018-10-15)
 
