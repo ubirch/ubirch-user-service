@@ -1,6 +1,6 @@
 ## Release History
 
-### Version 1.0.1 (tbd)
+### Version 1.0.1 (2018-10-16)
 
 * update to `com.ubirch.util:deep-check-model:0.3.1`
 * update to `com.ubirch.util:mongo-utils:0.8.4`
