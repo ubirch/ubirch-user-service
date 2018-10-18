@@ -2,7 +2,7 @@
 
 ### Version 1.0.2 (tbd)
 
-* tbd
+* update to `com.ubirch.util:response-util:0.5.0`
 
 ### Version 1.0.1 (2018-10-16)
 
