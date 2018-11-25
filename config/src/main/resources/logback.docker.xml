@@ -21,6 +21,7 @@
   </appender>
 
   <logger name="com.ubirch" level="DEBUG"/>
+  <logger name="com.ubirch.util.mongo.connection.MongoUtil" level="WARN"/>
   <logger name="akka.actor" level="WARN"/>
   <logger name="reactivemongo-akka.actor" level="WARN"/>
   <logger name="reactivemongo.core" level="WARN"/>
