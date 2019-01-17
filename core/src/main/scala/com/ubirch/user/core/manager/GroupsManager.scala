@@ -5,6 +5,7 @@ import com.ubirch.user.config.Config
 import com.ubirch.user.model.db.{Context, Group, User}
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
+import reactivemongo.api.Cursor
 import reactivemongo.bson.{BSONArray, BSONDocumentReader, BSONDocumentWriter, Macros, document}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -67,9 +68,13 @@ object GroupsManager extends StrictLogging
             )
           )
         )
-        _.find(selector)
+        _.find(selector, None)
           .cursor[Group]()
-          .collect[Set]()
+          .collect[Set](
+          -1,
+          Cursor.FailOnError[Set[Group]]()
+        )
+
       }
 
     } else {
@@ -100,9 +105,12 @@ object GroupsManager extends StrictLogging
             document("$in" -> Set(userId))
           )
         )
-        _.find(selector)
+        _.find(selector, None)
           .cursor[Group]()
-          .collect[Set]()
+          .collect[Set](
+          -1,
+          Cursor.FailOnError[Set[Group]]()
+        )
 
       }
 
