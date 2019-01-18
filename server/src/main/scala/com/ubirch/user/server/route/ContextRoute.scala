@@ -31,8 +31,9 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-03-29
   */
-class ContextRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDirective
+class ContextRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORSDirective
   with ResponseUtil
+  with WithRoutesHelpers
   with StrictLogging {
 
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
@@ -81,7 +82,8 @@ class ContextRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSD
   private def create(restContext: Context): Route = {
 
     val dbContext = Json4sUtil.any2any[db.Context](restContext)
-    onComplete(contextActor ? CreateContext(dbContext)) {
+
+    OnComplete(contextActor ? CreateContext(dbContext)).fold() {
 
       case Failure(t) =>
         logger.error("create context call responded with an unhandled message (check ContextRoute for bugs!!!)", t)
@@ -107,7 +109,8 @@ class ContextRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSD
   private def update(restContext: Context): Route = {
 
     val dbContext = Json4sUtil.any2any[db.Context](restContext)
-    onComplete(contextActor ? UpdateContext(dbContext)) {
+
+    OnComplete(contextActor ? UpdateContext(dbContext)).fold() {
 
       case Failure(t) =>
         logger.error("update context call responded with an unhandled message (check ContextRoute for bugs!!!)", t)
@@ -132,7 +135,7 @@ class ContextRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSD
 
   private def getById(id: UUID): Route = {
 
-    onComplete(contextActor ? GetContext(id)) {
+    OnComplete(contextActor ? GetContext(id)).fold() {
 
       case Failure(t) =>
 
@@ -159,7 +162,7 @@ class ContextRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSD
 
   private def deleteById(id: UUID): Route = {
 
-    onComplete(contextActor ? DeleteContext(id)) {
+    OnComplete(contextActor ? DeleteContext(id)).fold() {
 
       case Failure(t) =>
         logger.error("deleteContext call responded with an unhandled message (check ContextRoute for bugs!!!)", t)
@@ -177,7 +180,7 @@ class ContextRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSD
 
   private def findByName(name: String): Route = {
 
-    onComplete(contextActor ? FindContextByName(name)) {
+    OnComplete(contextActor ? FindContextByName(name)).fold() {
 
       case Failure(t) =>
 

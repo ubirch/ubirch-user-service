@@ -25,8 +25,9 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-06-07
   */
-class DeepCheckRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDirective
+class DeepCheckRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORSDirective
   with ResponseUtil
+  with WithRoutesHelpers
   with StrictLogging {
 
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
@@ -40,7 +41,7 @@ class DeepCheckRoute(implicit mongo: MongoUtil, system: ActorSystem) extends COR
       respondWithCORS {
         get {
 
-          onComplete(deepCheckActor ? DeepCheckRequest()) {
+          OnComplete(deepCheckActor ? DeepCheckRequest()).fold() {
 
             case Failure(t) =>
               logger.error("failed to run deepCheck (check DeepCheckRoute for bugs!!!)", t)

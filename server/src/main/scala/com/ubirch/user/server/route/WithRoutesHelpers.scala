@@ -27,16 +27,16 @@ trait WithRoutesHelpers extends StrictLogging with FutureDirectives {
     resetTimeout = 6 seconds
   )
 
-  class OnComplete[T >: Any](future: => Future[T])(implicit ec: ExecutionContext, classTag: ClassTag[T]) {
+  class OnComplete[T <: Any](future: => Future[T])(implicit ec: ExecutionContext, classTag: ClassTag[T]) {
 
-    def onCompleteWithNoCircuitBreaker = onComplete(future.recover {
+    def onCompleteWithNoCircuitBreaker:Directive1[Try[T]] = onComplete(future.recoverWith {
       case e: Exception =>
         logger.error("OOPs, (OC-CB) something happened: ", e)
         Future.failed(e)
     })
 
-    def onCompleteWithCircuitBreaker(circuitBreaker: CircuitBreaker) = {
-      onCompleteWithBreaker(circuitBreaker)(future.recover {
+    def onCompleteWithCircuitBreaker(circuitBreaker: CircuitBreaker):Directive1[Try[T]] = {
+      onCompleteWithBreaker(circuitBreaker)(future.recoverWith {
         case e: Exception =>
           logger.error("OOPs, (OC) something happened: ", e)
           Future.failed(e)
@@ -50,7 +50,7 @@ trait WithRoutesHelpers extends StrictLogging with FutureDirectives {
   }
 
   object OnComplete {
-    def apply[T >: Any](future: => Future[T])(implicit ec: ExecutionContext, classTag: ClassTag[T]): OnComplete[T] =
+    def apply[T <: Any](future: => Future[T])(implicit ec: ExecutionContext, classTag: ClassTag[T]): OnComplete[T] =
       new OnComplete(future)
   }
 
