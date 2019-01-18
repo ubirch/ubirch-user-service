@@ -20,24 +20,14 @@ trait WithRoutesHelpers extends StrictLogging with FutureDirectives {
 
   def system: ActorSystem
 
-  def circuitBreaker(scheduler: Scheduler,
-                     maxFailures: Int = 3,
-                     callTimeout: FiniteDuration = 3 seconds,
-                     resetTimeout: FiniteDuration = 6 seconds): CircuitBreaker = {
-    CircuitBreaker(
-      scheduler = scheduler,
-      maxFailures = maxFailures,
-      callTimeout = callTimeout,
-      resetTimeout = resetTimeout
-    )
-
-  }
-
-  def defaultCircuitBreaker: CircuitBreaker = circuitBreaker(system.scheduler)
+  lazy val defaultCircuitBreaker: CircuitBreaker = CircuitBreaker(
+    scheduler = system.scheduler,
+    maxFailures = 10,
+    callTimeout = 3 seconds,
+    resetTimeout = 6 seconds
+  )
 
   class OnComplete[T >: Any](future: => Future[T])(implicit ec: ExecutionContext, classTag: ClassTag[T]) {
-
-    lazy val defaultCircuit: CircuitBreaker = defaultCircuitBreaker
 
     def onCompleteWithNoCircuitBreaker = onComplete(future.recover {
       case e: Exception =>
@@ -53,7 +43,7 @@ trait WithRoutesHelpers extends StrictLogging with FutureDirectives {
       })
     }
 
-    def fold(maybeCircuitBreaker: => Option[CircuitBreaker] = Some(defaultCircuit)): Directive1[Try[T]] = {
+    def fold(maybeCircuitBreaker: => Option[CircuitBreaker] = Some(defaultCircuitBreaker)): Directive1[Try[T]] = {
       maybeCircuitBreaker.fold(onCompleteWithNoCircuitBreaker)(onCompleteWithCircuitBreaker)
     }
 
