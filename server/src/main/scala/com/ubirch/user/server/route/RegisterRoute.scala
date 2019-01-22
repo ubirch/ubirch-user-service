@@ -26,8 +26,9 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-04-20
   */
-class RegisterRoute(implicit mongo: MongoUtil, system: ActorSystem)
+class RegisterRoute(implicit mongo: MongoUtil, val system: ActorSystem)
   extends ResponseUtil
+    with WithRoutesHelpers
     with CORSDirective
     with StrictLogging {
 
@@ -55,7 +56,7 @@ class RegisterRoute(implicit mongo: MongoUtil, system: ActorSystem)
 
   private def registerUser(userContext: UserContext): Route = {
 
-    onComplete(registrationActor ? RegisterUser(userContext)) {
+    OnComplete(registrationActor ? RegisterUser(userContext)).fold() {
 
       case Failure(t) =>
 

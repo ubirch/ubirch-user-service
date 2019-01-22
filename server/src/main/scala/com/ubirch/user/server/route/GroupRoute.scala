@@ -31,8 +31,9 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-03-30
   */
-class GroupRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDirective
+class GroupRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORSDirective
   with ResponseUtil
+  with WithRoutesHelpers
   with StrictLogging {
 
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
@@ -97,7 +98,8 @@ class GroupRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDir
   private def createGroup(restGroup: Group): Route = {
 
     val dbGroup = Json4sUtil.any2any[db.Group](restGroup)
-    onComplete(groupActor ? CreateGroup(dbGroup)) {
+
+    OnComplete(groupActor ? CreateGroup(dbGroup)).fold() {
 
       case Failure(t) =>
         logger.error("create user call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
@@ -123,7 +125,8 @@ class GroupRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDir
   private def updateGroup(restGroup: Group): Route = {
 
     val dbGroup = Json4sUtil.any2any[db.Group](restGroup)
-    onComplete(groupActor ? UpdateGroup(dbGroup)) {
+
+    OnComplete(groupActor ? UpdateGroup(dbGroup)).fold() {
 
       case Failure(t) =>
         logger.error("update restGroup call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
@@ -148,7 +151,7 @@ class GroupRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDir
 
   private def findById(groupId: UUID): Route = {
 
-    onComplete(groupActor ? FindGroup(groupId)) {
+    OnComplete(groupActor ? FindGroup(groupId)).fold() {
 
       case Failure(t) =>
         logger.error("findGroup call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
@@ -173,7 +176,7 @@ class GroupRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDir
 
   private def deleteById(groupId: UUID): Route = {
 
-    onComplete(groupActor ? DeleteGroup(groupId)) {
+    OnComplete(groupActor ? DeleteGroup(groupId)).fold() {
 
       case Failure(t) =>
         logger.error("deleteGroup call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
@@ -198,7 +201,7 @@ class GroupRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDir
 
   private def addAllowedUsers(allowedUsers: AllowedUsers): Route = {
 
-    onComplete(groupActor ? AddAllowedUsers(groupId = allowedUsers.groupId, allowedUsers = allowedUsers.allowedUsers)) {
+    OnComplete(groupActor ? AddAllowedUsers(groupId = allowedUsers.groupId, allowedUsers = allowedUsers.allowedUsers)).fold() {
 
       case Failure(t) =>
         logger.error("adding allowed users call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
@@ -223,7 +226,7 @@ class GroupRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDir
 
   private def deleteAllowedUsers(allowedUsers: AllowedUsers): Route = {
 
-    onComplete(groupActor ? DeleteAllowedUsers(groupId = allowedUsers.groupId, allowedUsers = allowedUsers.allowedUsers)) {
+    OnComplete(groupActor ? DeleteAllowedUsers(groupId = allowedUsers.groupId, allowedUsers = allowedUsers.allowedUsers)).fold() {
 
       case Failure(t) =>
         logger.error("adding allowed users call responded with an unhandled message (check GroupRoute for bugs!!!)", t)
@@ -251,12 +254,11 @@ class GroupRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDir
                                                  externalUserId: String
                                                 ): Route = {
 
-    onComplete(groupActor ? FindMemberOf(
+    OnComplete(groupActor ? FindMemberOf(
       contextName = contextName,
       providerId = providerId,
-      externalUserId = externalUserId
-    )
-    ) {
+      externalUserId = externalUserId)
+    ).fold() {
 
       case Failure(t) =>
         logger.error("findGroups call responded with an unhandled message (check GroupsRoute for bugs!!!)", t)

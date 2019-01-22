@@ -29,8 +29,9 @@ import scala.util.{Failure, Success}
   * author: cvandrei
   * since: 2017-03-30
   */
-class UserRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDirective
+class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORSDirective
   with ResponseUtil
+  with WithRoutesHelpers
   with StrictLogging {
 
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
@@ -107,7 +108,8 @@ class UserRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDire
   private def createUser(restUser: User): Route = {
 
     val dbUser = Json4sUtil.any2any[db.User](restUser)
-    onComplete(userActor ? CreateUser(dbUser)) {
+
+    OnComplete(userActor ? CreateUser(dbUser)).fold() {
 
       case Success(resp) =>
 
@@ -137,12 +139,12 @@ class UserRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDire
                         ): Route = {
 
     val dbUser = Json4sUtil.any2any[db.User](restUser)
-    onComplete(userActor ? UpdateUser(
+
+    OnComplete(userActor ? UpdateUser(
       providerId = providerId,
       externalUserId = externalUserId,
-      dbUser
-    )
-    ) {
+      dbUser)
+    ).fold() {
 
       case Success(resp) =>
         resp match {
@@ -168,7 +170,7 @@ class UserRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDire
 
   private def findByProviderUserId(providerId: String, externalUserId: String): Route = {
 
-    onComplete(userActor ? FindUser(providerId, externalUserId)) {
+    OnComplete(userActor ? FindUser(providerId, externalUserId)).fold() {
 
       case Failure(t) =>
 
@@ -203,7 +205,7 @@ class UserRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDire
 
   private def deleteById(providerId: String, externalUserId: String): Route = {
 
-    onComplete(userActor ? DeleteUser(providerId = providerId, externalUserId = externalUserId)) {
+    OnComplete(userActor ? DeleteUser(providerId = providerId, externalUserId = externalUserId)).fold() {
 
       case Failure(t) =>
         logger.error("deleteUser call responded with an unhandled message (check UserRoute for bugs!!!)", t)
@@ -221,7 +223,7 @@ class UserRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDire
 
   private def searchByExternalId(externalId: String): Route = {
 
-    onComplete(userActor ? SearchByExternalId(externalId)) {
+    OnComplete(userActor ? SearchByExternalId(externalId)).fold() {
 
       case Failure(t) =>
         logger.error("searchByExternalId call responded with an unhandled message", t)
@@ -247,7 +249,7 @@ class UserRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDire
 
   private def getInfo(simpleUserContext: SimpleUserContext): Route = {
 
-    onComplete(userInfoActor ? simpleUserContext) {
+    OnComplete(userInfoActor ? simpleUserContext).fold() {
 
       case Failure(t) =>
         logger.error("get-user call responded with an unhandled message (check UserInfoRoute for bugs!!!)", t)
@@ -275,7 +277,7 @@ class UserRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDire
 
   private def update(updateInfo: UpdateInfo): Route = {
 
-    onComplete(userInfoActor ? updateInfo) {
+    OnComplete(userInfoActor ? updateInfo).fold() {
 
       case Failure(t) =>
         logger.error("update-user call responded with an unhandled message (check UserInfoRoute for bugs!!!)", t)
@@ -303,7 +305,7 @@ class UserRoute(implicit mongo: MongoUtil, system: ActorSystem) extends CORSDire
 
   private def searchByHashedEmailAddress(hasehEmailAddress: String): Route = {
 
-    onComplete(userActor ? SearchByHashedEmail(hasehEmailAddress)) {
+    OnComplete(userActor ? SearchByHashedEmail(hasehEmailAddress)).fold() {
 
       case Failure(t) =>
         logger.error("searchByHashedEmailAddress", t)
