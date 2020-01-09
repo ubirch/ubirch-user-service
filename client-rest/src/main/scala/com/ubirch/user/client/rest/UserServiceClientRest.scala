@@ -1,20 +1,17 @@
 package com.ubirch.user.client.rest
 
+import akka.http.scaladsl.HttpExt
+import akka.http.scaladsl.model._
+import akka.stream.Materializer
+import akka.util.ByteString
 import com.typesafe.scalalogging.slf4j.StrictLogging
-
 import com.ubirch.user.client.rest.config.UserClientRestConfig
-import com.ubirch.user.model.rest.{Group, UpdateInfo, User, UserContext, UserInfo}
+import com.ubirch.user.model.rest._
 import com.ubirch.util.deepCheck.model.DeepCheckResponse
 import com.ubirch.util.deepCheck.util.DeepCheckResponseUtil
 import com.ubirch.util.json.{Json4sUtil, MyJsonProtocol}
 import com.ubirch.util.model.JsonResponse
-
 import org.json4s.native.Serialization.read
-
-import akka.http.scaladsl.HttpExt
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpMethods, HttpRequest, HttpResponse, StatusCode, StatusCodes}
-import akka.stream.Materializer
-import akka.util.ByteString
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -147,34 +144,56 @@ object UserServiceClientRest extends MyJsonProtocol
 
         logger.debug(s"user (object): $userJsonString")
         val url = UserClientRestConfig.pathUserPOST
-        val req = HttpRequest(
-          method = HttpMethods.POST,
-          uri = url,
-          entity = HttpEntity.Strict(ContentTypes.`application/json`, data = ByteString(userJsonString))
-        )
-        httpClient.singleRequest(req) flatMap {
-
-          case HttpResponse(StatusCodes.OK, _, entity, _) =>
-
-            entity.dataBytes.runFold(ByteString(""))(_ ++ _) map { body =>
-              Some(read[User](body.utf8String))
-            }
-
-          case res@HttpResponse(code, _, _, _) =>
-
-            res.discardEntityBytes()
-            Future(
-              logErrorAndReturnNone(s"userPOST() call to user-service failed: url=$url code=$code, status=${res.status}")
-            )
-
-        }
+        postUserHelperMethod(url, userJsonString)
 
       case None =>
         logger.error(s"failed to to convert input to JSON: user=$user")
         Future(None)
 
     }
+  }
 
+  def userRecreate(user: User)
+                  (implicit httpClient: HttpExt, materializer: Materializer): Future[Option[User]] = {
+
+    Json4sUtil.any2String(user) match {
+
+      case Some(userJsonString: String) =>
+
+        logger.debug(s"recreate: $userJsonString")
+        val url = UserClientRestConfig.pathUserRecreate
+        postUserHelperMethod(url, userJsonString)
+
+      case None =>
+        logger.error(s"failed to to convert input to JSON: user=$user")
+        Future(None)
+
+    }
+  }
+
+
+  private def postUserHelperMethod(url: Uri, userJsonString: String)
+                                  (implicit httpClient: HttpExt, materializer: Materializer): Future[Option[User]] = {
+    val req = HttpRequest(
+      method = HttpMethods.POST,
+      uri = url,
+      entity = HttpEntity.Strict(ContentTypes.`application/json`, data = ByteString(userJsonString))
+    )
+    httpClient.singleRequest(req) flatMap {
+
+      case HttpResponse(StatusCodes.OK, _, entity, _) =>
+
+        entity.dataBytes.runFold(ByteString(""))(_ ++ _) map { body =>
+          Some(read[User](body.utf8String))
+        }
+
+      case res@HttpResponse(code, _, _, _) =>
+
+        res.discardEntityBytes()
+        Future(
+          logErrorAndReturnNone(s"userPOST() call to user-service failed: url=$url code=$code, status=${res.status}")
+        )
+    }
   }
 
   def userPUT(user: User)
