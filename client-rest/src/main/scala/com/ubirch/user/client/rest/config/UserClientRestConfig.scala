@@ -50,6 +50,8 @@ object UserClientRestConfig extends ConfigBase {
 
   val pathUserPOST: String = s"$host${RouteConstants.pathUser}"
 
+  val pathUserRecreate: String = s"$host${RouteConstants.pathRecreate}"
+
   def pathUserPUT(providerId: String,
                   externalUserId: String
                  ): String = {

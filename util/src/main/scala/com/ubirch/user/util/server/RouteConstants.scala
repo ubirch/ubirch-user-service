@@ -25,6 +25,7 @@ object RouteConstants {
   final val initData = "initData"
 
   final val externalIdExists = "extIdExists"
+  final val recreate = "recreate"
   final val info = "info"
 
   final val register = "register"
@@ -47,6 +48,7 @@ object RouteConstants {
   }
 
   val pathUser = s"$pathPrefix/$user"
+  val pathRecreate = s"$pathPrefix/$user/$recreate"
 
   def pathUserFind(providerId: String, externalUserId: String): String = {
 

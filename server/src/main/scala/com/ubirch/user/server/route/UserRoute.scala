@@ -6,7 +6,6 @@ import akka.http.scaladsl.server.Route
 import akka.pattern.ask
 import akka.util.Timeout
 import com.typesafe.scalalogging.slf4j.StrictLogging
-
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.actor._
 import com.ubirch.user.model._
@@ -17,7 +16,6 @@ import com.ubirch.util.json.Json4sUtil
 import com.ubirch.util.model.{JsonErrorResponse, JsonResponse}
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.rest.akka.directives.CORSDirective
-
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 
 import scala.concurrent.ExecutionContextExecutor
@@ -50,6 +48,14 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
           post {
             entity(as[User]) { user =>
               createUser(user)
+            }
+          }
+
+        } ~ path(RouteConstants.recreate) {
+
+          post {
+            entity(as[User]) { user =>
+              restoreUser(user)
             }
           }
 
@@ -110,6 +116,35 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
     val dbUser = Json4sUtil.any2any[db.User](restUser)
 
     OnComplete(userActor ? CreateUser(dbUser)).fold() {
+
+      case Success(resp) =>
+
+        resp match {
+
+          case Some(u: db.User) =>
+            complete(StatusCodes.OK -> Json4sUtil.any2any[rest.User](u))
+
+          case jer: JsonErrorResponse =>
+            complete(StatusCodes.BadRequest -> jer)
+
+          case _ =>
+            complete(StatusCodes.InternalServerError -> serverErrorResponse(errorType = "CreateError", errorMessage = "failed to create user"))
+
+        }
+
+      case Failure(t) =>
+        logger.error("create user failed", t)
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = t.getMessage))
+    }
+
+  }
+
+
+  private def restoreUser(restUser: User): Route = {
+
+    val dbUser = Json4sUtil.any2any[db.User](restUser)
+
+    OnComplete(userActor ? RestoreUser(dbUser)).fold() {
 
       case Success(resp) =>
 

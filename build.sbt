@@ -97,7 +97,8 @@ lazy val modelRest = (project in file("model-rest"))
   .settings(commonSettings: _*)
   .settings(
     name := "model-rest",
-    description := "REST JSON models"
+    description := "REST JSON models",
+    libraryDependencies ++= Seq(ubirchDate)
   )
 
 lazy val server = project

@@ -33,6 +33,17 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
           sender ! JsonErrorResponse(errorType = "ValidationError", errorMessage = t.getMessage)
       }
 
+    case toRestore: RestoreUser =>
+
+      val sender = context.sender()
+      UserManager.create(toRestore.user).onComplete {
+        case Success(u) =>
+          sender ! u
+        case Failure(t) =>
+          sender ! JsonErrorResponse(errorType = "ValidationError", errorMessage = t.getMessage)
+      }
+
+
     case update: UpdateUser =>
 
       val sender = context.sender()
@@ -114,6 +125,8 @@ object UserActor {
 }
 
 case class CreateUser(user: User)
+
+case class RestoreUser(user: User)
 
 case class UpdateUser(providerId: String,
                       externalUserId: String,
