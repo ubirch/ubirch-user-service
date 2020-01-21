@@ -81,7 +81,6 @@ function build_container() {
   fi
 
   # push Docker image
-  docker push ubirch/$CURRENT_SERVICE_NAME
   docker push ubirch/$CURRENT_SERVICE_NAME:v$GO_PIPELINE_LABEL
   if [ $? -ne 0 ]; then
     echo "Docker push failed"
