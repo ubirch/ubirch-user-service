@@ -185,15 +185,15 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
         resp match {
 
           case Some(u: db.User) =>
-            logger.info("successfully updated user")
+            logger.debug("successfully updated user")
             complete(StatusCodes.OK -> Json4sUtil.any2any[rest.User](u))
 
           case jer: JsonErrorResponse =>
-            logger.info(s"failed to update user $jer")
+            logger.debug(s"failed to update user $jer")
             complete(StatusCodes.BadRequest -> jer)
 
           case _ =>
-            logger.info(s"failed to update user, serverErrorResponse")
+            logger.debug(s"failed to update user, serverErrorResponse")
             complete(serverErrorResponse(errorType = "UpdateError", errorMessage = "failed to update user"))
 
         }
