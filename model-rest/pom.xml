@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- parent pom -->
+    <parent>
+        <groupId>com.ubirch.user</groupId>
+        <artifactId>ubirch-user-service</artifactId>
+        <version>1.0.4-SNAPSHOT</version>
+    </parent>
+
+    <!-- basic info -->
+    <artifactId>model-rest</artifactId>
+    <name>${project.artifactId}</name>
+    <description>REST JSON models</description>
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <!-- Ubirch -->
+        <dependency>
+            <groupId>com.ubirch.util</groupId>
+            <artifactId>date_${scala.compat.version}</artifactId>
+            <version>${ubirch-date.version}</version>
+        </dependency>
+    </dependencies>
+</project>

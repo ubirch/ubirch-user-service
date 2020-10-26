@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- parent pom -->
+    <parent>
+        <groupId>com.ubirch.user</groupId>
+        <artifactId>ubirch-user-service</artifactId>
+        <version>1.0.4-SNAPSHOT</version>
+    </parent>
+
+    <!-- basic info -->
+    <artifactId>model-db</artifactId>
+    <name>${project.artifactId}</name>
+    <description>database JSON models</description>
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <!-- USER SERVICE -->
+        <dependency>
+            <groupId>com.ubirch.user</groupId>
+            <artifactId>modelDb</artifactId>
+            <version>${user-service-parent.version}</version>
+        </dependency>
+
+        <!-- Ubirch -->
+        <dependency>
+            <groupId>com.ubirch.util</groupId>
+            <artifactId>date_${scala.compat.version}</artifactId>
+            <version>${ubirch-date.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ubirch.util</groupId>
+            <artifactId>uuid_${scala.compat.version}</artifactId>
+            <version>${ubirch-uuid.version}</version>
+        </dependency>
+    </dependencies>
+</project>

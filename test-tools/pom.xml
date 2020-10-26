@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- parent pom -->
+    <parent>
+        <groupId>com.ubirch.user</groupId>
+        <artifactId>ubirch-user-service</artifactId>
+        <version>1.0.4-SNAPSHOT</version>
+    </parent>
+
+    <!-- basic info -->
+    <artifactId>test-tools</artifactId>
+    <name>${project.artifactId}</name>
+    <description>tools useful in automated tests (not in test-tools to avoid circular dependencies between _test-tools_
+        and _core_)
+    </description>
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <!-- USER SERVICE -->
+        <dependency>
+            <groupId>com.ubirch.user</groupId>
+            <artifactId>config</artifactId>
+            <version>${user-service-parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ubirch.user</groupId>
+            <artifactId>modelDb</artifactId>
+            <version>${user-service-parent.version}</version>
+        </dependency>
+
+        <!-- Ubirch -->
+
+        <dependency>
+            <groupId>com.ubirch.util</groupId>
+            <artifactId>json_${scala.compat.version}</artifactId>
+            <version>${ubirch-json.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ubirch.util</groupId>
+            <artifactId>mongo-utils_${scala.compat.version}</artifactId>
+            <version>${ubirch-mongo.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ubirch.util</groupId>
+            <artifactId>mongo-test-utils_${scala.compat.version}</artifactId>
+            <version>${ubirch-mongo-test.version}</version>
+        </dependency>
+
+        <!-- Third parties -->
+
+        <dependency>
+            <groupId>org.json4s</groupId>
+            <artifactId>json4s-native</artifactId>
+            <version>${json4s.version}</version>
+        </dependency>
+
+        <!-- test scoped -->
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${scala.compat.version}</artifactId>
+            <version>${scalatest.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Logging -->
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-sl4f4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>jul-to-sl4f4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logback-logstash.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.typesafe.scala-logging</groupId>
+            <artifactId>scala-logging</artifactId>
+            <version>${scala-logging-.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.typesafe.scala-logging</groupId>
+            <artifactId>scala-logging-slf4j</artifactId>
+            <version>${scala-logging-slf4j.version}</version>
+        </dependency>
+    </dependencies>
+</project>
