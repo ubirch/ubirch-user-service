@@ -29,7 +29,7 @@
 
         <dependency>
             <groupId>com.ubirch.user</groupId>
-            <artifactId>modelDb</artifactId>
+            <artifactId>model-db</artifactId>
             <version>${user-service-parent.version}</version>
         </dependency>
 
@@ -55,9 +55,10 @@
 
         <!-- Third parties -->
 
+
         <dependency>
             <groupId>org.json4s</groupId>
-            <artifactId>json4s-native</artifactId>
+            <artifactId>json4s-native_${scala.compat.version}</artifactId>
             <version>${json4s.version}</version>
         </dependency>
 
@@ -66,7 +67,6 @@
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_${scala.compat.version}</artifactId>
             <version>${scalatest.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <!-- Logging -->
@@ -85,13 +85,7 @@
 
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-sl4f4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>jul-to-sl4f4j</artifactId>
+            <artifactId>jul-to-slf4j</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
 
@@ -115,13 +109,13 @@
 
         <dependency>
             <groupId>com.typesafe.scala-logging</groupId>
-            <artifactId>scala-logging</artifactId>
-            <version>${scala-logging-.version}</version>
+            <artifactId>scala-logging_${scala.compat.version}</artifactId>
+            <version>${scala-logging.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.typesafe.scala-logging</groupId>
-            <artifactId>scala-logging-slf4j</artifactId>
+            <artifactId>scala-logging-slf4j_${scala.compat.version}</artifactId>
             <version>${scala-logging-slf4j.version}</version>
         </dependency>
     </dependencies>

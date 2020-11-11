@@ -29,7 +29,6 @@
             <groupId>com.ubirch.user</groupId>
             <artifactId>test-tools-ext</artifactId>
             <version>${user-service-parent.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

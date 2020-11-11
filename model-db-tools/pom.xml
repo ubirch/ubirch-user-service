@@ -21,7 +21,7 @@
         <!-- USER SERVICE -->
         <dependency>
             <groupId>com.ubirch.user</groupId>
-            <artifactId>modelDb</artifactId>
+            <artifactId>model-db</artifactId>
             <version>${user-service-parent.version}</version>
         </dependency>
 

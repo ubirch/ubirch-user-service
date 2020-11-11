@@ -72,7 +72,7 @@
         <module>config</module>
         <module>core</module>
         <module>model-db</module>
-        <module>model-db-tools</module> <!-- probably not needed for deployment-->
+        <module>model-db-tools</module>
         <module>model-rest</module>
         <module>server</module>
         <module>test-tools</module>
@@ -101,7 +101,7 @@
         <scalatest.version>3.0.1</scalatest.version>
 
         <!-- trackle versions -->
-        <user-service-parent.version>1.0.3-SNAPSHOT</user-service-parent.version>
+        <user-service-parent.version>1.0.4-SNAPSHOT</user-service-parent.version>
         <!-- ubirch versions -->
         <ubirch-config.version>0.2.3</ubirch-config.version>
         <ubirch-crypto.version>0.4.11</ubirch-crypto.version>
@@ -144,221 +144,221 @@
 
     <dependencies>
 
-        <!-- USER SERVICE -->
-        <dependency>
-            <groupId>com.ubirch.user</groupId>
-            <artifactId>config</artifactId>
-            <version>${user-service-parent.version}</version>
-        </dependency>
+<!--        &lt;!&ndash; USER SERVICE &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.user</groupId>-->
+<!--            <artifactId>config</artifactId>-->
+<!--            <version>${user-service-parent.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.ubirch.user</groupId>
-            <artifactId>core</artifactId>
-            <version>${user-service-parent.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.user</groupId>-->
+<!--            <artifactId>core</artifactId>-->
+<!--            <version>${user-service-parent.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.ubirch.user</groupId>
-            <artifactId>modelDb</artifactId>
-            <version>${user-service-parent.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.user</groupId>-->
+<!--            <artifactId>model-db</artifactId>-->
+<!--            <version>${user-service-parent.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.ubirch.user</groupId>
-            <artifactId>modelDbTools</artifactId>
-            <version>${user-service-parent.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.user</groupId>-->
+<!--            <artifactId>model-dbTools</artifactId>-->
+<!--            <version>${user-service-parent.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.ubirch.user</groupId>
-            <artifactId>modelRest</artifactId>
-            <version>${user-service-parent.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.user</groupId>-->
+<!--            <artifactId>modelRest</artifactId>-->
+<!--            <version>${user-service-parent.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.ubirch.user</groupId>
-            <artifactId>testTools</artifactId>
-            <version>${user-service-parent.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.user</groupId>-->
+<!--            <artifactId>testTools</artifactId>-->
+<!--            <version>${user-service-parent.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.ubirch.user</groupId>
-            <artifactId>testToolsExt</artifactId>
-            <version>${user-service-parent.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.user</groupId>-->
+<!--            <artifactId>testToolsExt</artifactId>-->
+<!--            <version>${user-service-parent.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.ubirch.user</groupId>
-            <artifactId>util</artifactId>
-            <version>${user-service-parent.version}</version>
-        </dependency>
-
-
-        <!-- UBIRCH -->
-        <dependency>
-            <groupId>com.ubirch.util</groupId>
-            <artifactId>config_${scala.compat.version}</artifactId>
-            <version>${ubirch-config.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ubirch.util</groupId>
-            <artifactId>crypto_${scala.compat.version}</artifactId>
-            <version>${ubirch-crypto.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ubirch.util</groupId>
-            <artifactId>date_${scala.compat.version}</artifactId>
-            <version>${ubirch-date.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ubirch.util</groupId>
-            <artifactId>deep-check-model_${scala.compat.version}</artifactId>
-            <version>${ubirch-deep-check-model.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ubirch.util</groupId>
-            <artifactId>json_${scala.compat.version}</artifactId>
-            <version>${ubirch-json.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ubirch.util</groupId>
-            <artifactId>mongo-utils_${scala.compat.version}</artifactId>
-            <version>${ubirch-mongo.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ubirch.util</groupId>
-            <artifactId>mongo-test-utils_${scala.compat.version}</artifactId>
-            <version>${ubirch-mongo-test.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ubirch.util</groupId>
-            <artifactId>response-util_${scala.compat.version}</artifactId>
-            <version>${ubirch-response.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ubirch.util</groupId>
-            <artifactId>rest-akka-http_${scala.compat.version}</artifactId>
-            <version>${ubirch-rest-akka-http.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ubirch.util</groupId>
-            <artifactId>rest-akka-http-test_${scala.compat.version}</artifactId>
-            <version>${ubirch-rest-akka-http.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ubirch.util</groupId>
-            <artifactId>uuid_${scala.compat.version}</artifactId>
-            <version>${ubirch-uuid.version}</version>
-        </dependency>
-
-        <!-- Third parties -->
-
-        <dependency>
-            <groupId>org.json4s</groupId>
-            <artifactId>json4s-native</artifactId>
-            <version>${json4s.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.user</groupId>-->
+<!--            <artifactId>util</artifactId>-->
+<!--            <version>${user-service-parent.version}</version>-->
+<!--        </dependency>-->
 
 
-        <!-- Akka -->
+<!--        &lt;!&ndash; UBIRCH &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.util</groupId>-->
+<!--            <artifactId>config_${scala.compat.version}</artifactId>-->
+<!--            <version>${ubirch-config.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-actor</artifactId>
-            <version>${akka.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.util</groupId>-->
+<!--            <artifactId>crypto_${scala.compat.version}</artifactId>-->
+<!--            <version>${ubirch-crypto.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-http</artifactId>
-            <version>${akka-http.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.util</groupId>-->
+<!--            <artifactId>date_${scala.compat.version}</artifactId>-->
+<!--            <version>${ubirch-date.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-slf4j</artifactId>
-            <version>${akka.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.util</groupId>-->
+<!--            <artifactId>deep-check-model_${scala.compat.version}</artifactId>-->
+<!--            <version>${ubirch-deep-check.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-stream</artifactId>
-            <version>${akka.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.util</groupId>-->
+<!--            <artifactId>json_${scala.compat.version}</artifactId>-->
+<!--            <version>${ubirch-json.version}</version>-->
+<!--        </dependency>-->
 
-        <!-- Logging -->
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.util</groupId>-->
+<!--            <artifactId>mongo-utils_${scala.compat.version}</artifactId>-->
+<!--            <version>${ubirch-mongo.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.util</groupId>-->
+<!--            <artifactId>mongo-test-utils_${scala.compat.version}</artifactId>-->
+<!--            <version>${ubirch-mongo-test.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.util</groupId>-->
+<!--            <artifactId>response-util_${scala.compat.version}</artifactId>-->
+<!--            <version>${ubirch-response.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-sl4f4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.util</groupId>-->
+<!--            <artifactId>rest-akka-http_${scala.compat.version}</artifactId>-->
+<!--            <version>${ubirch-rest-akka-http.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>jul-to-sl4f4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.util</groupId>-->
+<!--            <artifactId>rest-akka-http-test_${scala.compat.version}</artifactId>-->
+<!--            <version>${ubirch-rest-akka-http.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.ubirch.util</groupId>-->
+<!--            <artifactId>uuid_${scala.compat.version}</artifactId>-->
+<!--            <version>${ubirch-uuid.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
+<!--        &lt;!&ndash; Third parties &ndash;&gt;-->
 
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-            <version>${logback-logstash.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.json4s</groupId>-->
+<!--            <artifactId>json4s-native</artifactId>-->
+<!--            <version>${json4s.version}</version>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.typesafe.scala-logging</groupId>
-            <artifactId>scala-logging</artifactId>
-            <version>${scala-logging-.version}</version>
-        </dependency>
 
-        <dependency>
-            <groupId>com.typesafe.scala-logging</groupId>
-            <artifactId>scala-logging-slf4j</artifactId>
-            <version>${scala-logging-slf4j.version}</version>
-        </dependency>
+<!--        &lt;!&ndash; Akka &ndash;&gt;-->
 
-        <!-- Test scoped -->
-        <dependency>
-            <groupId>org.scalatest</groupId>
-            <artifactId>scalatest_${scala.compat.version}</artifactId>
-            <version>${scalatest.version}</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.typesafe.akka</groupId>-->
+<!--            <artifactId>akka-actor</artifactId>-->
+<!--            <version>${akka.version}</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.typesafe.akka</groupId>-->
+<!--            <artifactId>akka-http</artifactId>-->
+<!--            <version>${akka-http.version}</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.typesafe.akka</groupId>-->
+<!--            <artifactId>akka-slf4j</artifactId>-->
+<!--            <version>${akka.version}</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.typesafe.akka</groupId>-->
+<!--            <artifactId>akka-stream</artifactId>-->
+<!--            <version>${akka.version}</version>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Logging &ndash;&gt;-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.slf4j</groupId>-->
+<!--            <artifactId>slf4j-api</artifactId>-->
+<!--            <version>${slf4j.version}</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.slf4j</groupId>-->
+<!--            <artifactId>log4j-over-slf4j</artifactId>-->
+<!--            <version>${slf4j.version}</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.slf4j</groupId>-->
+<!--            <artifactId>jul-to-sl4f4j</artifactId>-->
+<!--            <version>${slf4j.version}</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>ch.qos.logback</groupId>-->
+<!--            <artifactId>jul-to-sl4f4j</artifactId>-->
+<!--            <version>${slf4j.version}</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>ch.qos.logback</groupId>-->
+<!--            <artifactId>logback-core</artifactId>-->
+<!--            <version>${logback.version}</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>ch.qos.logback</groupId>-->
+<!--            <artifactId>logback-classic</artifactId>-->
+<!--            <version>${logback.version}</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>net.logstash.logback</groupId>-->
+<!--            <artifactId>logstash-logback-encoder</artifactId>-->
+<!--            <version>${logback-logstash.version}</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.typesafe.scala-logging</groupId>-->
+<!--            <artifactId>scala-logging</artifactId>-->
+<!--            <version>${scala-logging.version}</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.typesafe.scala-logging</groupId>-->
+<!--            <artifactId>scala-logging-slf4j</artifactId>-->
+<!--            <version>${scala-logging-slf4j.version}</version>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Test scoped &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.scalatest</groupId>-->
+<!--            <artifactId>scalatest_${scala.compat.version}</artifactId>-->
+<!--            <version>${scalatest.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
 
         <!-- Scala library stays in parent -->
 

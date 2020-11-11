@@ -11,7 +11,7 @@
     </parent>
 
     <!-- basic info -->
-    <artifactId>test-tools-ext</artifactId>
+    <artifactId>util</artifactId>
     <name>${project.artifactId}</name>
     <description>utils</description>
     <packaging>jar</packaging>

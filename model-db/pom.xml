@@ -18,13 +18,6 @@
 
     <dependencies>
 
-        <!-- USER SERVICE -->
-        <dependency>
-            <groupId>com.ubirch.user</groupId>
-            <artifactId>modelDb</artifactId>
-            <version>${user-service-parent.version}</version>
-        </dependency>
-
         <!-- Ubirch -->
         <dependency>
             <groupId>com.ubirch.util</groupId>

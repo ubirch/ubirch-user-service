@@ -67,7 +67,7 @@
         <dependency>
             <groupId>com.ubirch.util</groupId>
             <artifactId>deep-check-model_${scala.compat.version}</artifactId>
-            <version>${ubirch-deep-check-model.version}</version>
+            <version>${ubirch-deep-check.version}</version>
         </dependency>
 
         <dependency>
@@ -93,7 +93,7 @@
 
         <dependency>
             <groupId>org.json4s</groupId>
-            <artifactId>json4s-native</artifactId>
+            <artifactId>json4s-native_${scala.compat.version}</artifactId>
             <version>${json4s.version}</version>
         </dependency>
 
@@ -101,8 +101,8 @@
 
         <dependency>
             <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-actor</artifactId>
-            <version>${akka-actor.version}</version>
+            <artifactId>akka-actor_${scala.compat.version}</artifactId>
+            <version>${akka.version}</version>
         </dependency>
 
 
@@ -122,13 +122,7 @@
 
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-sl4f4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>jul-to-sl4f4j</artifactId>
+            <artifactId>jul-to-slf4j</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
 
@@ -152,13 +146,13 @@
 
         <dependency>
             <groupId>com.typesafe.scala-logging</groupId>
-            <artifactId>scala-logging</artifactId>
-            <version>${scala-logging-.version}</version>
+            <artifactId>scala-logging_${scala.compat.version}</artifactId>
+            <version>${scala-logging.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.typesafe.scala-logging</groupId>
-            <artifactId>scala-logging-slf4j</artifactId>
+            <artifactId>scala-logging-slf4j_${scala.compat.version}</artifactId>
             <version>${scala-logging-slf4j.version}</version>
         </dependency>
 
