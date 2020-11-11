@@ -469,7 +469,7 @@
 
     <distributionManagement>
         <repository>
-            <id>ubirch.public</id>
+            <id>ubirch.mvn.public</id>
             <name>Ubirch Public Cloud Repo Repository</name>
             <url>https://ubirch.mycloudrepo.io/public/repositories/mvn-public</url>
         </repository>
