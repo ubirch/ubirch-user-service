@@ -467,6 +467,14 @@
         </repository>
     </repositories>
 
+    <distributionManagement>
+        <repository>
+            <id>ubirch.public</id>
+            <name>Ubirch Public Cloud Repo Repository</name>
+            <url>https://ubirch.mycloudrepo.io/public/repositories/mvn-public</url>
+        </repository>
+    </distributionManagement>
+
 </project>
 
 
