@@ -151,7 +151,7 @@
                         <BUILD>${build.number}</BUILD>
                         <SERVICE_NAME>${parent.name}</SERVICE_NAME>
                         <JAR_LIBS>target/lib</JAR_LIBS>
-                        <JAR_FILE>target/${parent.build.finalName}.${project.packaging}</JAR_FILE>
+                        <JAR_FILE>target/${project.build.finalName}.${project.packaging}</JAR_FILE>
                     </buildArgs>
                 </configuration>
             </plugin>
