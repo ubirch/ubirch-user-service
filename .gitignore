@@ -1,5 +1,6 @@
 *.class
 *.log
+*.iml
 
 # sbt specific
 .cache
@@ -18,7 +19,5 @@ project/plugins/project/
 
 .idea
 cache
-Dockerfile
-Dockerfile.input
 .ivy2
 dump.rdb
