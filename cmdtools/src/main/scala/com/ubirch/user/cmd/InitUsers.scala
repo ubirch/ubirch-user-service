@@ -1,7 +1,6 @@
 package com.ubirch.user.cmd
 
-import com.typesafe.scalalogging.slf4j.StrictLogging
-
+import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.config.{Config, ConfigKeys}
 import com.ubirch.user.core.manager.ContextManager
 import com.ubirch.user.model.db.{Context, Group, User}

@@ -1,16 +1,13 @@
 package com.ubirch.user.core.manager
 
-import java.util.UUID
-
-import com.typesafe.scalalogging.slf4j.StrictLogging
-
+import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.config.Config
 import com.ubirch.user.model.db.Group
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
+import reactivemongo.bson.{BSONDocument, BSONDocumentReader, BSONDocumentWriter, Macros, document}
 
-import reactivemongo.bson.{BSONDocumentReader, BSONDocumentWriter, Macros, document}
-
+import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -35,7 +32,7 @@ object GroupManager extends StrictLogging
 
         mongo.collection(collectionName) flatMap { collection =>
 
-          collection.insert[Group](group) map { writeResult =>
+          collection.insert(ordered = false).one[Group](group) map { writeResult =>
 
             if (writeResult.ok && writeResult.n == 1) {
               logger.debug(s"created new group: $group")
@@ -70,7 +67,7 @@ object GroupManager extends StrictLogging
         val selector = document("id" -> groupId)
         mongo.collection(collectionName) flatMap {
 
-          _.update(selector, group) map { writeResult =>
+          _.update(ordered = false).one(selector, group) map { writeResult =>
 
             if (writeResult.ok) {
               logger.info(s"updated group: id=$groupId")
@@ -93,7 +90,7 @@ object GroupManager extends StrictLogging
     val selector = document("id" -> id)
 
     mongo.collection(collectionName) flatMap {
-      _.find(selector).one[Group]
+      _.find[BSONDocument, Group](selector).one[Group]
     }
 
   }
@@ -104,7 +101,7 @@ object GroupManager extends StrictLogging
     val selector = document("contextId" -> contextId, "ownerIds" -> ownerId)
 
     mongo.collection(collectionName) flatMap {
-      _.find(selector).one[Group]
+      _.find[BSONDocument, Group](selector).one[Group]
     }
 
   }
@@ -114,7 +111,7 @@ object GroupManager extends StrictLogging
     val selector = document("id" -> id)
 
     mongo.collection(collectionName) flatMap {
-      _.remove(selector) map { writeResult =>
+      _.delete().one(selector) map { writeResult =>
 
         if (writeResult.ok && writeResult.n == 1) {
           logger.info(s"deleted group: id=$id")

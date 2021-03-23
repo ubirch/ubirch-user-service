@@ -1,13 +1,11 @@
 package com.ubirch.user.testTools.external
 
-import com.typesafe.scalalogging.slf4j.StrictLogging
-
+import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.core.manager.{ContextManager, GroupManager, GroupsManager, UserManager}
 import com.ubirch.user.model.db.tools.DefaultModels
 import com.ubirch.user.model.db.{Context, Group, User}
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.uuid.UUIDUtil
-
 import org.joda.time.{DateTime, DateTimeZone}
 
 import scala.concurrent.ExecutionContext.Implicits.global

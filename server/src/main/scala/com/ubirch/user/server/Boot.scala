@@ -1,17 +1,16 @@
 package com.ubirch.user.server
 
-import java.util.concurrent.TimeUnit
-
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.Http.ServerBinding
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.config.{Config, ConfigKeys}
 import com.ubirch.user.server.route.MainRoute
 import com.ubirch.util.mongo.connection.MongoUtil
 
+import java.util.concurrent.TimeUnit
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
 /**

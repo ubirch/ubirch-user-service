@@ -5,7 +5,7 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
 import akka.pattern.ask
 import akka.util.Timeout
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.actor.{ActorNames, DeepCheckActor}
 import com.ubirch.user.util.server.RouteConstants

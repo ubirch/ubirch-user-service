@@ -60,19 +60,19 @@
 
         <dependency>
             <groupId>com.ubirch.util</groupId>
-            <artifactId>crypto_${scala.compat.version}</artifactId>
+            <artifactId>ubirch-crypto-utils_${scala.compat.version}</artifactId>
             <version>${ubirch-crypto.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.ubirch.util</groupId>
-            <artifactId>deep-check-model_${scala.compat.version}</artifactId>
+            <artifactId>ubirch-deep-check-utils_${scala.compat.version}</artifactId>
             <version>${ubirch-deep-check.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.ubirch.util</groupId>
-            <artifactId>json_${scala.compat.version}</artifactId>
+            <artifactId>ubirch-json-utils_${scala.compat.version}</artifactId>
             <version>${ubirch-json.version}</version>
         </dependency>
 
@@ -84,7 +84,7 @@
 
         <dependency>
             <groupId>com.ubirch.util</groupId>
-            <artifactId>response-util_${scala.compat.version}</artifactId>
+            <artifactId>ubirch-response-utils_${scala.compat.version}</artifactId>
             <version>${ubirch-response.version}</version>
         </dependency>
 

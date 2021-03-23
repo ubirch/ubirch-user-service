@@ -5,7 +5,7 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Route
 import akka.pattern.ask
 import akka.util.Timeout
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.actor._
 import com.ubirch.user.model._
@@ -19,10 +19,9 @@ import com.ubirch.util.rest.akka.directives.CORSDirective
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 
 import scala.concurrent.ExecutionContextExecutor
-import scala.concurrent.duration._
+import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 import scala.util.{Failure, Success}
-
 /**
   * author: cvandrei
   * since: 2017-03-30

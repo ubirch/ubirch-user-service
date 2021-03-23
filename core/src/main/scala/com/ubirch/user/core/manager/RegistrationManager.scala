@@ -1,7 +1,7 @@
 package com.ubirch.user.core.manager
 
-import com.typesafe.scalalogging.slf4j.StrictLogging
 
+import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.core.manager.util.UserInfoUtil
 import com.ubirch.user.model.db.{Context, Group, User}
 import com.ubirch.user.model.rest.{UserContext, UserInfo, UserInfoGroup}
