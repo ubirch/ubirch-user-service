@@ -1,13 +1,13 @@
 package com.ubirch.user.server.route
 
-import akka.actor.{ActorSystem, Scheduler}
+import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Directive1
 import akka.http.scaladsl.server.directives.FutureDirectives
 import akka.pattern.CircuitBreaker
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.util.http.response.ResponseUtil
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
 import scala.reflect.ClassTag

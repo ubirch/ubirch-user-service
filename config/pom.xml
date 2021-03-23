@@ -21,7 +21,7 @@
         <!-- Ubirch -->
         <dependency>
             <groupId>com.ubirch.util</groupId>
-            <artifactId>config_${scala.compat.version}</artifactId>
+            <artifactId>ubirch-config-utils_${scala.compat.version}</artifactId>
             <version>${ubirch-config.version}</version>
         </dependency>
     </dependencies>

@@ -1,7 +1,9 @@
 package com.ubirch.user.server.route
 
 import akka.actor.ActorSystem
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.server.Route
+import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.manager.{ContextManager, GroupManager, UserManager}
 import com.ubirch.user.model.db.{Context, Group, User}
@@ -11,8 +13,6 @@ import com.ubirch.util.http.response.ResponseUtil
 import com.ubirch.util.json.MyJsonProtocol
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.rest.akka.directives.CORSDirective
-import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.server.Route
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

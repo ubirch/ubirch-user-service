@@ -1,12 +1,12 @@
 package com.ubirch.user.core.manager
 
-import com.typesafe.scalalogging.slf4j.StrictLogging
-import com.ubirch.crypto.hash.HashUtil
+import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.config.Config
 import com.ubirch.user.model.db.User
+import com.ubirch.util.crypto.hash.HashUtil
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
-import reactivemongo.bson.{BSONDocumentReader, BSONDocumentWriter, Macros, document}
+import reactivemongo.bson.{BSONDocument, BSONDocumentReader, BSONDocumentWriter, Macros, document}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -52,7 +52,7 @@ object UserManager extends StrictLogging
           }
           validateUser(userToCreate)
           val withExternalIdLowerCase = userToCreate.copy(externalId = userToCreate.externalId.toLowerCase)
-          collection.insert[User](withExternalIdLowerCase) map { writeResult =>
+          collection.insert(ordered = false).one[User](withExternalIdLowerCase) map { writeResult =>
 
             if (writeResult.ok && writeResult.n == 1) {
               logger.debug(s"created new user: $userToCreate")
@@ -85,7 +85,7 @@ object UserManager extends StrictLogging
         val selector = document("id" -> user.id)
         mongo.collection(collectionName) flatMap {
 
-          _.update(selector, patchedUser) map { writeResult =>
+          _.update(ordered = false).one(selector, patchedUser) map { writeResult =>
 
             if (writeResult.ok) {
               logger.info(s"updated user: id=${user.id}")
@@ -107,7 +107,7 @@ object UserManager extends StrictLogging
     val selector = document("id" -> id)
 
     mongo.collection(collectionName) flatMap {
-      _.find(selector).one[User]
+      _.find[BSONDocument, User](selector).one[User]
     }
 
   }
@@ -121,7 +121,7 @@ object UserManager extends StrictLogging
     )
 
     mongo.collection(collectionName) flatMap {
-      _.find(selector).one[User]
+      _.find[BSONDocument, User](selector).one[User]
     }
 
   }
@@ -134,7 +134,7 @@ object UserManager extends StrictLogging
     )
 
     mongo.collection(collectionName) flatMap {
-      _.find(selector).one[User]
+      _.find[BSONDocument, User](selector).one[User]
     }
 
   }
@@ -144,7 +144,7 @@ object UserManager extends StrictLogging
     val selector = document("id" -> id)
 
     mongo.collection(collectionName) flatMap {
-      _.remove(selector) map { writeResult =>
+      _.delete().one(selector) map { writeResult =>
 
         if (writeResult.ok && writeResult.n == 1) {
           logger.info(s"deleted user: id=$id")

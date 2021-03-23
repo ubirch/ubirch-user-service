@@ -1,6 +1,6 @@
 package com.ubirch.user.core.manager
 
-import com.typesafe.scalalogging.slf4j.StrictLogging
+import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.config.Config
 import com.ubirch.user.model.db.Context
 import com.ubirch.util.deepCheck.model.DeepCheckResponse

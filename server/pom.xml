@@ -47,21 +47,14 @@
 
         <dependency>
             <groupId>com.ubirch.util</groupId>
-            <artifactId>response-util_${scala.compat.version}</artifactId>
+            <artifactId>ubirch-response-utils_${scala.compat.version}</artifactId>
             <version>${ubirch-response.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.ubirch.util</groupId>
-            <artifactId>rest-akka-http_${scala.compat.version}</artifactId>
+            <artifactId>ubirch-rest-akka-http-utils_${scala.compat.version}</artifactId>
             <version>${ubirch-rest-akka-http.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ubirch.util</groupId>
-            <artifactId>rest-akka-http-test_${scala.compat.version}</artifactId>
-            <version>${ubirch-rest-akka-http.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <!-- Akka -->

@@ -37,7 +37,7 @@
 
         <dependency>
             <groupId>com.ubirch.util</groupId>
-            <artifactId>json_${scala.compat.version}</artifactId>
+            <artifactId>ubirch-json-utils_${scala.compat.version}</artifactId>
             <version>${ubirch-json.version}</version>
         </dependency>
 
