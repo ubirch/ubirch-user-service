@@ -41,14 +41,8 @@
 
         <dependency>
             <groupId>com.ubirch.util</groupId>
-            <artifactId>mongo-utils_${scala.compat.version}</artifactId>
+            <artifactId>ubirch-mongo-utils_${scala.compat.version}</artifactId>
             <version>${ubirch-mongo.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ubirch.util</groupId>
-            <artifactId>mongo-test-utils_${scala.compat.version}</artifactId>
-            <version>${ubirch-mongo-test.version}</version>
         </dependency>
 
         <!-- Third parties -->

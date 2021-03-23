@@ -108,8 +108,7 @@
         <ubirch-date.version>0.5.3</ubirch-date.version>
         <ubirch-deep-check.version>0.3.1</ubirch-deep-check.version>
         <ubirch-json.version>0.5.1</ubirch-json.version>
-        <ubirch-mongo.version>0.9.1</ubirch-mongo.version>
-        <ubirch-mongo-test.version>0.9.1</ubirch-mongo-test.version>
+        <ubirch-mongo.version>0.9.6-SNAPSHOT</ubirch-mongo.version>
         <ubirch-response.version>0.5.0</ubirch-response.version>
         <ubirch-rest-akka-http.version>0.4.0</ubirch-rest-akka-http.version>
         <ubirch-rest-akka-http-test.version>0.4.0</ubirch-rest-akka-http-test.version>
@@ -135,6 +134,7 @@
         <scala-maven-plugin.version>3.3.2</scala-maven-plugin.version>
         <scalatest-maven-plugin.version>1.0</scalatest-maven-plugin.version>
         <scoverage.plugin.version>1.4.0</scoverage.plugin.version>
+        <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 
     </properties>
 
@@ -164,6 +164,8 @@
                 <executions>
                     <execution>
                         <goals>
+                            <goal>add-source</goal>
+                            <goal>doc-jar</goal>
                             <goal>compile</goal>
                             <goal>testCompile</goal>
                         </goals>
@@ -178,9 +180,22 @@
                                 <arg>-Ywarn-dead-code</arg>
                                 <arg>-Ywarn-unused</arg> <!-- might be buggy -->
                                 <arg>-Ylog-classpath</arg>
-                                <!--                                <arg>${project.build.directory}/.scala_dependencies</arg> &lt;!&ndash; really needed? &ndash;&gt;-->
                             </args>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -198,6 +213,25 @@
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+
+            <!-- copy all dependencies into the target/lib dir for our docker image -->
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${maven-dependency-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <overWriteReleases>false</overWriteReleases>
+                            <includeScope>runtime</includeScope>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <!--  for mvn deploy to work, disable the default deploy plugin -->
