@@ -45,6 +45,12 @@
             <groupId>com.ubirch.util</groupId>
             <artifactId>ubirch-mongo-utils_${scala.compat.version}</artifactId>
             <version>${ubirch-mongo.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Third parties -->

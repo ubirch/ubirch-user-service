@@ -123,7 +123,6 @@
         <logstash-logback.version>5.2</logstash-logback.version>
         <logback.version>1.2.3</logback.version>
         <scala-logging.version>3.9.0</scala-logging.version>
-        <log4j.version>2.13.2</log4j.version>
 
         <!-- plugins -->
         <dockerfile-maven-plugin.version>1.4.4</dockerfile-maven-plugin.version>
@@ -141,13 +140,6 @@
 
     <dependencies>
 
-        <!-- logging -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-
         <!-- Scala library stays in parent -->
 
         <dependency>
@@ -155,7 +147,6 @@
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
         </dependency>
-
     </dependencies>
 
 
