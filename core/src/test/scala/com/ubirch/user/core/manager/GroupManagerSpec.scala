@@ -13,9 +13,9 @@ class GroupManagerSpec extends MongoSpec {
 
   private val collection = Config.mongoCollectionGroup
 
-  feature("create()") {
+  Feature("create()") {
 
-    scenario("non-admin group does NOT exist --> success") {
+    Scenario("non-admin group does NOT exist --> success") {
 
       // prepare
       val group = DefaultModels.group()
@@ -33,7 +33,7 @@ class GroupManagerSpec extends MongoSpec {
 
     }
 
-    scenario("admin group does NOT exist --> success") {
+    Scenario("admin group does NOT exist --> success") {
 
       // prepare
       val group = DefaultModels.group(adminGroup = Some(true))
@@ -51,7 +51,7 @@ class GroupManagerSpec extends MongoSpec {
 
     }
 
-    scenario("non-admin group already exists --> fail") {
+    Scenario("non-admin group already exists --> fail") {
 
       // prepare
       GroupManager.create(DefaultModels.group()) flatMap {
@@ -74,7 +74,7 @@ class GroupManagerSpec extends MongoSpec {
 
     }
 
-    scenario("admin group already exists --> fail") {
+    Scenario("admin group already exists --> fail") {
 
       // prepare
       GroupManager.create(DefaultModels.group(adminGroup = Some(true))) flatMap {
@@ -99,9 +99,9 @@ class GroupManagerSpec extends MongoSpec {
 
   }
 
-  feature("update()") {
+  Feature("update()") {
 
-    scenario("group.id does not exist --> fail") {
+    Scenario("group.id does not exist --> fail") {
 
       // prepare
       val group = DefaultModels.group()
@@ -117,7 +117,7 @@ class GroupManagerSpec extends MongoSpec {
 
     }
 
-    scenario("group.id exists --> success") {
+    Scenario("group.id exists --> success") {
 
       // prepare
       GroupManager.create(DefaultModels.group()) flatMap {
@@ -142,7 +142,7 @@ class GroupManagerSpec extends MongoSpec {
 
     }
 
-    scenario("group.id exists and promote to admin --> success") {
+    Scenario("group.id exists and promote to admin --> success") {
 
       // prepare
       GroupManager.create(DefaultModels.group()) flatMap {
@@ -169,9 +169,9 @@ class GroupManagerSpec extends MongoSpec {
 
   }
 
-  feature("findById()") {
+  Feature("findById()") {
 
-    scenario("group.id does not exist --> fail") {
+    Scenario("group.id does not exist --> fail") {
 
       // test
       GroupManager.findById(UUIDUtil.uuidStr) flatMap { created =>
@@ -184,7 +184,7 @@ class GroupManagerSpec extends MongoSpec {
 
     }
 
-    scenario("non-admin group.id exists --> success") {
+    Scenario("non-admin group.id exists --> success") {
 
       // prepare
       GroupManager.create(DefaultModels.group()) flatMap {
@@ -207,7 +207,7 @@ class GroupManagerSpec extends MongoSpec {
 
     }
 
-    scenario("admin group.id exists --> success") {
+    Scenario("admin group.id exists --> success") {
 
       // prepare
       GroupManager.create(DefaultModels.group(adminGroup = Some(true))) flatMap {
@@ -232,9 +232,9 @@ class GroupManagerSpec extends MongoSpec {
 
   }
 
-  feature("delete()") {
+  Feature("delete()") {
 
-    scenario("group.id does not exist --> fail") {
+    Scenario("group.id does not exist --> fail") {
 
       // test
       GroupManager.delete(UUIDUtil.uuidStr) flatMap { result =>
@@ -247,7 +247,7 @@ class GroupManagerSpec extends MongoSpec {
 
     }
 
-    scenario("group.id exists --> success") {
+    Scenario("group.id exists --> success") {
 
       // prepare
       GroupManager.create(DefaultModels.group()) flatMap {

@@ -12,9 +12,9 @@ class GroupsManagerSpec extends MongoSpec {
 
   private val dataHelpers = new DataHelpers
 
-  feature("findByContextAndUser") {
+  Feature("findByContextAndUser") {
 
-    scenario("empty database") {
+    Scenario("empty database") {
 
       // prepare
       val context = DefaultModels.context()
@@ -28,13 +28,13 @@ class GroupsManagerSpec extends MongoSpec {
       ) map { groups =>
 
         // verify
-        groups should be('isEmpty)
+        groups.isEmpty shouldBe true
 
       }
 
     }
 
-    scenario("user is group owner") {
+    Scenario("user is group owner") {
 
       // prepare
       val contextModel = DefaultModels.context()
@@ -61,7 +61,7 @@ class GroupsManagerSpec extends MongoSpec {
 
     }
 
-    scenario("user is allowed to access the group") {
+    Scenario("user is allowed to access the group") {
 
       // prepare
       val contextModel = DefaultModels.context()
@@ -88,7 +88,7 @@ class GroupsManagerSpec extends MongoSpec {
 
     }
 
-    scenario("user owns no groups nor is allowed to access any of them") {
+    Scenario("user owns no groups nor is allowed to access any of them") {
 
       // prepare
       val contextModel = DefaultModels.context()

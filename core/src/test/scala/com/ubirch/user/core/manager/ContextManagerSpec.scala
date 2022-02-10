@@ -13,9 +13,9 @@ class ContextManagerSpec extends MongoSpec {
 
   private val collection: String = Config.mongoCollectionContext
   
-  feature("create()") {
+  Feature("create()") {
 
-    scenario("context does NOT exist --> success") {
+    Scenario("context does NOT exist --> success") {
 
       // prepare
       val context = DefaultModels.context()
@@ -33,7 +33,7 @@ class ContextManagerSpec extends MongoSpec {
 
     }
 
-    scenario("context with same id exists --> fail") {
+    Scenario("context with same id exists --> fail") {
 
       // prepare
       ContextManager.create(DefaultModels.context()) flatMap {
@@ -58,7 +58,7 @@ class ContextManagerSpec extends MongoSpec {
 
     }
 
-    scenario("context with same name exists --> fail") {
+    Scenario("context with same name exists --> fail") {
 
       // prepare
       ContextManager.create(DefaultModels.context()) flatMap {
@@ -85,9 +85,9 @@ class ContextManagerSpec extends MongoSpec {
 
   }
 
-  feature("update()") {
+  Feature("update()") {
 
-    scenario("context.id does not exist --> fail") {
+    Scenario("context.id does not exist --> fail") {
 
       // test
       ContextManager.update(DefaultModels.context()) flatMap { updated =>
@@ -100,7 +100,7 @@ class ContextManagerSpec extends MongoSpec {
 
     }
 
-    scenario("context.id exists --> success") {
+    Scenario("context.id exists --> success") {
 
       // prepare
       ContextManager.create(DefaultModels.context()) flatMap {
@@ -127,9 +127,9 @@ class ContextManagerSpec extends MongoSpec {
 
   }
 
-  feature("findById()") {
+  Feature("findById()") {
 
-    scenario("context.id does not exist --> fail") {
+    Scenario("context.id does not exist --> fail") {
 
       // test
       ContextManager.findById(UUIDUtil.uuidStr) flatMap { created =>
@@ -142,7 +142,7 @@ class ContextManagerSpec extends MongoSpec {
 
     }
 
-    scenario("context.id exists --> success") {
+    Scenario("context.id exists --> success") {
 
       // prepare
       ContextManager.create(DefaultModels.context()) flatMap {
@@ -167,9 +167,9 @@ class ContextManagerSpec extends MongoSpec {
 
   }
 
-  feature("findByName()") {
+  Feature("findByName()") {
 
-    scenario("context.name does not exist --> fail") {
+    Scenario("context.name does not exist --> fail") {
 
       // test
       ContextManager.findByName("automated-test") flatMap { created =>
@@ -182,7 +182,7 @@ class ContextManagerSpec extends MongoSpec {
 
     }
 
-    scenario("context.name exists --> success") {
+    Scenario("context.name exists --> success") {
 
       // prepare
       ContextManager.create(DefaultModels.context()) flatMap {
@@ -207,9 +207,9 @@ class ContextManagerSpec extends MongoSpec {
 
   }
 
-  feature("delete()") {
+  Feature("delete()") {
 
-    scenario("context.id does not exist --> fail") {
+    Scenario("context.id does not exist --> fail") {
 
       // test
       ContextManager.delete(UUIDUtil.uuidStr) flatMap { result =>
@@ -222,7 +222,7 @@ class ContextManagerSpec extends MongoSpec {
 
     }
 
-    scenario("context.id exists --> success") {
+    Scenario("context.id exists --> success") {
 
       // prepare
       ContextManager.create(DefaultModels.context()) flatMap {

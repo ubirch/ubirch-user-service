@@ -173,7 +173,6 @@
                             <!--https://www.threatstack.com/blog/useful-scalac-options-for-better-scala-development-part-1-->
                             <args>
                                 <arg>-deprecation</arg>
-                                <arg>-dependencyfile</arg> <!-- really needed? -->
                                 <arg>-unchecked</arg>
                                 <arg>-Ywarn-value-discard</arg>
                                 <arg>-Ywarn-dead-code</arg>

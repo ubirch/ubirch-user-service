@@ -7,7 +7,6 @@ import com.ubirch.util.crypto.hash.HashUtil
 import com.ubirch.util.uuid.UUIDUtil
 import org.scalatest.concurrent.ScalaFutures
 
-import scala.concurrent.ExecutionContext.Implicits._
 
 /**
   * author: cvandrei
@@ -17,9 +16,9 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
   private val collection = Config.mongoCollectionUser
 
-  feature("create()") {
+  Feature("create()") {
 
-    scenario("user does NOT exist --> success") {
+    Scenario("user does NOT exist --> success") {
 
       // prepare
       val user = DefaultModels.user()
@@ -36,7 +35,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("user with email does NOT exist --> success") {
+    Scenario("user with email does NOT exist --> success") {
 
       val emailAdr = " A@a.de "
       val cleanEmailAdr = emailAdr.toLowerCase.trim
@@ -63,7 +62,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("user already exists --> fail") {
+    Scenario("user already exists --> fail") {
 
       // prepare
       UserManager.create(DefaultModels.user()) flatMap {
@@ -86,9 +85,9 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
   }
 
-  feature("update()") {
+  Feature("update()") {
 
-    scenario("user.id does not exist --> fail") {
+    Scenario("user.id does not exist --> fail") {
 
       // prepare
       val user = DefaultModels.user()
@@ -101,7 +100,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("update displayName --> success") {
+    Scenario("update displayName --> success") {
 
       // prepare
       UserManager.create(DefaultModels.user()) flatMap {
@@ -131,7 +130,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("update email --> success") {
+    Scenario("update email --> success") {
 
       val email1 = "b@d.de"
       val email2 = "c@e.de"
@@ -168,7 +167,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("update email to None--> success") {
+    Scenario("update email to None--> success") {
 
       val email1 = "b@d.de"
       val email2 = None
@@ -203,7 +202,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("update locale --> success") {
+    Scenario("update locale --> success") {
 
       // prepare
       UserManager.create(DefaultModels.user()) flatMap {
@@ -236,9 +235,9 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
   }
 
-  feature("findById()") {
+  Feature("findById()") {
 
-    scenario("user.id does not exist --> fail") {
+    Scenario("user.id does not exist --> fail") {
 
       // test
       UserManager.findById(UUIDUtil.uuidStr) flatMap {
@@ -252,7 +251,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("user.id exists --> success") {
+    Scenario("user.id exists --> success") {
 
       // prepare
       UserManager.create(DefaultModels.user()) flatMap {
@@ -277,9 +276,9 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
   }
 
-  feature("findByProviderIdAndExternalId()") {
+  Feature("findByProviderIdAndExternalId()") {
 
-    scenario("user.providerId: exists; user.externalId: exists --> success") {
+    Scenario("user.providerId: exists; user.externalId: exists --> success") {
 
       // prepare
       UserManager.create(DefaultModels.user()) flatMap {
@@ -304,7 +303,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("user.providerId: exists (BASE64 encoded; all lower-case); user.externalId: exists --> success") {
+    Scenario("user.providerId: exists (BASE64 encoded; all lower-case); user.externalId: exists --> success") {
 
       // prepare
       val userPrep = DefaultModels.user(
@@ -333,7 +332,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("user.providerId: exists (BASE64 encoded with some upper-cases; url encoded); user.externalId: exists --> success") {
+    Scenario("user.providerId: exists (BASE64 encoded with some upper-cases; url encoded); user.externalId: exists --> success") {
 
       // prepare
       val userPrep = DefaultModels.user(
@@ -362,7 +361,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("user.providerId: does not exist; user.externalId: exists --> fail") {
+    Scenario("user.providerId: does not exist; user.externalId: exists --> fail") {
 
       // prepare
       UserManager.create(DefaultModels.user()) flatMap {
@@ -387,7 +386,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("user.providerId: exists; user.externalId: does not exist --> fail") {
+    Scenario("user.providerId: exists; user.externalId: does not exist --> fail") {
 
       // prepare
       UserManager.create(DefaultModels.user()) flatMap {
@@ -415,7 +414,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("user.providerId: exists; user.externalId: exists --> fail") {
+    Scenario("user.providerId: exists; user.externalId: exists --> fail") {
 
       // prepare
       UserManager.create(DefaultModels.user()) flatMap {
@@ -447,9 +446,9 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
   }
 
-  feature("findByEmail()") {
+  Feature("findByEmail()") {
 
-    scenario("email=None --> None") {
+    Scenario("email=None --> None") {
 
       // prepare
       UserManager.create(DefaultModels.user()) flatMap {
@@ -463,7 +462,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
             result =>
 
               // verify
-              result shouldBe 'empty
+              result.isEmpty shouldBe true
               mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
@@ -472,7 +471,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("email=Some; search with another email address --> None") {
+    Scenario("email=Some; search with another email address --> None") {
 
       // prepare
       val email1 = "test1@ubirch.com"
@@ -488,7 +487,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
             result =>
 
               // verify
-              result shouldBe 'empty
+              result.isEmpty shouldBe true
               mongoTestUtils.countAll(collection) map (_ shouldBe 1)
 
           }
@@ -497,7 +496,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("email=Some; search with same email address --> Some") {
+    Scenario("email=Some; search with same email address --> Some") {
 
       // prepare
       val email = "test@ubirch.com"
@@ -523,9 +522,9 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
   }
 
-  feature("delete()") {
+  Feature("delete()") {
 
-    scenario("user.id does not exist --> fail") {
+    Scenario("user.id does not exist --> fail") {
 
       // test
       UserManager.delete(UUIDUtil.uuidStr) flatMap {
@@ -539,7 +538,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     }
 
-    scenario("user.id exists --> success") {
+    Scenario("user.id exists --> success") {
 
       // prepare
       UserManager.create(DefaultModels.user()) flatMap {

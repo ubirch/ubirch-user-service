@@ -3,8 +3,9 @@ package com.ubirch.user.testTools.db.mongo
 import com.ubirch.user.config.ConfigKeys
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.test.MongoTestUtils
-
-import org.scalatest.{AsyncFeatureSpec, BeforeAndAfterAll, BeforeAndAfterEach, Matchers}
+import org.scalatest.featurespec.AsyncFeatureSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 
 /**
   * author: cvandrei

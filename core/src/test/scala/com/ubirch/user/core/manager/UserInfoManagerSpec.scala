@@ -13,9 +13,9 @@ class UserInfoManagerSpec extends MongoSpec {
 
   private val dataHelpers = new DataHelpers
 
-  feature("getInfo()") {
+  Feature("getInfo()") {
 
-    scenario("user does not exist") {
+    Scenario("user does not exist") {
 
       // prepare
       val userContext = defaultSimpleUserContext()
@@ -30,7 +30,7 @@ class UserInfoManagerSpec extends MongoSpec {
 
     }
 
-    scenario("user exists - without groups") {
+    Scenario("user exists - without groups") {
 
       // prepare
       for {
@@ -61,7 +61,7 @@ class UserInfoManagerSpec extends MongoSpec {
 
     }
 
-    scenario("non-admin user exists - with myGroups") {
+    Scenario("non-admin user exists - with myGroups") {
 
       // prepare
       for {
@@ -96,7 +96,7 @@ class UserInfoManagerSpec extends MongoSpec {
 
     }
 
-    scenario("admin user exists - with myGroups") {
+    Scenario("admin user exists - with myGroups") {
 
       // prepare
       for {
@@ -131,7 +131,7 @@ class UserInfoManagerSpec extends MongoSpec {
 
     }
 
-    scenario("user exists - with allowedGroups") {
+    Scenario("user exists - with allowedGroups") {
 
       // prepare
       for {
@@ -167,7 +167,7 @@ class UserInfoManagerSpec extends MongoSpec {
 
     }
 
-    scenario("user exists - with myGroups && allowedGroups") {
+    Scenario("user exists - with myGroups && allowedGroups") {
 
       // prepare
       for {
@@ -209,9 +209,9 @@ class UserInfoManagerSpec extends MongoSpec {
 
   }
 
-  feature("update()") {
+  Feature("update()") {
 
-    scenario("user does not exist") {
+    Scenario("user does not exist") {
 
       // prepare
       val userContext = defaultSimpleUserContext()
@@ -227,7 +227,7 @@ class UserInfoManagerSpec extends MongoSpec {
 
     }
 
-    scenario("user does not change") {
+    Scenario("user does not change") {
 
       // prepare
       for {
@@ -256,7 +256,7 @@ class UserInfoManagerSpec extends MongoSpec {
 
     }
 
-    scenario("user.displayName changes") {
+    Scenario("user.displayName changes") {
 
       // prepare
       for {

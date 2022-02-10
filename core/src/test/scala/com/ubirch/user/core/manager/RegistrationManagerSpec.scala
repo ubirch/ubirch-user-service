@@ -15,9 +15,9 @@ class RegistrationManagerSpec extends MongoSpec {
 
   private val dataHelpers = new DataHelpers
 
-  feature("register()") {
+  Feature("register()") {
 
-    scenario(
+    Scenario(
       """exists?
         |  context: no
         |  user: no
@@ -44,7 +44,7 @@ class RegistrationManagerSpec extends MongoSpec {
 
     }
 
-    scenario(
+    Scenario(
       """exists?
         |  context: no
         |  user: yes
@@ -83,7 +83,7 @@ class RegistrationManagerSpec extends MongoSpec {
 
     }
 
-    scenario(
+    Scenario(
       """exists?
         |  context: no
         |  user: yes
@@ -130,7 +130,7 @@ class RegistrationManagerSpec extends MongoSpec {
 
     }
 
-    scenario(
+    Scenario(
       """exists?
         |  context: yes
         |  user: no
@@ -168,7 +168,7 @@ class RegistrationManagerSpec extends MongoSpec {
               result.myGroups.size shouldBe 1
               result.myGroups.head.displayName shouldBe userName
               result.myGroups.head.adminGroup shouldBe None
-              result.allowedGroups should be('isEmpty)
+              result.allowedGroups.isEmpty shouldBe true
 
           }
 
@@ -176,7 +176,7 @@ class RegistrationManagerSpec extends MongoSpec {
 
     }
 
-    scenario(
+    Scenario(
       """exists?
         |  context: yes
         |  user: yes (different name and locale than existing user...as it's being ignored)
@@ -227,7 +227,7 @@ class RegistrationManagerSpec extends MongoSpec {
                   result.myGroups.size shouldBe 1
                   result.myGroups.head.displayName shouldBe userContext.userName
                   result.myGroups.head.adminGroup shouldBe None
-                  result.allowedGroups should be('isEmpty)
+                  result.allowedGroups.isEmpty shouldBe true
 
               }
 
@@ -237,7 +237,7 @@ class RegistrationManagerSpec extends MongoSpec {
 
     }
 
-    scenario(
+    Scenario(
       """exists?
         |  context: yes
         |  user: yes

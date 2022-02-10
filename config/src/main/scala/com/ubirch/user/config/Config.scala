@@ -1,8 +1,8 @@
 package com.ubirch.user.config
 
 import com.ubirch.util.config.ConfigBase
-import scala.collection.JavaConversions._
 
+import scala.collection.JavaConverters._
 /**
   * author: cvandrei
   * since: 2017-01-19
@@ -67,8 +67,8 @@ object Config extends ConfigBase {
 
   def testUserContext: String = config.getString(ConfigKeys.TEST_USER_CONTEXT)
 
-  def contextPrefixList: List[String] = config.getStringList(ConfigKeys.CONTEXT_PREFIX_LIST).toList
+  def contextPrefixList: List[String] = config.getStringList(ConfigKeys.CONTEXT_PREFIX_LIST).asScala.toList
 
-  def providersWithUsersActivated: List[String] = config.getStringList(ConfigKeys.PROVIDERS_WITH_USERS_ACTIVATED).toList
+  def providersWithUsersActivated: List[String] = config.getStringList(ConfigKeys.PROVIDERS_WITH_USERS_ACTIVATED).asScala.toList
 
 }
