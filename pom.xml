@@ -22,7 +22,7 @@
     <!-- parent pom -->
     <groupId>com.ubirch.user</groupId>
     <artifactId>ubirch-user-service</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.5-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <licenses>
@@ -95,44 +95,44 @@
         <encoding>UTF-8</encoding>
 
         <!-- versions -->
-        <scala.major.version>2.11</scala.major.version>
-        <scala.version>2.11.12</scala.version>
-        <scala.compat.version>2.11</scala.compat.version>
-        <scalatest.version>3.0.1</scalatest.version>
+        <scala.major.version>2.13</scala.major.version>
+        <scala.version>2.13.6</scala.version>
+        <scala.compat.version>2.13</scala.compat.version>
+        <scalatest.version>3.2.10</scalatest.version>
 
         <!-- trackle versions -->
-        <user-service-parent.version>1.0.4-SNAPSHOT</user-service-parent.version>
+        <user-service-parent.version>1.0.5-SNAPSHOT</user-service-parent.version>
         <!-- ubirch versions -->
-        <ubirch-config.version>0.2.4</ubirch-config.version>
-        <ubirch-crypto.version>0.5.4-SNAPSHOT</ubirch-crypto.version>
-        <ubirch-date.version>0.5.4</ubirch-date.version>
-        <ubirch-deep-check.version>0.4.1</ubirch-deep-check.version>
-        <ubirch-json.version>0.5.2</ubirch-json.version>
-        <ubirch-mongo.version>0.9.6-SNAPSHOT</ubirch-mongo.version>
-        <ubirch-response.version>0.5.1</ubirch-response.version>
-        <ubirch-rest-akka-http.version>0.4.1</ubirch-rest-akka-http.version>
-        <ubirch-rest-akka-http-test.version>0.4.1</ubirch-rest-akka-http-test.version>
-        <ubirch-uuid.version>0.1.4</ubirch-uuid.version>
+        <ubirch-config.version>0.2.5</ubirch-config.version>
+        <ubirch-crypto.version>0.5.4</ubirch-crypto.version>
+        <ubirch-date.version>0.5.5</ubirch-date.version>
+        <ubirch-deep-check.version>0.4.2</ubirch-deep-check.version>
+        <ubirch-json.version>0.5.3</ubirch-json.version>
+        <ubirch-mongo.version>0.9.6</ubirch-mongo.version>
+        <ubirch-response.version>0.5.2</ubirch-response.version>
+        <ubirch-rest-akka-http.version>0.4.3</ubirch-rest-akka-http.version>
+        <!--        <ubirch-rest-akka-http-test.version>0.4.1</ubirch-rest-akka-http-test.version>-->
+        <ubirch-uuid.version>0.1.5</ubirch-uuid.version>
 
         <!-- external version -->
-        <akka.version>2.5.11</akka.version>
-        <akka-http.version>10.1.3</akka-http.version>
-        <json4s.version>3.6.0</json4s.version>
+        <akka.version>2.6.18</akka.version>
+        <akka-http.version>10.2.7</akka-http.version>
+        <json4s.version>4.0.3</json4s.version>
         <!-- logging -->
-        <slf4j.version>1.7.25</slf4j.version>
-        <logstash-logback.version>5.2</logstash-logback.version>
-        <logback.version>1.2.3</logback.version>
-        <scala-logging.version>3.9.0</scala-logging.version>
+        <slf4j.version>1.7.33</slf4j.version>
+        <logstash-logback.version>7.0.1</logstash-logback.version>
+        <logback.version>1.2.10</logback.version>
+        <scala-logging.version>3.9.4</scala-logging.version>
 
         <!-- plugins -->
-        <dockerfile-maven-plugin.version>1.4.4</dockerfile-maven-plugin.version>
+        <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-        <maven-dependency-plugin.version>2.8</maven-dependency-plugin.version>
-        <maven-jar-plugin.version>2.6</maven-jar-plugin.version>
-        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-        <maven-surefire-plugin.version>2.7</maven-surefire-plugin.version>
-        <scala-maven-plugin.version>3.3.2</scala-maven-plugin.version>
-        <scalatest-maven-plugin.version>1.0</scalatest-maven-plugin.version>
+        <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+        <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
+        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <scala-maven-plugin.version>4.5.6</scala-maven-plugin.version>
+        <scalatest-maven-plugin.version>2.0.2</scalatest-maven-plugin.version>
         <scoverage.plugin.version>1.4.0</scoverage.plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 
