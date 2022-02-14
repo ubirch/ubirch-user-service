@@ -33,6 +33,12 @@
             <version>${user-service-parent.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.ubirch.user</groupId>
+            <artifactId>util</artifactId>
+            <version>${user-service-parent.version}</version>
+        </dependency>
+
         <!-- Ubirch -->
 
         <dependency>

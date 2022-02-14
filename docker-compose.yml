@@ -1,0 +1,9 @@
+version: '3.3'
+services:
+  mongo-user:
+    image: mongo:4.2.18
+    container_name: mongo-user-run-unit
+    ports:
+      - 27017:27017
+    logging:
+      driver: none

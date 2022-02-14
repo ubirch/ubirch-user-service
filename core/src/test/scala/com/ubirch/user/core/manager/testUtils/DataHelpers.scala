@@ -58,6 +58,29 @@ class DataHelpers(implicit mongo: MongoUtil) extends StrictLogging {
 
   }
 
+  /**
+    * Method should only be used in test environment
+    */
+  def createContextIfNotExists(id: String = UUIDUtil.uuidStr,
+                    displayName: String = s"automated-test-${UUIDUtil.uuid}",
+                    created: DateTime = DateTime.now(DateTimeZone.UTC),
+                    updated: DateTime = DateTime.now(DateTimeZone.UTC)
+                   ): Future[Option[Context]] = {
+
+    val context = Context(
+      id = id,
+      displayName = displayName,
+      created = created,
+      updated = updated
+    )
+    ContextManager.findByName(context.displayName) flatMap  {
+      case None =>    ContextManager.create(context)
+      case contextFound => Future.successful(contextFound)
+    }
+
+  }
+
+
   def createGroup(contextOpt: Option[Context],
                   ownerOpt: Option[User],
                   allowedUsersOpt: Option[User]*

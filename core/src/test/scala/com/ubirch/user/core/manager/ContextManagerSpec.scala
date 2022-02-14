@@ -25,10 +25,9 @@ class ContextManagerSpec extends MongoSpec {
 
         // verify
         created shouldBe Some(context)
-        Thread.sleep(200)
         ContextManager.findById(created.get.id) map(_ should be(created))
         mongoTestUtils.countAll(collection) map (_ shouldBe 1)
-
+        ContextManager.delete(context.id).map(_ shouldBe true)
       }
 
     }
@@ -51,7 +50,7 @@ class ContextManagerSpec extends MongoSpec {
             created shouldBe None
             ContextManager.findById(existingContext.id) map(_ should be(Some(existingContext)))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
-
+            ContextManager.delete(existingContext.id).map(_ shouldBe true)
           }
 
       }
@@ -76,7 +75,7 @@ class ContextManagerSpec extends MongoSpec {
             created shouldBe None
             ContextManager.findById(existingContext.id) map(_ should be(Some(existingContext)))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
-
+            ContextManager.delete(existingContext.id).map(_ shouldBe true)
           }
 
       }
@@ -118,7 +117,7 @@ class ContextManagerSpec extends MongoSpec {
             result shouldBe Some(update)
             ContextManager.findById(update.id) map(_ should be(Some(update)))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
-
+            ContextManager.delete(context.id).map(_ shouldBe true)
           }
 
       }
@@ -158,7 +157,7 @@ class ContextManagerSpec extends MongoSpec {
             result shouldBe Some(context)
             ContextManager.findById(result.get.id) map(_ should be(result))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
-
+            ContextManager.delete(context.id).map(_ shouldBe true)
           }
 
       }
@@ -198,7 +197,7 @@ class ContextManagerSpec extends MongoSpec {
             result shouldBe Some(context)
             ContextManager.findById(result.get.id) map(_ should be(result))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
-
+            ContextManager.delete(context.id).map(_ shouldBe true)
           }
 
       }
@@ -237,7 +236,6 @@ class ContextManagerSpec extends MongoSpec {
             // verify
             result shouldBe true
             mongoTestUtils.countAll(collection) map (_ shouldBe 0)
-
           }
 
       }

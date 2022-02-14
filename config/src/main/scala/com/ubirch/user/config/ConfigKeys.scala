@@ -6,53 +6,53 @@ package com.ubirch.user.config
   */
 object ConfigKeys {
 
-  final val CONFIG_PREFIX = "ubirchUserService"
+  final val CONFIG_PREFIX: String = "ubirchUserService"
 
   /*
    * general server configs
    *********************************************************************************************/
 
-  final val INTERFACE = s"$CONFIG_PREFIX.interface"
-  final val PORT = s"$CONFIG_PREFIX.port"
-  final val TIMEOUT = s"$CONFIG_PREFIX.timeout"
+  final val INTERFACE: String = s"$CONFIG_PREFIX.interface"
+  final val PORT: String = s"$CONFIG_PREFIX.port"
+  final val TIMEOUT: String = s"$CONFIG_PREFIX.timeout"
 
-  final val GO_PIPELINE_NAME = s"$CONFIG_PREFIX.gopipelinename"
-  final val GO_PIPELINE_LABEL = s"$CONFIG_PREFIX.gopipelinelabel"
-  final val GO_PIPELINE_REVISION = s"$CONFIG_PREFIX.gopipelinerev"
+  final val GO_PIPELINE_NAME: String = s"$CONFIG_PREFIX.gopipelinename"
+  final val GO_PIPELINE_LABEL: String = s"$CONFIG_PREFIX.gopipelinelabel"
+  final val GO_PIPELINE_REVISION: String = s"$CONFIG_PREFIX.gopipelinerev"
 
   /*
    * Akka related configs
    *********************************************************************************************/
 
-  private val akkaPrefix = s"$CONFIG_PREFIX.akka"
+  final val akkaPrefix: String = s"$CONFIG_PREFIX.akka"
 
-  final val ACTOR_TIMEOUT = s"$akkaPrefix.actorTimeout"
-  final val AKKA_NUMBER_OF_WORKERS = s"$akkaPrefix.numberOfWorkers"
+  final val ACTOR_TIMEOUT: String = s"$akkaPrefix.actorTimeout"
+  final val AKKA_NUMBER_OF_WORKERS: String = s"$akkaPrefix.numberOfWorkers"
 
   /*
    * Mongo
    *********************************************************************************************/
 
-  final val MONGO_PREFIX = s"$CONFIG_PREFIX.mongo"
+  final val MONGO_PREFIX: String = s"$CONFIG_PREFIX.mongo"
 
-  private final val mongoCollection = s"$MONGO_PREFIX.collection"
+  private final val mongoCollection: String = s"$MONGO_PREFIX.collection"
 
-  final val COLLECTION_CONTEXT = s"$mongoCollection.context"
-  final val COLLECTION_USER = s"$mongoCollection.user"
-  final val COLLECTION_GROUP = s"$mongoCollection.group"
+  final val COLLECTION_CONTEXT: String = s"$mongoCollection.context"
+  final val COLLECTION_USER: String = s"$mongoCollection.user"
+  final val COLLECTION_GROUP: String = s"$mongoCollection.group"
 
   /*
    * Init Data
    *********************************************************************************************/
 
-  private val adminPrefix = s"$CONFIG_PREFIX.adminUser"
-  final val ADMIN_PROVIDER_ID = s"$adminPrefix.providerId"
-  final val ADMIN_EXTERNAL_ID = s"$adminPrefix.externalId"
+  private final val adminPrefix: String = s"$CONFIG_PREFIX.adminUser"
+  final val ADMIN_PROVIDER_ID: String = s"$adminPrefix.providerId"
+  final val ADMIN_EXTERNAL_ID: String = s"$adminPrefix.externalId"
 
-  private val testUserPrefix = s"$CONFIG_PREFIX.testUser"
-  final val TEST_USER_CONTEXT = s"$testUserPrefix.context"
+  private final val testUserPrefix: String = s"$CONFIG_PREFIX.testUser"
+  final val TEST_USER_CONTEXT: String = s"$testUserPrefix.context"
 
-  final val CONTEXT_PREFIX_LIST = s"$CONFIG_PREFIX.contextPrefixList"
-  final val PROVIDERS_WITH_USERS_ACTIVATED = s"$CONFIG_PREFIX.providersWithUsersActivated"
+  final val CONTEXT_PREFIX_LIST: String = s"$CONFIG_PREFIX.contextPrefixList"
+  final val PROVIDERS_WITH_USERS_ACTIVATED: String = s"$CONFIG_PREFIX.providersWithUsersActivated"
 
 }

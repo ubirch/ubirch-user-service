@@ -41,7 +41,6 @@ class RegistrationManagerSpec extends MongoSpec {
         mongoTestUtils.countAll(Config.mongoCollectionGroup) map (_ shouldBe 0)
 
       }
-
     }
 
     Scenario(
@@ -189,12 +188,11 @@ class RegistrationManagerSpec extends MongoSpec {
       // prepare
       val userContext = defaultUserContext()
 
-      dataHelpers.createContext(displayName = userContext.context) flatMap {
+      dataHelpers.createContextIfNotExists(displayName = userContext.context) flatMap {
 
         case None => fail("failed to create context during preparation")
 
         case Some(_: Context) =>
-
           val otherLocale = if (userContext.locale == "en") {
             "de"
           } else {
@@ -250,7 +248,11 @@ class RegistrationManagerSpec extends MongoSpec {
       // prepare
       val userContext = defaultUserContext()
 
-      dataHelpers.createContext(displayName = userContext.context) flatMap { contextOpt =>
+      dataHelpers.createContextIfNotExists(displayName = userContext.context) flatMap { contextOpt =>
+
+        val beforeContext = mongoTestUtils.countAll(Config.mongoCollectionContext)
+        val beforeUser = mongoTestUtils.countAll(Config.mongoCollectionUser)
+        val beforeGroup = mongoTestUtils.countAll(Config.mongoCollectionGroup)
 
         dataHelpers.createUser(
           displayName = userContext.userName,
@@ -274,9 +276,9 @@ class RegistrationManagerSpec extends MongoSpec {
                 // verify
                 result shouldBe None
 
-                mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ shouldBe 1)
-                mongoTestUtils.countAll(Config.mongoCollectionUser) map (_ shouldBe 1)
-                mongoTestUtils.countAll(Config.mongoCollectionGroup) map (_ shouldBe 1)
+                beforeContext.flatMap( before => mongoTestUtils.countAll(Config.mongoCollectionContext) map (_ - before shouldBe 1))
+                beforeUser.flatMap( before => mongoTestUtils.countAll(Config.mongoCollectionUser) map (_ - before shouldBe 1))
+                beforeGroup.flatMap( before => mongoTestUtils.countAll(Config.mongoCollectionGroup) map (_ -before shouldBe 1))
 
               }
 
@@ -290,12 +292,14 @@ class RegistrationManagerSpec extends MongoSpec {
 
   }
 
+  private val r = scala.util.Random
+
   private def defaultUserContext(): UserContext = {
 
     UserContext(
       context = "trackle-dev",
       providerId = "google",
-      externalUserId = "asdf-1234",
+      externalUserId = r.nextInt(10000000).toString,
       userName = "user display name",
       locale = "en"
     )

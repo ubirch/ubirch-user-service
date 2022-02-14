@@ -2,11 +2,13 @@ package com.ubirch.user.core.manager
 
 import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.config.Config
-import com.ubirch.user.model.db.User
+import com.ubirch.user.model.db.{Action, User}
 import com.ubirch.util.crypto.hash.HashUtil
+import com.ubirch.util.date.DateUtil
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
-import reactivemongo.bson.{BSONDocument, BSONDocumentReader, BSONDocumentWriter, Macros, document}
+import reactivemongo.api.Cursor
+import reactivemongo.bson.{BSON, BSONDocument, BSONDocumentReader, BSONDocumentWriter, BSONHandler, BSONString, Macros, document}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -20,9 +22,16 @@ object UserManager extends StrictLogging
 
   private val collectionName = Config.mongoCollectionUser
 
+  implicit protected object BSONActionHandler extends BSONHandler[BSONString, Action] {
+    def read(action: BSONString): Action = Action.unsafeFromString(action.value)
+
+    def write(action: Action): BSONString = BSONString(Action.toFormattedString(action))
+  }
+
   implicit protected def userWriter: BSONDocumentWriter[User] = Macros.writer[User]
 
   implicit protected def userReader: BSONDocumentReader[User] = Macros.reader[User]
+
 
   def create(user: User)(implicit mongo: MongoUtil): Future[Option[User]] = {
 
@@ -40,10 +49,10 @@ object UserManager extends StrictLogging
 
           // TODO update tests to include the Config.providersWithUsersActivated.contains() check
           logger.debug(s"create(): user.providerId=${user.providerId}")
-          val userToCreate = (Config.providersWithUsersActivated.contains(user.providerId) match {
-            case true => user.copy(activeUser = Some(true))
-            case false => user
-          }) match {
+          val userToCreate = (
+            if (Config.providersWithUsersActivated.contains(user.providerId)) user.copy(activeUser = Some(true))
+            else user
+          ) match {
             case pu if pu.email.isDefined =>
               fixEmail(pu)
             case pu => pu.copy(
@@ -52,17 +61,17 @@ object UserManager extends StrictLogging
           }
           validateUser(userToCreate)
           val withExternalIdLowerCase = userToCreate.copy(externalId = userToCreate.externalId.toLowerCase)
-          collection.insert(ordered = false).one[User](withExternalIdLowerCase) map { writeResult =>
-
-            if (writeResult.ok && writeResult.n == 1) {
-              logger.debug(s"created new user: $userToCreate")
-              Some(withExternalIdLowerCase)
-            } else {
-              throw new Exception("failed to create user")
-            }
-
+          collection
+            .insert(ordered = false)
+            .one[User](withExternalIdLowerCase)
+            .map { writeResult =>
+              if (writeResult.ok && writeResult.n == 1) {
+                logger.debug(s"created new user: $userToCreate")
+                Some(withExternalIdLowerCase)
+              } else {
+                throw new Exception("failed to create user")
+              }
           }
-
         }
     }
 
@@ -94,12 +103,9 @@ object UserManager extends StrictLogging
               logger.error(s"failed to update user: user=$patchedUser, writeResult=$writeResult")
               None
             }
-
           }
-
         }
     }
-
   }
 
   def findById(id: String)(implicit mongo: MongoUtil): Future[Option[User]] = {
@@ -124,6 +130,59 @@ object UserManager extends StrictLogging
       _.find[BSONDocument, User](selector).one[User]
     }
 
+  }
+
+
+  def updateMany(users: Seq[User])(implicit mongo: MongoUtil): Future[Either[String, Seq[User]]] = {
+
+    val usersWithLastUpdated = users.map(_.copy(updated = DateUtil.nowUTC))
+
+    mongo.collection(collectionName).flatMap { coll =>
+      val updateBuilder = coll.update(ordered = false)
+      val userUpdates =
+        Future.sequence(
+          usersWithLastUpdated
+            .map(user =>
+              updateBuilder
+                .element(
+                  q = document("id" -> user.id),
+                  u = BSON.writeDocument[User](user))))
+
+      userUpdates
+        .flatMap(ops => updateBuilder.many(ops))
+        .map { writeResult =>
+          if (writeResult.ok && writeResult.n == users.size) {
+            Right(usersWithLastUpdated)
+          } else {
+            val errorMsg = s"error on updating users in mongoDB with ids ${users.map(_.id)}"
+            logger.error(errorMsg + s" with writeResult $writeResult")
+            Left(errorMsg)
+          }
+        }
+    }
+  }
+
+  def findByExternalIds(externalIds: Seq[String])
+                       (implicit mongo: MongoUtil): Future[Seq[User]] = {
+
+    val selector = document("externalId" -> document("$in" -> externalIds.map(cleanExternalId)))
+
+    mongo
+      .collection(collectionName)
+      .flatMap { collection =>
+        collection
+          .find[BSONDocument, User](selector)
+          .cursor[User]()
+          .collect[Seq](
+            -1,
+            Cursor.FailOnError[Seq[User]]()
+          )
+      }
+      .recover {
+        case ex =>
+          logger.error(s"error when retrieving users with the following externalIds $externalIds: ${ex.getMessage}")
+          Seq[User]()
+      }
   }
 
   def findByExternalId(externalId: String)
