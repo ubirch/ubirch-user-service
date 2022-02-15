@@ -56,8 +56,8 @@ class UserActorLogicSpec extends MongoSpec {
         result <-  userLogic.validate(activations, Seq(user1, user2, user3))
       } yield {
         //verify
-        val errorRow1 = activations.updates.head.toErrorCsv + targetStateWrong(false.toString)
-        val errorRow2 = activations.updates.last.toErrorCsv + targetStateWrong(false.toString)
+        val errorRow1 = activations.updates.head.toErrorCsv + targetStateWrong(active = false)
+        val errorRow2 = activations.updates.last.toErrorCsv + targetStateWrong(active = false)
         result shouldBe Left(errorHeader + lineBreak + errorRow1 + lineBreak + errorRow2)
       }
     }

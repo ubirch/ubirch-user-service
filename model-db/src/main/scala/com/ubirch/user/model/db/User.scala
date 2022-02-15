@@ -9,7 +9,7 @@ import org.joda.time.DateTime
   * @param id            unique user identifier
   * @param displayName
   * @param providerId
-  * @param externalId    hashed mail address
+  * @param externalId    sha512 hashed email
   * @param locale
   * @param activeUser    if the user is active or not
   * @param email         email address

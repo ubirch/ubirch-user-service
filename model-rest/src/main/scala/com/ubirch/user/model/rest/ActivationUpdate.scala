@@ -10,7 +10,7 @@ object ActivationUpdate {
   val lineBreak = "\n"
   val extIdNotExisting = "externalId not existing."
   val dateInPast = "executionDate being in the past."
-  def targetStateWrong(active: String) = s"target status of activeUser flag already being '$active'."
+  def targetStateWrong(active: Boolean) = s"target status of activeUser flag already being '$active'."
 
 }
 

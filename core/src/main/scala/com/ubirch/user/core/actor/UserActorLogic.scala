@@ -31,14 +31,15 @@ trait UserActorLogic {
     val now = DateUtil.nowUTC
 
     val errors = update.updates.map { u =>
-      users.find(_.externalId == u.externalId) match {
-        case _ if u.executionDate.isDefined && u.executionDate.get.isBefore(now) =>
-          Some(u.toErrorCsv + dateInPast)
-        case Some(user) if user.activeUser.contains(u.activate) =>
-          Some(u.toErrorCsv + targetStateWrong(user.activeUser.getOrElse("undefined").toString))
-        case None => Some(u.toErrorCsv + extIdNotExisting)
-        case _ => None
-      }
+      if (u.executionDate.isDefined && u.executionDate.get.isBefore(now))
+        Some(u.toErrorCsv + dateInPast)
+      else
+        users.find(_.externalId == u.externalId) match {
+          case Some(user) if user.activeUser.contains(u.activate) =>
+            Some(u.toErrorCsv + targetStateWrong(user.activeUser.get))
+          case None => Some(u.toErrorCsv + extIdNotExisting)
+          case _ => None
+        }
     }.collect { case Some(el) => el }
     if (errors.nonEmpty) Future.successful(Left(errorHeader + lineBreak + errors.mkString(lineBreak)))
     else Future.successful(Right(()))
