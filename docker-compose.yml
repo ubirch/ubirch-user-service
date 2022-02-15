@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+  mongo-user-test:
+    image: mongo:4.2.18
+    container_name: mongo-user-test
+    expose:
+      - "27017"
+    logging:
+      driver: none
+  mvn-user-service-test:
+    container_name: mvn-user-service-test
+    user: $USER_ID:$GID
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/home/mvn-user/build
+      - /home/go/.m2-with-cr/:/home/mvn-user/.m2:rw
+      - /home/go/maven-repo:/home/mvn-user/maven-repo
+    command: >
+      /bin/bash -c " \
+        echo $HOME && \
+        cd /home/mvn-user/build && \
+        env && \
+        mvn -q clean test scoverage:report -B -s /home/mvn-user/.m2/settings.xml"
+    environment:
+      - MONGO_HOST=mongo-user-test
+      - sun.net.maxDatagramSockets=1024
+      - MAVEN_OPTS=-Dmaven.repo.local=/home/mvn-user/maven-repo
+      - JAVA_OPTS="-XX:MaxMetaspaceSize=512m"
+      - MAVEN_OPTS=-Dsettings.security=/home/mvn-user/.m2/settings-security.xml
+

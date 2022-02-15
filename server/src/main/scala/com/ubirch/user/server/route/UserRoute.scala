@@ -1,7 +1,8 @@
 package com.ubirch.user.server.route
 
 import akka.actor.ActorSystem
-import akka.http.scaladsl.model.StatusCodes
+import akka.http.scaladsl.model.StatusCodes.{BadRequest, OK}
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.Route
 import akka.pattern.ask
 import akka.util.Timeout
@@ -9,19 +10,23 @@ import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.actor._
 import com.ubirch.user.model._
-import com.ubirch.user.model.rest.{SimpleUserContext, UpdateInfo, User, UserInfo}
+import com.ubirch.user.model.rest._
+import com.ubirch.user.server.formats.UserFormats
 import com.ubirch.user.util.server.RouteConstants
 import com.ubirch.util.http.response.ResponseUtil
-import com.ubirch.util.json.Json4sUtil
+import com.ubirch.util.json.JsonFormats
 import com.ubirch.util.model.{JsonErrorResponse, JsonResponse}
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.rest.akka.directives.CORSDirective
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
+import org.json4s.Formats
+import org.json4s.native.Serialization.{read, write}
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 import scala.util.{Failure, Success}
+
 /**
   * author: cvandrei
   * since: 2017-03-30
@@ -30,6 +35,8 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
   with ResponseUtil
   with WithRoutesHelpers
   with StrictLogging {
+
+  implicit val formats: Formats = JsonFormats.default ++ UserFormats.all
 
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
   implicit val timeout: Timeout = Timeout(Config.actorTimeout seconds)
@@ -103,6 +110,12 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
             }
           }
 
+        } ~ pathPrefix(RouteConstants.activation) {
+          post {
+            entity(as[ActivationUpdate]) { users =>
+              updateActivation(users)
+            }
+          }
         }
 
       }
@@ -112,7 +125,7 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
 
   private def createUser(restUser: User): Route = {
 
-    val dbUser = Json4sUtil.any2any[db.User](restUser)
+    val dbUser = read[db.User](write(restUser))
 
     OnComplete(userActor ? CreateUser(dbUser)).fold() {
 
@@ -121,7 +134,7 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
         resp match {
 
           case Some(u: db.User) =>
-            complete(StatusCodes.OK -> Json4sUtil.any2any[rest.User](u))
+            complete(StatusCodes.OK -> read[rest.User](write(u)))
 
           case jer: JsonErrorResponse =>
             complete(StatusCodes.BadRequest -> jer)
@@ -141,7 +154,7 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
 
   private def restoreUser(restUser: User): Route = {
 
-    val dbUser = Json4sUtil.any2any[db.User](restUser)
+    val dbUser = read[db.User](write(restUser))
 
     OnComplete(userActor ? RestoreUser(dbUser)).fold() {
 
@@ -150,7 +163,7 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
         resp match {
 
           case Some(u: db.User) =>
-            complete(StatusCodes.OK -> Json4sUtil.any2any[rest.User](u))
+            complete(StatusCodes.OK -> read[rest.User](write(u)))
 
           case jer: JsonErrorResponse =>
             complete(StatusCodes.BadRequest -> jer)
@@ -172,7 +185,7 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
                          restUser: User
                         ): Route = {
 
-    val dbUser = Json4sUtil.any2any[db.User](restUser)
+    val dbUser = read[db.User](write(restUser))
 
     OnComplete(userActor ? UpdateUser(
       providerId = providerId,
@@ -185,7 +198,7 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
 
           case Some(u: db.User) =>
             logger.debug("successfully updated user")
-            complete(StatusCodes.OK -> Json4sUtil.any2any[rest.User](u))
+            complete(StatusCodes.OK -> read[rest.User](write(u)))
 
           case jer: JsonErrorResponse =>
             logger.debug(s"failed to update user $jer")
@@ -227,7 +240,7 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
           case Some(u: db.User) =>
 
             logger.debug(s"UserRoute.findByProviderUserId() -- userFound=Some (providerId=$providerId, externalUserId=$externalUserId)")
-            complete(Json4sUtil.any2any[rest.User](u))
+            complete(read[rest.User](write(u)))
 
           case _ =>
 
@@ -335,33 +348,26 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
             complete(serverErrorResponse(errorType = "ServerError", errorMessage = "failed to update user info"))
 
         }
-
     }
-
   }
 
-  private def searchByHashedEmailAddress(hasehEmailAddress: String): Route = {
+  private def updateActivation(updates: ActivationUpdate): Route = {
 
-    OnComplete(userActor ? SearchByHashedEmail(hasehEmailAddress)).fold() {
+    OnComplete(userActor ? updates).fold() {
 
       case Failure(t) =>
-        logger.error("searchByHashedEmailAddress", t)
+        logger.error("Activation Update failed", t)
         complete(serverErrorResponse(errorType = "ServerError", errorMessage = t.getMessage))
 
-      case Success(resp) =>
-        resp match {
-          case true =>
-            complete(StatusCodes.OK -> JsonResponse(message = s"hashed email address exist: $hasehEmailAddress"))
-          case false =>
-            complete(StatusCodes.BadRequest -> JsonResponse(message = s"hashed email does not address exist: $hasehEmailAddress"))
-          case jre: JsonErrorResponse =>
-            complete(StatusCodes.BadRequest -> jre)
-          case _ =>
-            complete(serverErrorResponse(errorType = "QueryError", errorMessage = "no user with given email address exists"))
+      case Success(either) =>
+        either match {
+          case Right(msg: String) => complete(HttpResponse(OK, entity = HttpEntity(ContentTypes.`text/csv(UTF-8)`, msg)))
+
+          case Left(msg: String) => complete(HttpResponse(BadRequest, entity = HttpEntity(ContentTypes.`text/csv(UTF-8)`, msg)))
+
+          case jsonError: JsonErrorResponse => complete(serverErrorResponse(jsonError))
         }
-
     }
-
   }
 
 }

@@ -5,6 +5,7 @@ import akka.routing.RoundRobinPool
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.manager.UserManager
 import com.ubirch.user.model.db.User
+import com.ubirch.user.model.rest.ActivationUpdate
 import com.ubirch.util.model.JsonErrorResponse
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.uuid.UUIDUtil
@@ -18,7 +19,7 @@ import scala.util.{Failure, Success}
   * since: 2017-03-30
   */
 class UserActor(implicit mongo: MongoUtil) extends Actor
-  with ActorLogging {
+  with ActorLogging with UserActorLogic {
 
   override def receive: Receive = {
 
@@ -86,7 +87,7 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
 
         case None =>
           log.error("unable to delete non-existing user")
-          Future(false)
+          Future.successful(false)
 
         case Some(u: User) => UserManager.delete(u.id)
 
@@ -107,6 +108,19 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
 
       }
 
+    case updates: ActivationUpdate =>
+
+      val sender = context.sender()
+      updateActivation(updates)
+        .onComplete {
+          case Success(rsp) =>
+            sender ! rsp
+          case Failure(t) =>
+            sender ! JsonErrorResponse(
+              errorType = "InternalServerError",
+              errorMessage = t.getMessage
+            )
+        }
   }
 
   override def unhandled(message: Any): Unit = {

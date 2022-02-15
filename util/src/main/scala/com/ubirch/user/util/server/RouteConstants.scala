@@ -27,6 +27,7 @@ object RouteConstants {
   final val externalIdExists = "extIdExists"
   final val recreate = "recreate"
   final val info = "info"
+  final val activation = "activation"
 
   final val register = "register"
 

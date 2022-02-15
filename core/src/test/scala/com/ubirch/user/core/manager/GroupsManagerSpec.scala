@@ -38,8 +38,8 @@ class GroupsManagerSpec extends MongoSpec {
 
       // prepare
       val contextModel = DefaultModels.context()
-      val ownerModel = DefaultModels.user(displayName = "test-user-1", externalId = "1234")
-      val user2Model = DefaultModels.user(displayName = "test-user-2", externalId = "1235")
+      val ownerModel = DefaultModels.user(displayName = "test-user-1")
+      val user2Model = DefaultModels.user(displayName = "test-user-2")
 
       for {
         contextOpt <- ContextManager.create(contextModel)
@@ -65,8 +65,8 @@ class GroupsManagerSpec extends MongoSpec {
 
       // prepare
       val contextModel = DefaultModels.context()
-      val ownerModel = DefaultModels.user(displayName = "test-user-1", externalId = "1234")
-      val user2Model = DefaultModels.user(displayName = "test-user-2", externalId = "1235")
+      val ownerModel = DefaultModels.user(displayName = "test-user-1")
+      val user2Model = DefaultModels.user(displayName = "test-user-2")
 
       for {
         contextOpt <- ContextManager.create(contextModel)
@@ -83,7 +83,8 @@ class GroupsManagerSpec extends MongoSpec {
 
       } yield {
         // verify
-        result shouldBe Set.empty
+        groupOpt.isDefined shouldBe true
+        result shouldBe Set(groupOpt.get)
       }
 
     }
@@ -92,9 +93,9 @@ class GroupsManagerSpec extends MongoSpec {
 
       // prepare
       val contextModel = DefaultModels.context()
-      val ownerModel = DefaultModels.user(displayName = "test-user-1", externalId = "1234")
-      val user2Model = DefaultModels.user(displayName = "test-user-2", externalId = "1235")
-      val user3Model = DefaultModels.user(displayName = "test-user-3", externalId = "1236")
+      val ownerModel = DefaultModels.user(displayName = "test-user-1")
+      val user2Model = DefaultModels.user(displayName = "test-user-2")
+      val user3Model = DefaultModels.user(displayName = "test-user-3")
 
       for {
         contextOpt <- ContextManager.create(contextModel)
