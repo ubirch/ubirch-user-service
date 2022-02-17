@@ -141,7 +141,6 @@
     <dependencies>
 
         <!-- Scala library stays in parent -->
-
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>

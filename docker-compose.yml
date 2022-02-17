@@ -5,14 +5,16 @@ services:
     container_name: mongo-user-test
     expose:
       - "27017"
-    logging:
-      driver: none
+  #    logging:
+  #      driver: none
   mvn-user-service-test:
     container_name: mvn-user-service-test
     user: $USER_ID:$GID
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      - mongo-user-test
     volumes:
       - .:/home/mvn-user/build
       - /home/go/.m2-with-cr/:/home/mvn-user/.m2:rw
