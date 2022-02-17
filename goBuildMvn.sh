@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # needed in docker-compose.yml -> don't remove, otherwise docker is executed as sudo and is writing files with root ownership!
 #  export UID=$(id -u $whoami)

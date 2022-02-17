@@ -1,0 +1,9 @@
+version: '3.3'
+services:
+  mongo-user-test:
+    image: mongo:4.2.18
+    container_name: mongo-user-test
+    ports:
+      - 27017:27017
+    logging:
+      driver: none
