@@ -1,8 +1,8 @@
 version: '3.3'
 services:
-  mongo-user-test:
+  mongo-user-local-test:
     image: mongo:4.2.18
-    container_name: mongo-user-test
+    container_name: mongo-user-local-test
     ports:
       - 27017:27017
     logging:
