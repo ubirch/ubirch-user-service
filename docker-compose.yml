@@ -5,8 +5,8 @@ services:
     container_name: mongo-user-test
     expose:
       - "27017"
-  #    logging:
-  #      driver: none
+    logging:
+      driver: none
   mvn-user-service-test:
     container_name: mvn-user-service-test
     user: $USER_ID:$GID
