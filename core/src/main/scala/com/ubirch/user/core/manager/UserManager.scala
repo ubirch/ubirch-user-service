@@ -90,15 +90,16 @@ object UserManager extends StrictLogging
       case Some(_: User) =>
 
         val patchedUser = fixEmail(user)
+        val userToUpdate = patchedUser.copy(updated = DateUtil.nowUTC)
         validateUser(patchedUser)
         val selector = document("id" -> user.id)
         mongo.collection(collectionName) flatMap {
 
-          _.update(ordered = false).one(selector, patchedUser) map { writeResult =>
+          _.update(ordered = false).one(selector, userToUpdate) map { writeResult =>
 
             if (writeResult.ok) {
               logger.info(s"updated user: id=${user.id}")
-              Some(patchedUser)
+              Some(userToUpdate)
             } else {
               logger.error(s"failed to update user: user=$patchedUser, writeResult=$writeResult")
               None

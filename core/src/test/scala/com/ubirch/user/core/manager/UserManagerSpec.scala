@@ -139,7 +139,8 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
             result =>
 
               // verify
-              result shouldBe Some(update)
+              result.isDefined shouldBe true
+              result shouldBe Some(update.copy(updated = result.get.updated))
               UserManager.findById(update.id) map (_ should be(Some(update)))
               mongoTestUtils.countAll(collection) map (_ shouldBe 1)
               UserManager.delete(user.id).map(_ shouldBe true)
@@ -239,7 +240,8 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
             result =>
 
               // verify
-              result shouldBe Some(update)
+              result.isDefined shouldBe true
+              result shouldBe Some(update.copy(updated = result.get.updated))
               UserManager.findById(update.id) map (_ should be(Some(update)))
               mongoTestUtils.countAll(collection) map (_ shouldBe 1)
               UserManager.delete(user.id).map(_ shouldBe true)
