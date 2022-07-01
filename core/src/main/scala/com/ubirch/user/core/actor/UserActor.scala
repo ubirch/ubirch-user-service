@@ -9,6 +9,7 @@ import com.ubirch.user.model.rest.ActivationUpdate
 import com.ubirch.util.model.JsonErrorResponse
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.uuid.UUIDUtil
+import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -121,6 +122,10 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
               errorMessage = t.getMessage
             )
         }
+
+    case getUsersWithPagination: GetUsersWithPagination =>
+      val sender = context.sender()
+      UserManager.getWithPagination(getUsersWithPagination.limit, getUsersWithPagination.lastCreatedAt) map (sender ! _)
   }
 
   override def unhandled(message: Any): Unit = {
@@ -158,3 +163,5 @@ case class DeleteUser(providerId: String,
 case class SearchByExternalId(emailAddress: String)
 
 case class SearchByHashedEmail(hashedEmailAddress: String)
+
+case class GetUsersWithPagination(limit: Int, lastCreatedAt: Option[DateTime])

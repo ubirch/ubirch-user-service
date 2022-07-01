@@ -50,7 +50,7 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
       respondWithCORS {
         pathEnd {
           get {
-            parameters('limit.as[Int], 'lastCreatedAt.as[String].?) { (limit: Int, lastCreatedAt: Option[String]) =>
+            parameters("limit".as[Int], "lastCreatedAt".optional) { (limit: Int, lastCreatedAt: Option[String]) =>
               getUsersWithPagination(limit, lastCreatedAt)
             }
           }
@@ -379,13 +379,18 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
     }
   }
 
+  /**
+   * Response users created after lastCreatedAtOpt
+   * @param limit: maximum number of users
+   * @param lastCreatedAtOpt: DateTime string
+   */
   private def getUsersWithPagination(limit: Int, lastCreatedAtOpt: Option[String]): Route = {
     Try(lastCreatedAtOpt.map { dateTimeStr =>
       DateTime.parse(dateTimeStr)
     }) match {
       case Failure(ex) =>
         logger.info("lastCreatedAt has a wrong date format", ex.getMessage)
-        complete(serverErrorResponse(errorType = "BadRequest", errorMessage = "lastCreatedAt must be datetime"))
+        complete(requestErrorResponse(errorType = "BadRequest", errorMessage = "lastCreatedAt must be datetime"))
       case Success(lastCreatedAtOpt) =>
         OnComplete(userActor ? GetUsersWithPagination(limit, lastCreatedAtOpt)).fold() {
           case Failure(t) =>
@@ -395,7 +400,7 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
           case Success(resp) =>
             resp match {
               case userList: List[db.User] =>
-                complete(Json4sUtil.any2any[List[rest.User]](userList))
+                complete(read[List[rest.User]](write(userList)))
               case _ =>
                 complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query users"))
             }

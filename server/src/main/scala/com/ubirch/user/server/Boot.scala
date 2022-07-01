@@ -3,7 +3,6 @@ package com.ubirch.user.server
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.Http.ServerBinding
-import akka.stream.ActorMaterializer
 import akka.util.Timeout
 import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.config.{Config, ConfigKeys}
