@@ -676,6 +676,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
         users5 <- UserManager.getWithPagination(10, Some(now.minusSeconds(1)))
         users6 <- UserManager.getWithPagination(10, Some(now.minusMinutes(1)))
         users7 <- UserManager.getWithPagination(2, Some(now.minusMinutes(1)))
+        users8 <- UserManager.getWithPagination(2, Some(now.plusHours(1)))
       } yield {
         users1.length shouldBe users.length
         users2.length shouldBe 3
@@ -684,6 +685,7 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
         users5.length shouldBe 3
         users6.length shouldBe 4
         users7.length shouldBe 2
+        users8.length shouldBe 0
 
         users2.map(_.id) shouldBe users.take(3).map(_.id)
         users4.map(_.id) shouldBe users.slice(5, users.length).map(_.id)
