@@ -13,7 +13,8 @@ trait UserMongoConstraints extends MongoConstraintsBase with StrictLogging {
       Index(name = Some("_id_"), key = Seq(("_id", IndexType.Ascending)), unique = true),
       Index(name = Some("externalId_1_providerId_1"),
         key = Seq(("externalId", IndexType.Ascending), ("providerId", IndexType.Ascending)),
-        unique = true)
+        unique = true),
+      Index(name = Some("user_created"), key = Seq(("created", IndexType.Ascending)), unique = false),
     ),
     Config.mongoCollectionGroup -> Set(
       Index(name = Some("_id_"), key = Seq(("_id", IndexType.Ascending)), unique = true),
@@ -24,7 +25,7 @@ trait UserMongoConstraints extends MongoConstraintsBase with StrictLogging {
     ),
     Config.mongoCollectionContext -> Set(
       Index(name = Some("_id_"), key = Seq(("_id", IndexType.Ascending)), unique = true)
-    )
+    ),
 
   )
 
