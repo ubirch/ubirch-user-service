@@ -21,11 +21,12 @@ import com.ubirch.util.rest.akka.directives.CORSDirective
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport._
 import org.json4s.Formats
 import org.json4s.native.Serialization.{read, write}
+import org.joda.time.DateTime
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
-import scala.util.{Failure, Success}
+import scala.util.{Failure, Success, Try}
 
 /**
   * author: cvandrei
@@ -45,8 +46,17 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
   private val userInfoActor = system.actorOf(UserInfoActor.props(), ActorNames.USER_INFO)
 
   val route: Route = {
-
-    pathPrefix(RouteConstants.user) {
+    pathPrefix(RouteConstants.users) {
+      respondWithCORS {
+        pathEnd {
+          get {
+            parameters("limit".as[Int], "lastCreatedAt".optional) { (limit: Int, lastCreatedAt: Option[String]) =>
+              getUsersWithPagination(limit, lastCreatedAt)
+            }
+          }
+        }
+      }
+    } ~ pathPrefix(RouteConstants.user) {
       respondWithCORS {
 
         pathEnd {
@@ -120,7 +130,6 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
 
       }
     }
-
   }
 
   private def createUser(restUser: User): Route = {
@@ -366,6 +375,36 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
           case Left(msg: String) => complete(HttpResponse(BadRequest, entity = HttpEntity(ContentTypes.`text/csv(UTF-8)`, msg)))
 
           case jsonError: JsonErrorResponse => complete(serverErrorResponse(jsonError))
+        }
+    }
+  }
+
+  /**
+   * Response users created after lastCreatedAtOpt
+   * @param limit: maximum number of users
+   * @param lastCreatedAtOpt: DateTime string
+   */
+  private def getUsersWithPagination(limit: Int, lastCreatedAtOpt: Option[String]): Route = {
+    Try(lastCreatedAtOpt.map { dateTimeStr =>
+      DateTime.parse(dateTimeStr)
+    }) match {
+      case Failure(ex) =>
+        logger.info("lastCreatedAt has a wrong date format", ex.getMessage)
+        complete(requestErrorResponse(errorType = "BadRequest", errorMessage = "lastCreatedAt must be datetime"))
+      case Success(lastCreatedAtOpt) =>
+        OnComplete(userActor ? GetUsersWithPagination(limit, lastCreatedAtOpt)).fold() {
+          case Failure(t) =>
+            logger.error("getUsersWithPagination", t)
+            complete(serverErrorResponse(errorType = "ServerError", errorMessage = t.getMessage))
+
+          case Success(resp) =>
+            resp match {
+              case userList: List[db.User] =>
+                complete(read[List[rest.User]](write(userList)))
+              case _ =>
+                complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query users"))
+            }
+
         }
     }
   }

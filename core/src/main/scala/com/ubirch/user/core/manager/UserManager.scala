@@ -7,8 +7,9 @@ import com.ubirch.util.crypto.hash.HashUtil
 import com.ubirch.util.date.DateUtil
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
-import reactivemongo.api.Cursor
 import reactivemongo.bson.{BSON, BSONDocument, BSONDocumentReader, BSONDocumentWriter, BSONHandler, BSONString, Macros, document}
+import org.joda.time.DateTime
+import reactivemongo.api.Cursor
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -217,6 +218,17 @@ object UserManager extends StrictLogging
       }
     }
 
+  }
+
+  def getWithPagination(limit: Int, lastCreatedAt: Option[DateTime])(implicit mongo: MongoUtil): Future[List[User]] = {
+    val selector = lastCreatedAt match {
+      case Some(createdAt) => document("created" -> document("$gt" -> createdAt))
+      case None => document()
+    }
+    val sort = document("created" -> 1)
+    mongo.collection(collectionName) flatMap {
+      _.find(selector, None).sort(sort).cursor[User]().collect[List](limit, Cursor.FailOnError[List[User]]())
+    }
   }
 
   private def validateUser(user: User): Unit = {

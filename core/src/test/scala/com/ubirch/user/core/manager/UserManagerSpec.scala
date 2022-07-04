@@ -7,7 +7,9 @@ import com.ubirch.user.testTools.db.mongo.MongoSpec
 import com.ubirch.util.crypto.hash.HashUtil
 import com.ubirch.util.uuid.UUIDUtil
 import org.scalatest.concurrent.ScalaFutures
+import com.ubirch.util.date.DateUtil
 
+import scala.concurrent.Future
 
 /**
   * author: cvandrei
@@ -643,4 +645,52 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
     }
   }
 
+  Feature("getWithPagination()") {
+    Scenario("get empty list when no users") {
+      UserManager.getWithPagination(10, None) flatMap { result =>
+        result.length shouldBe 0
+      }
+    }
+    Scenario("get users with pagination") {
+      val now = DateUtil.nowUTC
+      val users = List(
+        DefaultModels.user(created = now.minusDays(1)),
+        DefaultModels.user(created = now.minusHours(1)),
+        DefaultModels.user(created = now.minusMinutes(1)),
+        DefaultModels.user(created = now.minusSeconds(1)),
+        DefaultModels.user(created = now),
+        DefaultModels.user(created = now.plusSeconds(1)),
+        DefaultModels.user(created = now.plusHours(1))
+      )
+
+      for {
+        _ <- Future.sequence(
+          users.map { user =>
+            UserManager.create(user)
+          }
+        )
+        users1 <- UserManager.getWithPagination(10, None)
+        users2 <- UserManager.getWithPagination(3, None)
+        users3 <- UserManager.getWithPagination(10, Some(now.minusDays(1).minusSeconds(1)))
+        users4 <- UserManager.getWithPagination(10, Some(now))
+        users5 <- UserManager.getWithPagination(10, Some(now.minusSeconds(1)))
+        users6 <- UserManager.getWithPagination(10, Some(now.minusMinutes(1)))
+        users7 <- UserManager.getWithPagination(2, Some(now.minusMinutes(1)))
+        users8 <- UserManager.getWithPagination(2, Some(now.plusHours(1)))
+      } yield {
+        users1.length shouldBe users.length
+        users2.length shouldBe 3
+        users3.length shouldBe users.length
+        users4.length shouldBe 2
+        users5.length shouldBe 3
+        users6.length shouldBe 4
+        users7.length shouldBe 2
+        users8.length shouldBe 0
+
+        users2.map(_.id) shouldBe users.take(3).map(_.id)
+        users4.map(_.id) shouldBe users.slice(5, users.length).map(_.id)
+        users5.map(_.id) shouldBe users.slice(4, users.length).map(_.id)
+      }
+    }
+  }
 }

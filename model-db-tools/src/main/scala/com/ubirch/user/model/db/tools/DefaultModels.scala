@@ -1,7 +1,9 @@
 package com.ubirch.user.model.db.tools
 
 import com.ubirch.user.model.db.{Context, Group, User}
+import com.ubirch.util.date.DateUtil
 import com.ubirch.util.uuid.UUIDUtil
+import org.joda.time.DateTime
 
 /**
   * author: cvandrei
@@ -21,7 +23,8 @@ object DefaultModels {
            providerId: String = "google",
            externalId: String = UUIDUtil.uuidStr,
            locale: String = "en",
-           email: Option[String] = None
+           email: Option[String] = None,
+           created: DateTime = DateUtil.nowUTC
           ): User = {
 
     User(
@@ -29,7 +32,9 @@ object DefaultModels {
       providerId = providerId,
       externalId = externalId,
       locale = locale,
-      email = email
+      email = email,
+      created = created,
+      updated = created
     )
 
   }
