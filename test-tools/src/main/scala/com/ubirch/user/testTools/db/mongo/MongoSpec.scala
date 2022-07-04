@@ -17,7 +17,7 @@ class MongoSpec extends AsyncFeatureSpec
 
   protected val mongoTestUtils = new MongoTestUtils()
 
-  override protected def afterAll(): Unit = {
+  override protected def beforeEach(): Unit = {
     cleanMongoDb()
   }
 
