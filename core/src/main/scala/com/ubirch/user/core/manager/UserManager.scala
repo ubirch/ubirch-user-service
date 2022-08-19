@@ -220,7 +220,15 @@ object UserManager extends StrictLogging
 
   }
 
-  def getWithPagination(limit: Int, lastCreatedAt: Option[DateTime])(implicit mongo: MongoUtil): Future[List[User]] = {
+  def getWithOffset(limit: Int, offset: Option[Int])(implicit mongo: MongoUtil): Future[List[User]] = {
+    val skipNumOfUsers = limit * offset.getOrElse(0)
+    val sort = document("created" -> 1)
+    mongo.collection(collectionName) flatMap {
+      _.find(document(), None).sort(sort).skip(skipNumOfUsers).cursor[User]().collect[List](limit, Cursor.FailOnError[List[User]]())
+    }
+  }
+
+  def getWithCursor(limit: Int, lastCreatedAt: Option[DateTime])(implicit mongo: MongoUtil): Future[List[User]] = {
     val selector = lastCreatedAt match {
       case Some(createdAt) => document("created" -> document("$gt" -> createdAt))
       case None => document()

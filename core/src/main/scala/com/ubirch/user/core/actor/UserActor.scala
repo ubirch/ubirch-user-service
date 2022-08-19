@@ -123,9 +123,13 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
             )
         }
 
-    case getUsersWithPagination: GetUsersWithPagination =>
+    case getUsersWithCursor: GetUsersWithCursor =>
       val sender = context.sender()
-      UserManager.getWithPagination(getUsersWithPagination.limit, getUsersWithPagination.lastCreatedAt) map (sender ! _)
+      UserManager.getWithCursor(getUsersWithCursor.limit, getUsersWithCursor.lastCreatedAt) map (sender ! _)
+
+    case getUsersWithOffset: GetUsersWithOffset =>
+      val sender = context.sender()
+      UserManager.getWithOffset(getUsersWithOffset.limit, getUsersWithOffset.offset) map (sender ! _)
   }
 
   override def unhandled(message: Any): Unit = {
@@ -164,4 +168,6 @@ case class SearchByExternalId(emailAddress: String)
 
 case class SearchByHashedEmail(hashedEmailAddress: String)
 
-case class GetUsersWithPagination(limit: Int, lastCreatedAt: Option[DateTime])
+case class GetUsersWithCursor(limit: Int, lastCreatedAt: Option[DateTime])
+
+case class GetUsersWithOffset(limit: Int, offset: Option[Int])

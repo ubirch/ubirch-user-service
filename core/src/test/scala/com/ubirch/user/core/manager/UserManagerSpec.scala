@@ -645,13 +645,13 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
     }
   }
 
-  Feature("getWithPagination()") {
+  Feature("getWithCursor()") {
     Scenario("get empty list when no users") {
-      UserManager.getWithPagination(10, None) flatMap { result =>
+      UserManager.getWithCursor(10, None) flatMap { result =>
         result.length shouldBe 0
       }
     }
-    Scenario("get users with pagination") {
+    Scenario("get users with cursor") {
       val now = DateUtil.nowUTC
       val users = List(
         DefaultModels.user(created = now.minusDays(1)),
@@ -669,14 +669,14 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
             UserManager.create(user)
           }
         )
-        users1 <- UserManager.getWithPagination(10, None)
-        users2 <- UserManager.getWithPagination(3, None)
-        users3 <- UserManager.getWithPagination(10, Some(now.minusDays(1).minusSeconds(1)))
-        users4 <- UserManager.getWithPagination(10, Some(now))
-        users5 <- UserManager.getWithPagination(10, Some(now.minusSeconds(1)))
-        users6 <- UserManager.getWithPagination(10, Some(now.minusMinutes(1)))
-        users7 <- UserManager.getWithPagination(2, Some(now.minusMinutes(1)))
-        users8 <- UserManager.getWithPagination(2, Some(now.plusHours(1)))
+        users1 <- UserManager.getWithCursor(10, None)
+        users2 <- UserManager.getWithCursor(3, None)
+        users3 <- UserManager.getWithCursor(10, Some(now.minusDays(1).minusSeconds(1)))
+        users4 <- UserManager.getWithCursor(10, Some(now))
+        users5 <- UserManager.getWithCursor(10, Some(now.minusSeconds(1)))
+        users6 <- UserManager.getWithCursor(10, Some(now.minusMinutes(1)))
+        users7 <- UserManager.getWithCursor(2, Some(now.minusMinutes(1)))
+        users8 <- UserManager.getWithCursor(2, Some(now.plusHours(1)))
       } yield {
         users1.length shouldBe users.length
         users2.length shouldBe 3
@@ -690,6 +690,46 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
         users2.map(_.id) shouldBe users.take(3).map(_.id)
         users4.map(_.id) shouldBe users.slice(5, users.length).map(_.id)
         users5.map(_.id) shouldBe users.slice(4, users.length).map(_.id)
+      }
+    }
+  }
+
+  Feature("getWithOffset()") {
+    Scenario("get empty list when no users") {
+      UserManager.getWithCursor(10, None) flatMap { result =>
+        result.length shouldBe 0
+      }
+    }
+    Scenario("get users with cursor") {
+      val now = DateUtil.nowUTC
+      val users = List(
+        DefaultModels.user(created = now.minusDays(1)),
+        DefaultModels.user(created = now.minusHours(1)),
+        DefaultModels.user(created = now.minusMinutes(1)),
+        DefaultModels.user(created = now.minusSeconds(1)),
+        DefaultModels.user(created = now),
+        DefaultModels.user(created = now.plusSeconds(1)),
+        DefaultModels.user(created = now.plusHours(1))
+      )
+
+      for {
+        _ <- Future.sequence(
+          users.map { user =>
+            UserManager.create(user)
+          }
+        )
+        users1 <- UserManager.getWithOffset(10, None)
+        users2 <- UserManager.getWithOffset(3, None)
+        users3 <- UserManager.getWithOffset(10, Some(0))
+        users4 <- UserManager.getWithOffset(3, Some(1))
+      } yield {
+        users1.length shouldBe users.length
+        users2.length shouldBe 3
+        users3.length shouldBe users.length
+        users4.length shouldBe 3
+
+        users2.map(_.id) shouldBe users.take(3).map(_.id)
+        users4.map(_.id) shouldBe users.slice(3, users.length-1).map(_.id)
       }
     }
   }

@@ -50,8 +50,8 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
       respondWithCORS {
         pathEnd {
           get {
-            parameters("limit".as[Int], "lastCreatedAt".optional) { (limit: Int, lastCreatedAt: Option[String]) =>
-              getUsersWithPagination(limit, lastCreatedAt)
+            parameters("limit".as[Int], "lastCreatedAt".optional, "offset".optional) { (limit: Int, lastCreatedAt: Option[String], offset: Option[String]) =>
+              getUsersWithPagination(limit, lastCreatedAt, offset)
             }
           }
         }
@@ -380,11 +380,55 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
   }
 
   /**
+   * Response users with pagination
+   * 1. Whenever lastCreatedAtOpt is presented, getUsersWithCursor
+   * 2. When offsetOpt is presented and lastCreatedAtOpt is not, getUsersWithOffset
+   * 3. When neither of them are presented, getUsersWithCursor
+   * @param limit: maximum number of users
+   * @param lastCreatedAtOpt: DateTime string
+   * @param offsetOpt: offset string
+   */
+  private def getUsersWithPagination(limit: Int, lastCreatedAtOpt: Option[String], offsetOpt: Option[String]): Route = (lastCreatedAtOpt, offsetOpt) match {
+    case (Some(_), _) => getUsersWithCursor(limit, lastCreatedAtOpt)
+    case (None, Some(_)) => getUsersWithOffset(limit, offsetOpt)
+    case (None, None) => getUsersWithCursor(limit, lastCreatedAtOpt)
+  }
+
+  /**
+   * Response users with offset
+   * @param limit: maximum number of users
+   * @param offsetOpt: offset string
+   */
+  private def getUsersWithOffset(limit: Int, offsetOpt: Option[String]): Route = {
+    Try(offsetOpt.map { offset =>
+      offset.toInt
+    }) match {
+      case Failure(ex) =>
+        logger.info("offset must be integer", ex.getMessage)
+        complete(requestErrorResponse(errorType = "BadRequest", errorMessage = "offset must be integer"))
+      case Success(offset) =>
+        OnComplete(userActor ? GetUsersWithOffset(limit, offset)).fold() {
+          case Failure(t) =>
+            logger.error("getUsersWithOffset", t)
+            complete(serverErrorResponse(errorType = "ServerError", errorMessage = t.getMessage))
+
+          case Success(resp) =>
+            resp match {
+              case userList: List[db.User] =>
+                complete(read[List[rest.User]](write(userList)))
+              case _ =>
+                complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query users"))
+            }
+        }
+    }
+  }
+
+  /**
    * Response users created after lastCreatedAtOpt
    * @param limit: maximum number of users
    * @param lastCreatedAtOpt: DateTime string
    */
-  private def getUsersWithPagination(limit: Int, lastCreatedAtOpt: Option[String]): Route = {
+  private def getUsersWithCursor(limit: Int, lastCreatedAtOpt: Option[String]): Route = {
     Try(lastCreatedAtOpt.map { dateTimeStr =>
       DateTime.parse(dateTimeStr)
     }) match {
@@ -392,7 +436,7 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
         logger.info("lastCreatedAt has a wrong date format", ex.getMessage)
         complete(requestErrorResponse(errorType = "BadRequest", errorMessage = "lastCreatedAt must be datetime"))
       case Success(lastCreatedAtOpt) =>
-        OnComplete(userActor ? GetUsersWithPagination(limit, lastCreatedAtOpt)).fold() {
+        OnComplete(userActor ? GetUsersWithCursor(limit, lastCreatedAtOpt)).fold() {
           case Failure(t) =>
             logger.error("getUsersWithPagination", t)
             complete(serverErrorResponse(errorType = "ServerError", errorMessage = t.getMessage))
@@ -404,9 +448,7 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
               case _ =>
                 complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query users"))
             }
-
         }
     }
   }
-
 }
