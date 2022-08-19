@@ -407,6 +407,7 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
         logger.info("offset must be integer", ex.getMessage)
         complete(requestErrorResponse(errorType = "BadRequest", errorMessage = "offset must be integer"))
       case Success(offset) =>
+        logger.info(s"getUsersWithOffset. limit=$limit, offset=$offset")
         OnComplete(userActor ? GetUsersWithOffset(limit, offset)).fold() {
           case Failure(t) =>
             logger.error("getUsersWithOffset", t)
@@ -436,6 +437,7 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
         logger.info("lastCreatedAt has a wrong date format", ex.getMessage)
         complete(requestErrorResponse(errorType = "BadRequest", errorMessage = "lastCreatedAt must be datetime"))
       case Success(lastCreatedAtOpt) =>
+        logger.info(s"getUsersWithCursor. limit=$limit, lastCreatedAtOpt=$lastCreatedAtOpt")
         OnComplete(userActor ? GetUsersWithCursor(limit, lastCreatedAtOpt)).fold() {
           case Failure(t) =>
             logger.error("getUsersWithPagination", t)
