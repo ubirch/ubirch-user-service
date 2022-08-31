@@ -23,6 +23,7 @@ import org.json4s.Formats
 import org.json4s.native.Serialization.{read, write}
 import org.joda.time.DateTime
 
+import java.util.UUID
 import scala.concurrent.ExecutionContextExecutor
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
@@ -52,6 +53,12 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
           get {
             parameters("limit".as[Int], "lastCreatedAt".optional, "offset".optional) { (limit: Int, lastCreatedAt: Option[String], offset: Option[String]) =>
               getUsersWithPagination(limit, lastCreatedAt, offset)
+            }
+          }
+        } ~ path(RouteConstants.byIds) {
+          post {
+            entity(as[List[UUID]]) { userIds =>
+              getUsersByIds(userIds)
             }
           }
         }
@@ -379,6 +386,23 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
     }
   }
 
+  private def getUsersByIds(userIds: List[UUID]): Route = {
+    logger.info(s"getUsersByIds: number of userIds: ${userIds.length}")
+    OnComplete(userActor ? GetUsersByIds(userIds)).fold() {
+      case Failure(t) =>
+        logger.error("getUsersByIds", t)
+        complete(serverErrorResponse(errorType = "ServerError", errorMessage = t.getMessage))
+
+      case Success(resp) =>
+        resp match {
+          case userList: List[_] =>
+            complete(read[List[rest.User]](write(userList)))
+          case _ =>
+            complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query users by ids"))
+        }
+    }
+  }
+
   /**
    * Response users with pagination
    * 1. Whenever lastCreatedAtOpt is presented, getUsersWithCursor
@@ -415,10 +439,10 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
 
           case Success(resp) =>
             resp match {
-              case userList: List[db.User] =>
+              case userList: List[_] =>
                 complete(read[List[rest.User]](write(userList)))
               case _ =>
-                complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query users"))
+                complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query users with offset"))
             }
         }
     }
@@ -440,15 +464,15 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
         logger.info(s"getUsersWithCursor. limit=$limit, lastCreatedAtOpt=$lastCreatedAtOpt")
         OnComplete(userActor ? GetUsersWithCursor(limit, lastCreatedAtOpt)).fold() {
           case Failure(t) =>
-            logger.error("getUsersWithPagination", t)
+            logger.error("getUsersWithCursor", t)
             complete(serverErrorResponse(errorType = "ServerError", errorMessage = t.getMessage))
 
           case Success(resp) =>
             resp match {
-              case userList: List[db.User] =>
+              case userList: List[_] =>
                 complete(read[List[rest.User]](write(userList)))
               case _ =>
-                complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query users"))
+                complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query users with lastCreatedAt cursor"))
             }
         }
     }

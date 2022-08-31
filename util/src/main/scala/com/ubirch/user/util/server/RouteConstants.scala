@@ -20,6 +20,7 @@ object RouteConstants {
   final val byName = "byName"
   final val user = "user"
   final val users = "users"
+  final val byIds = "byIds"
   final val group = "group"
   final val allowedUsers = "allowedUsers"
   final val memberOf = "memberOf"

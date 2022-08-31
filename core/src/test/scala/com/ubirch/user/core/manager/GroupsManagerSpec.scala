@@ -101,8 +101,8 @@ class GroupsManagerSpec extends MongoSpec {
         contextOpt <- ContextManager.create(contextModel)
         ownerOpt <- UserManager.create(ownerModel)
         user2Opt <- UserManager.create(user2Model)
-        user3Opt <- UserManager.create(user3Model)
-        groupOpt <- dataHelpers.createGroup(contextOpt, ownerOpt, user2Opt)
+        _ <- UserManager.create(user3Model)
+        _ <- dataHelpers.createGroup(contextOpt, ownerOpt, user2Opt)
 
         // test
         result <- GroupsManager.findByContextAndUser(

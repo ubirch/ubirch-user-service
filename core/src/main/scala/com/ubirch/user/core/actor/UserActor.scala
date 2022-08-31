@@ -11,6 +11,7 @@ import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.uuid.UUIDUtil
 import org.joda.time.DateTime
 
+import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
@@ -130,6 +131,10 @@ class UserActor(implicit mongo: MongoUtil) extends Actor
     case getUsersWithOffset: GetUsersWithOffset =>
       val sender = context.sender()
       UserManager.getWithOffset(getUsersWithOffset.limit, getUsersWithOffset.offset) map (sender ! _)
+
+    case getUsersByIds: GetUsersByIds =>
+      val sender = context.sender()
+      UserManager.findByUsedIds(getUsersByIds.userIds) map (sender ! _)
   }
 
   override def unhandled(message: Any): Unit = {
@@ -171,3 +176,5 @@ case class SearchByHashedEmail(hashedEmailAddress: String)
 case class GetUsersWithCursor(limit: Int, lastCreatedAt: Option[DateTime])
 
 case class GetUsersWithOffset(limit: Int, offset: Option[Int])
+
+case class GetUsersByIds(userIds: List[UUID])

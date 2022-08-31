@@ -11,6 +11,7 @@ import reactivemongo.bson.{BSON, BSONDocument, BSONDocumentReader, BSONDocumentW
 import org.joda.time.DateTime
 import reactivemongo.api.Cursor
 
+import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -183,6 +184,29 @@ object UserManager extends StrictLogging
       .recover {
         case ex =>
           logger.error(s"error when retrieving users with the following externalIds $externalIds: ${ex.getMessage}")
+          Seq[User]()
+      }
+  }
+
+  def findByUsedIds(userIds: Seq[UUID])
+                       (implicit mongo: MongoUtil): Future[Seq[User]] = {
+
+    val selector = document("id" -> document("$in" -> userIds.map(_.toString)))
+
+    mongo
+      .collection(collectionName)
+      .flatMap { collection =>
+        collection
+          .find[BSONDocument, User](selector)
+          .cursor[User]()
+          .collect[Seq](
+            -1,
+            Cursor.FailOnError[Seq[User]]()
+          )
+      }
+      .recover {
+        case ex =>
+          logger.error(s"error when retrieving users with the following userIds $userIds: ${ex.getMessage}")
           Seq[User]()
       }
   }

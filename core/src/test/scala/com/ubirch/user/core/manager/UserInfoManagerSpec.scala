@@ -289,9 +289,7 @@ class UserInfoManagerSpec extends MongoSpec {
 
   private def defaultSimpleUserContext(context: String = "context-test",
                                        providerId: String = "provider-test",
-                                       userId: String = "user-id-test",
-                                       userName: String = "some-user-name-test",
-                                       locale: String = "en"
+                                       userId: String = "user-id-test"
                                       ): SimpleUserContext = {
 
     SimpleUserContext(
