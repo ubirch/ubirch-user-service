@@ -55,4 +55,6 @@ object ConfigKeys {
   final val CONTEXT_PREFIX_LIST: String = s"$CONFIG_PREFIX.contextPrefixList"
   final val PROVIDERS_WITH_USERS_ACTIVATED: String = s"$CONFIG_PREFIX.providersWithUsersActivated"
 
+  final val RETRIEVE_RESOURCE_LIMIT: String = s"$CONFIG_PREFIX.retrieveResourceLimit"
+
 }
