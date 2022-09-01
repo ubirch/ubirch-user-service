@@ -387,19 +387,24 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
   }
 
   private def getUsersByIds(userIds: List[UUID]): Route = {
-    logger.info(s"getUsersByIds: number of userIds: ${userIds.length}")
-    OnComplete(userActor ? GetUsersByIds(userIds)).fold() {
-      case Failure(t) =>
-        logger.error("getUsersByIds", t)
-        complete(serverErrorResponse(errorType = "ServerError", errorMessage = t.getMessage))
+    if (userIds.length > Config.retrieveResourceLimit) {
+      logger.info(s"too many userIds(${userIds.length}) in the request")
+      complete(requestErrorResponse(errorType = "BadRequest", errorMessage = s"number of userIds must be less than ${Config.retrieveResourceLimit}"))
+    } else {
+      logger.info(s"getUsersByIds: number of userIds: ${userIds.length}")
+      OnComplete(userActor ? GetUsersByIds(userIds)).fold() {
+        case Failure(t) =>
+          logger.error("getUsersByIds", t)
+          complete(serverErrorResponse(errorType = "ServerError", errorMessage = t.getMessage))
 
-      case Success(resp) =>
-        resp match {
-          case userList: List[_] =>
-            complete(read[List[rest.User]](write(userList)))
-          case _ =>
-            complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query users by ids"))
-        }
+        case Success(resp) =>
+          resp match {
+            case userList: List[_] =>
+              complete(read[List[rest.User]](write(userList)))
+            case _ =>
+              complete(serverErrorResponse(errorType = "QueryError", errorMessage = "failed to query users by ids"))
+          }
+      }
     }
   }
 
@@ -412,10 +417,17 @@ class UserRoute(implicit mongo: MongoUtil, val system: ActorSystem) extends CORS
    * @param lastCreatedAtOpt: DateTime string
    * @param offsetOpt: offset string
    */
-  private def getUsersWithPagination(limit: Int, lastCreatedAtOpt: Option[String], offsetOpt: Option[String]): Route = (lastCreatedAtOpt, offsetOpt) match {
-    case (Some(_), _) => getUsersWithCursor(limit, lastCreatedAtOpt)
-    case (None, Some(_)) => getUsersWithOffset(limit, offsetOpt)
-    case (None, None) => getUsersWithCursor(limit, lastCreatedAtOpt)
+  private def getUsersWithPagination(limit: Int, lastCreatedAtOpt: Option[String], offsetOpt: Option[String]): Route = {
+    if(limit > Config.retrieveResourceLimit) {
+      logger.info(s"limit($limit) is too big")
+      complete(requestErrorResponse(errorType = "BadRequest", errorMessage = s"limit must be less than ${Config.retrieveResourceLimit}"))
+    } else {
+      (lastCreatedAtOpt, offsetOpt) match {
+        case (Some(_), _) => getUsersWithCursor(limit, lastCreatedAtOpt)
+        case (None, Some(_)) => getUsersWithOffset(limit, offsetOpt)
+        case (None, None) => getUsersWithCursor(limit, lastCreatedAtOpt)
+      }
+    }
   }
 
   /**

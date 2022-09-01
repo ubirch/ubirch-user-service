@@ -71,4 +71,5 @@ object Config extends ConfigBase {
 
   def providersWithUsersActivated: List[String] = config.getStringList(ConfigKeys.PROVIDERS_WITH_USERS_ACTIVATED).asScala.toList
 
+  def retrieveResourceLimit: Int = config.getInt(ConfigKeys.RETRIEVE_RESOURCE_LIMIT)
 }
