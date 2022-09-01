@@ -204,10 +204,10 @@ object UserManager extends StrictLogging
             Cursor.FailOnError[Seq[User]]()
           )
       }
-      .recover {
+      .recoverWith {
         case ex =>
           logger.error(s"error when retrieving users with the following userIds $userIds: ${ex.getMessage}")
-          Seq[User]()
+          Future.failed(ex)
       }
   }
 
