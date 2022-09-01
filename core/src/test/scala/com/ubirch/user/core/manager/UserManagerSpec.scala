@@ -9,6 +9,7 @@ import com.ubirch.util.uuid.UUIDUtil
 import org.scalatest.concurrent.ScalaFutures
 import com.ubirch.util.date.DateUtil
 
+import java.util.UUID
 import scala.concurrent.Future
 
 /**
@@ -598,10 +599,6 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
     Scenario("Only one of two user does not exist --> fail") {
 
-      // prepare
-      val user1 = DefaultModels.user()
-      val user2 = DefaultModels.user()
-
       for {
         user1 <- UserManager.create(DefaultModels.user())
         _ = user1.isDefined shouldBe true
@@ -730,6 +727,29 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
         users2.map(_.id) shouldBe users.take(3).map(_.id)
         users4.map(_.id) shouldBe users.slice(3, users.length-1).map(_.id)
+      }
+    }
+  }
+
+  Feature("findByUsedIds()") {
+    Scenario("get users with cursor") {
+      val users = (0 until 10).toList.map { _ => DefaultModels.user() }
+
+      for {
+        _ <- Future.sequence(
+          users.map { user =>
+            UserManager.create(user)
+          }
+        )
+        users1 <- UserManager.findByUsedIds(users.map(u => UUID.fromString(u.id)))
+        users2 <- UserManager.findByUsedIds(users.take(3).map(u => UUID.fromString(u.id)))
+        users3 <- UserManager.findByUsedIds(users.take(3).map(u => UUID.fromString(u.id)).+:(UUID.randomUUID()))
+      } yield {
+        users1.length shouldBe users.length
+        users2.length shouldBe 3
+        users3.length shouldBe 3
+
+        users2.map(_.id).toSet shouldBe users.take(3).map(_.id).toSet
       }
     }
   }
