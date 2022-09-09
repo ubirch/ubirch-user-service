@@ -1,6 +1,7 @@
 package com.ubirch.user.core.manager
 
 import com.ubirch.user.config.Config
+import com.ubirch.user.core.manager.util.DBException
 import com.ubirch.user.model.db.tools.DefaultModels
 import com.ubirch.user.testTools.db.mongo.MongoSpec
 import com.ubirch.util.uuid.UUIDUtil
@@ -59,13 +60,15 @@ class GroupManagerSpec extends MongoSpec {
         case None => fail("failed during preparation")
 
         case Some(existingGroup) =>
-
           // test
-          GroupManager.create(existingGroup) flatMap { created =>
-
+          GroupManager.create(existingGroup).recover {
+            case ex =>
+              assert(ex.isInstanceOf[DBException])
+              None
+          }.flatMap { created =>
             // verify
             created shouldBe None
-            ContextManager.findById(existingGroup.id) map(_ should be(Some(created)))
+            ContextManager.findById(existingGroup.id) map (_ should be(Some(created)))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
             GroupManager.delete(existingGroup.id).map(_ shouldBe true)
 
@@ -83,13 +86,15 @@ class GroupManagerSpec extends MongoSpec {
         case None => fail("failed during preparation")
 
         case Some(existingGroup) =>
-
           // test
-          GroupManager.create(existingGroup) flatMap { created =>
-
+          GroupManager.create(existingGroup).recover {
+            case ex =>
+              assert(ex.isInstanceOf[DBException])
+              None
+          }.flatMap { created =>
             // verify
             created shouldBe None
-            ContextManager.findById(existingGroup.id) map(_ should be(Some(existingGroup)))
+            ContextManager.findById(existingGroup.id) map (_ should be(Some(existingGroup)))
             mongoTestUtils.countAll(collection) map (_ shouldBe 1)
             GroupManager.delete(existingGroup.id).map(_ shouldBe true)
           }
@@ -108,8 +113,11 @@ class GroupManagerSpec extends MongoSpec {
       val group = DefaultModels.group()
 
       // test
-      GroupManager.update(group) flatMap { updated =>
-
+      GroupManager.update(group).recover {
+        case ex =>
+          assert(ex.isInstanceOf[DBException])
+          None
+      }.flatMap { updated =>
         // verify
         updated shouldBe None
         mongoTestUtils.countAll(collection) map (_ shouldBe 0)

@@ -2,10 +2,11 @@ package com.ubirch.user.core.manager
 
 import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.config.Config
+import com.ubirch.user.core.manager.util.DBException.handleError
 import com.ubirch.user.model.db.Group
 import com.ubirch.util.mongo.connection.MongoUtil
 import com.ubirch.util.mongo.format.MongoFormats
-import reactivemongo.bson.{BSONDocument, BSONDocumentReader, BSONDocumentWriter, Macros, document}
+import reactivemongo.api.bson.{BSONDocumentHandler, Macros, document}
 
 import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -15,39 +16,28 @@ import scala.concurrent.Future
   * author: cvandrei
   * since: 2017-03-30
   */
-object GroupManager extends StrictLogging
-  with MongoFormats {
+object GroupManager extends StrictLogging with MongoFormats {
 
   private val collectionName = Config.mongoCollectionGroup
+  implicit private val log = logger
 
-  implicit protected def groupWriter: BSONDocumentWriter[Group] = Macros.writer[Group]
-
-  implicit protected def groupReader: BSONDocumentReader[Group] = Macros.reader[Group]
+  implicit protected def groupHandler: BSONDocumentHandler[Group] = Macros.handler[Group]
 
   def create(group: Group)(implicit mongo: MongoUtil): Future[Option[Group]] = {
 
     findById(group.id) flatMap {
 
       case None =>
-
         mongo.collection(collectionName) flatMap { collection =>
-
           collection.insert(ordered = false).one[Group](group) map { writeResult =>
-
-            if (writeResult.ok && writeResult.n == 1) {
+            if (writeResult.n == 1) {
               logger.debug(s"created new group: $group")
               Some(group)
-            } else {
-              logger.error("failed to create group")
-              None
-            }
+            } else handleError("failed to create group")
           }
-
         }
-
       case Some(_: Group) =>
-        logger.error("unable to create group that already exists")
-        Future(None)
+        handleError("unable to create group that already exists")
 
     }
 
@@ -59,27 +49,21 @@ object GroupManager extends StrictLogging
     findById(groupId) flatMap {
 
       case None =>
-        logger.error(s"unable to update if no Group exists: groupId=$groupId")
-        Future(None)
+        handleError(s"update if no Group exists: groupId=$groupId")
 
       case Some(_: Group) =>
-
         val selector = document("id" -> groupId)
-        mongo.collection(collectionName) flatMap {
+        mongo.collection(collectionName).flatMap {
 
           _.update(ordered = false).one(selector, group) map { writeResult =>
-
-            if (writeResult.ok) {
+            if (writeResult.n == 1) {
               logger.info(s"updated group: id=$groupId")
               Some(group)
-            } else {
-              logger.error(s"failed to update group: group=$group, writeResult=$writeResult")
-              None
-            }
+            } else handleError(s"failed to update group: group=$group, writeResult=$writeResult")
 
           }
 
-        }
+        }.recover(handleError(s"update group $group", _))
 
     }
 
@@ -89,9 +73,9 @@ object GroupManager extends StrictLogging
 
     val selector = document("id" -> id)
 
-    mongo.collection(collectionName) flatMap {
-      _.find[BSONDocument, Group](selector).one[Group]
-    }
+    mongo.collection(collectionName).flatMap {
+      _.find(selector).one[Group]
+    }.recover(handleError(s"find by id $id", _))
 
   }
 
@@ -100,9 +84,9 @@ object GroupManager extends StrictLogging
     // TODO automated tests
     val selector = document("contextId" -> contextId, "ownerIds" -> ownerId)
 
-    mongo.collection(collectionName) flatMap {
-      _.find[BSONDocument, Group](selector).one[Group]
-    }
+    mongo.collection(collectionName).flatMap {
+      _.find(selector).one[Group]
+    }.recover(handleError(s"find by context $contextId and owner $ownerId", _))
 
   }
 
@@ -112,8 +96,7 @@ object GroupManager extends StrictLogging
 
     mongo.collection(collectionName) flatMap {
       _.delete().one(selector) map { writeResult =>
-
-        if (writeResult.ok && writeResult.n == 1) {
+        if (writeResult.n == 1) {
           logger.info(s"deleted group: id=$id")
           true
         } else {
