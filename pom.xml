@@ -108,20 +108,19 @@
         <ubirch-date.version>0.5.5</ubirch-date.version>
         <ubirch-deep-check.version>0.4.2</ubirch-deep-check.version>
         <ubirch-json.version>0.5.3</ubirch-json.version>
-        <ubirch-mongo.version>0.9.6</ubirch-mongo.version>
+        <ubirch-mongo.version>0.10.0</ubirch-mongo.version>
         <ubirch-response.version>0.5.2</ubirch-response.version>
         <ubirch-rest-akka-http.version>0.4.3</ubirch-rest-akka-http.version>
-        <!--        <ubirch-rest-akka-http-test.version>0.4.1</ubirch-rest-akka-http-test.version>-->
         <ubirch-uuid.version>0.1.5</ubirch-uuid.version>
 
         <!-- external version -->
-        <akka.version>2.6.18</akka.version>
+        <akka.version>2.6.19</akka.version>
         <akka-http.version>10.2.7</akka-http.version>
-        <json4s.version>4.0.3</json4s.version>
+        <json4s.version>4.0.5</json4s.version>
         <!-- logging -->
-        <slf4j.version>1.7.33</slf4j.version>
-        <logstash-logback.version>7.0.1</logstash-logback.version>
-        <logback.version>1.2.10</logback.version>
+        <slf4j.version>1.7.36</slf4j.version>
+        <logstash-logback.version>7.1.1</logstash-logback.version>
+        <logback.version>1.2.11</logback.version>
         <scala-logging.version>3.9.4</scala-logging.version>
 
         <!-- plugins -->

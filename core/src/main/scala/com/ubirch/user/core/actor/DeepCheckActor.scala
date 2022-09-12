@@ -3,7 +3,7 @@ package com.ubirch.user.core.actor
 import akka.actor.{Actor, ActorLogging, Props}
 import akka.routing.RoundRobinPool
 import com.ubirch.user.config.Config
-import com.ubirch.user.core.manager.DeepCheckManager
+import com.ubirch.user.core.manager.UserManager
 import com.ubirch.util.deepCheck.model.{DeepCheckRequest, DeepCheckResponse}
 import com.ubirch.util.model.JsonErrorResponse
 import com.ubirch.util.mongo.connection.MongoUtil
@@ -41,7 +41,7 @@ class DeepCheckActor(implicit mongo: MongoUtil)
     context.sender() ! JsonErrorResponse(errorType = "ServerError", errorMessage = "Berlin, we have a problem!")
   }
 
-  private def deepCheck(): Future[DeepCheckResponse] = DeepCheckManager.connectivityCheck()
+  private def deepCheck(): Future[DeepCheckResponse] = UserManager.connectivityCheck()
 
 }
 

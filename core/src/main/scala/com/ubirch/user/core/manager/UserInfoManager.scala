@@ -16,11 +16,10 @@ object UserInfoManager {
 
   /**
     * @param simpleUserContext user is determined based on this context
-    * @param mongo       mongo connection
+    * @param mongo             mongo connection
     * @return None if no user is found; Some otherwise
     */
-  def getInfo(simpleUserContext: SimpleUserContext)
-             (implicit mongo: MongoUtil): Future[Option[UserInfo]] = {
+  def getInfo(simpleUserContext: SimpleUserContext)(implicit mongo: MongoUtil): Future[Option[UserInfo]] = {
 
     UserManager.findByProviderIdAndExternalId(
       providerId = simpleUserContext.providerId,
@@ -30,13 +29,11 @@ object UserInfoManager {
       case None => Future(None)
 
       case Some(user: User) =>
-
         GroupsManager.findByContextAndUser(
           contextName = simpleUserContext.context,
           providerId = simpleUserContext.providerId,
           externalUserId = simpleUserContext.userId
         ) map { groups =>
-
           val myGroups = groups filter (_.ownerIds.contains(user.id))
           val allowedGroups = groups diff myGroups
 
@@ -51,13 +48,12 @@ object UserInfoManager {
 
         }
 
-
     }
 
   }
 
-  def update(simpleUserContext: SimpleUserContext, userUpdate: UserUpdate)
-            (implicit mongo: MongoUtil): Future[Option[UserInfo]] = {
+  def update(simpleUserContext: SimpleUserContext, userUpdate: UserUpdate)(implicit
+                                                                           mongo: MongoUtil): Future[Option[UserInfo]] = {
 
     UserManager.findByProviderIdAndExternalId(
       providerId = simpleUserContext.providerId,
@@ -67,7 +63,6 @@ object UserInfoManager {
       case None => Future(None)
 
       case Some(user: User) =>
-
         val forUpdate = user.copy(displayName = userUpdate.displayName)
         if (user == forUpdate) {
 

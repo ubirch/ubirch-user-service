@@ -8,7 +8,7 @@ import reactivemongo.api.indexes.{Index, IndexType}
 
 trait UserMongoConstraints extends MongoConstraintsBase with StrictLogging {
 
-  val constraintsToCreate: Map[String, Set[Index]] = Map(
+  val constraintsToCreate: Map[String, Set[Index.Default]] = Map(
     Config.mongoCollectionUser -> Set(
       Index(name = Some("_id_"), key = Seq(("_id", IndexType.Ascending)), unique = true),
       Index(name = Some("externalId_1_providerId_1"),
