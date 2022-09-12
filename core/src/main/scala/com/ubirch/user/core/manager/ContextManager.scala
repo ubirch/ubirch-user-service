@@ -127,7 +127,7 @@ object ContextManager extends StrictLogging with MongoFormats {
           logger.debug(s"created new context: $context")
           Some(context)
         } else {
-          handleError(s"failed to create context $context")
+          handleError(s"create context $context; writeResult=$writeResult")
         }
 
       }.recover(handleError(s"insert $context", _))

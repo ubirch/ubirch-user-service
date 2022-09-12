@@ -3,6 +3,7 @@ package com.ubirch.user.core.manager
 import com.typesafe.scalalogging.StrictLogging
 import com.ubirch.user.config.Config
 import com.ubirch.user.core.manager.util.DBException
+import com.ubirch.user.core.manager.util.DBException.handleError
 import com.ubirch.user.model.db.{Action, User}
 import com.ubirch.util.crypto.hash.HashUtil
 import com.ubirch.util.date.DateUtil
@@ -153,7 +154,7 @@ object UserManager extends StrictLogging with MongoFormats {
     val docs = usersWithLastUpdated.map { u =>
       userHandler.writeTry(u) match {
         case Success(doc) => (u, doc)
-        case Failure(ex: Throwable) => DBException.handleError(s"parse $u to BSONDocument", ex)
+        case Failure(ex: Throwable) => handleError(s"parse $u to BSONDocument", ex)
       }
     }
 

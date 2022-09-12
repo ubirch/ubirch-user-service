@@ -33,11 +33,11 @@ object GroupManager extends StrictLogging with MongoFormats {
             if (writeResult.n == 1) {
               logger.debug(s"created new group: $group")
               Some(group)
-            } else handleError("failed to create group")
+            } else handleError(s"create group $group")
           }
         }
       case Some(_: Group) =>
-        handleError("unable to create group that already exists")
+        handleError(s"create group; ${group.id} already exists")
 
     }
 
@@ -49,7 +49,7 @@ object GroupManager extends StrictLogging with MongoFormats {
     findById(groupId) flatMap {
 
       case None =>
-        handleError(s"update if no Group exists: groupId=$groupId")
+        handleError(s"update; no Group exists for id: groupId=$groupId")
 
       case Some(_: Group) =>
         val selector = document("id" -> groupId)
@@ -59,7 +59,7 @@ object GroupManager extends StrictLogging with MongoFormats {
             if (writeResult.n == 1) {
               logger.info(s"updated group: id=$groupId")
               Some(group)
-            } else handleError(s"failed to update group: group=$group, writeResult=$writeResult")
+            } else handleError(s"update group: group=$group, writeResult=$writeResult")
 
           }
 
