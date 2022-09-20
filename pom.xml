@@ -108,7 +108,7 @@
         <ubirch-date.version>0.5.5</ubirch-date.version>
         <ubirch-deep-check.version>0.4.2</ubirch-deep-check.version>
         <ubirch-json.version>0.5.3</ubirch-json.version>
-        <ubirch-mongo.version>0.10.1</ubirch-mongo.version>
+        <ubirch-mongo.version>0.11.0</ubirch-mongo.version>
         <ubirch-response.version>0.5.2</ubirch-response.version>
         <ubirch-rest-akka-http.version>0.4.3</ubirch-rest-akka-http.version>
         <ubirch-uuid.version>0.1.5</ubirch-uuid.version>
