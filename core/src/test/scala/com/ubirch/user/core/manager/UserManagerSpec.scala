@@ -5,9 +5,9 @@ import com.ubirch.user.model.db.Deactivate
 import com.ubirch.user.model.db.tools.DefaultModels
 import com.ubirch.user.testTools.db.mongo.MongoSpec
 import com.ubirch.util.crypto.hash.HashUtil
+import com.ubirch.util.date.DateUtil
 import com.ubirch.util.uuid.UUIDUtil
 import org.scalatest.concurrent.ScalaFutures
-import com.ubirch.util.date.DateUtil
 
 import java.util.UUID
 import scala.concurrent.Future
@@ -644,11 +644,15 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
 
   Feature("getWithCursor()") {
     Scenario("get empty list when no users") {
+      cleanMongoDb()
       UserManager.getWithCursor(10, None) flatMap { result =>
         result.length shouldBe 0
       }
     }
+
     Scenario("get users with cursor") {
+      cleanMongoDb()
+
       val now = DateUtil.nowUTC
       val users = List(
         DefaultModels.user(created = now.minusDays(1)),
@@ -692,12 +696,16 @@ class UserManagerSpec extends MongoSpec with ScalaFutures {
   }
 
   Feature("getWithOffset()") {
+
     Scenario("get empty list when no users") {
+      cleanMongoDb()
       UserManager.getWithCursor(10, None) flatMap { result =>
         result.length shouldBe 0
       }
     }
+
     Scenario("get users with cursor") {
+      cleanMongoDb()
       val now = DateUtil.nowUTC
       val users = List(
         DefaultModels.user(created = now.minusDays(1)),
